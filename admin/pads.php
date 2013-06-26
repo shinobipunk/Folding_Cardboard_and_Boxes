@@ -32,6 +32,7 @@ session_start();
         $(document).ready(function() {
         fecha = moment().format('MMMM Do YYYY, h:mm:ss a');
         $("#fecha").val(fecha);
+        $("#fechaescondido").val(fecha);
         });
 
         </script>
@@ -120,13 +121,13 @@ session_start();
                         
                                                                 
                         <label># de parte</label> <br/>            
-                        <input id="noparte" type="text" name="noparte" required /> <br/>                                                                
+                        <input id="noparte" type="text" name="noparte" value="1" required /> <br/>                                                                
                                               
                         <label>Cliente</label>  <br/>           
-                        <input id="cliente" type="text" name="cliente" required /> <br/>
+                        <input id="cliente" type="text" name="cliente" value="Nanolabs" required /> <br/>
                                   
                         <label>Email</label> <br/>            
-                        <input id="email" type="email" name="email" required /> <br/>
+                        <input id="email" type="email" name="email" value="eliasstaticx@hotmail.com" required /> <br/>
 
                          <label>Gramos</label><br/> 
                          <input id="gr" type="text" name="gr" disabled /> <br/>
@@ -138,6 +139,9 @@ session_start();
                         <input id="subtotal" type="text" name="subtotal" disabled /> <br/>
 
                         <input id="subtotalescondido" type="hidden" name="subtotalescondido"  /> <br/>
+
+                        <label>Area de PAD</label> <br/>
+                     <input id="areapad" type="text" name="areapad" disabled /><br/>
                                 
                 </div>     
 
@@ -158,7 +162,10 @@ session_start();
                          <input id="preciokgescondido" type="hidden" name="preciokgescondido" /><br/>
 
                     <label>Factor U.</label> <br/>
-                     <input id="factoru" type="text" name="factoru" disabled /><br/>    
+                     <input id="factoru" type="text" name="factoru" disabled /><br/>  
+
+                     <label>Area de Desperdicio</label> <br/>
+                     <input id="areadesperdicio" type="text" name="areadesperdicio" disabled /><br/>  
     				
                 </div>
 
@@ -201,7 +208,7 @@ session_start();
                                 <option value="40">40</option>                        
                             </select>
                        
-
+                    <input id="tipocalibreescondido" type="hidden"  name="tipocalibreescondido" />
 
                     <br/>
                     <label>Bobina</label><br/>
@@ -274,6 +281,8 @@ session_start();
                         <option value="30" gramos="0.000432" pxkg="1.2">30</option>                       
                     </select><br/>
 
+                    <input id="bobinaescondido" type="hidden"  name="bobinaescondido" />
+
 
                     <label>Kilos</label><br/> 
                      <input id="kg" type="text" name="kg" disabled /><br/>
@@ -283,26 +292,67 @@ session_start();
                      <input id="utilidad" type="text" name="utilidad" disabled /><br/>
 
                      <input id="utilidadescondido" type="hidden" name="utilidadescondido" /><br/>
-    					                
+    					
+                     <label>Desperdicio</label> <br/>
+                     <input id="desperdicio" type="text" name="desperdicio" disabled /><br/>
+
+
                 </div>
 
                 <div class="clearitem"></div>
 
                 <div id="test">asd</div>
+                <input type="button" name="desperdiciobtn" value="Desperdicio" onclick="calcularDesperdicio()" />
 
 				<input type="submit" name="cotizarpad" value="Cotizar PAD" />
 
 			</form>
- <!-- Codigo de seleccion de Material con Calibre-->
+        <!-- Codigo de seleccion de Material con Calibre-->
             <script type="text/javascript">
+       //------------------------------------------------------------------------------     
+             function calcularDesperdicio() {
+
+                    if ((bobina<alto) && (bobina<largo)){
+                        
+                        alert("El largo y ancho es demasiado para la bobina");
+                    } else {
+                        areapad= alto * largo;
+                        areadesperdicio = bobina * alto;
+                        desperdicio = areadesperdicio - areapad;
+                        $("#areapad").val(areapad);
+                        $("#areadesperdicio").val(areadesperdicio);
+                        $("#desperdicio").val(desperdicio);
+
+
+                        //Numero de elementos del option bobina 
+                        idSelect =material + "-" + tipocalibre;
+                         nobobina = document.getElementById(idSelect).length;
+                        alert(nobobina.options[0].text);
+                        lista = new array();
+
+                        for (var i = 0; i < nobobina; i++) {
+                                
+                        }
+
+
+
+
+                    }
+
+                }
+        //-----------------------------------------------------------------------------        
+
+
+            // Mostramos la lista de calibres dependiendo el material
              function materialSeleccion() {
                     $('.sub-opcion').hide();
                     var materialSeleccionado = $('#material').val();
                     if (materialSeleccionado) {
                         $('#' + materialSeleccionado + '-seleccionado').show();
-                    }
+                    } 
                 }
 
+               // Mostramos la lista de bobinas dependiendo el calibre
                 function calibreSeleccion() {
                     $('.opcion-bobina').hide();
                     var calibreSeleccionado = $('#'+ material + '-seleccionado').val();
@@ -310,7 +360,10 @@ session_start();
                     if (calibreSeleccionado) {                         
                         $('#'+ material + '-' + tipocalibre ).show();
                     }
+
                 }
+
+
 
                 $(document).ready(function() {
                           
@@ -324,19 +377,27 @@ session_start();
                                     $("#" + material +"-seleccionado").change(function(){
                                       
                                             tipocalibre = $('#' + material + '-seleccionado option:selected').val();
-                                          
+                                            
 
                                             calibreSeleccion();
                                             if (material=="Kraft") {
                                                 operacion= parseFloat(tipocalibre) * 2;
                                                 //$("#kg").text(operacion);
                                             };
-                                            
+                                          
                                          
-                                                     $('#'+ material + '-' + tipocalibre ).change(function(){
+                                                 $('#'+ material + '-' + tipocalibre ).change(function(){
+                                                      
+
                                                   gramos = $('option:selected', this).attr('gramos');
                                                   pxkg = $('option:selected', this).attr('pxkg');
-                                                   }).change();
+                                                  bobina = $('option:selected', this).attr('value');
+                                                  $("#bobinaescondido").val(bobina);
+                                                  
+ 
+                                                   }).change();                                           
+                                                   
+
                                                      $("#gr").val(gramos);
                                                      $("#grescondido").val(gramos);
                                                      $("#preciokg").val(pxkg);
@@ -353,6 +414,9 @@ session_start();
                                                     subtotal = kilos * pxkg;
                                                     factor =2;
                                                     total = subtotal * factor;
+                                                    total=total.toFixed(3);
+
+                                                    
                                                     
 
                                                     $("#kg").val(kilos);
@@ -362,11 +426,13 @@ session_start();
                                                     $("#subtotalescondido").val(subtotal);
                                                     $("#utilidad").val(total);
                                                     $("#utilidadescondido").val(total);
+                                                    $("#tipocalibreescondido").val(tipocalibre);
 
 
 
 
-                                                  $("#test").text(kilos + " - " + numeropads + " - " + alto+ " - " +  largo+ " - "  + gramos );
+                                                  $("#test").text(bobina + "--" + tipocalibre + "--" + operacion + "--" + calibre + "--"  + kilos + " - " + numeropads + " - " + alto+ " - " +  largo+ " - "  + gramos );
+
                                     }).change();
                                     
                                     
@@ -374,11 +440,14 @@ session_start();
                             })
                             .change();
 
+
     
                     });
 
 
                     $("input").keyup(function () {
+
+                                                    
 
                                                      $("#gr").val(gramos);
                                                      $("#grescondido").val(gramos);
@@ -393,7 +462,7 @@ session_start();
                                                     subtotal = kilos * pxkg;
                                                     factor =2;
                                                     total = subtotal * factor;
-                                                    
+                                                    total=total.toFixed(3);
 
                                                     $("#kg").val(kilos);
                                                     $("#kgescondido").val(kilos);
@@ -401,8 +470,13 @@ session_start();
                                                     $("#subtotal").val(subtotal);
                                                     $("#subtotalescondido").val(subtotal);
                                                     $("#utilidad").val(total);
-                                                     $("#utilidadescondido").val(total);
+                                                    $("#utilidadescondido").val(total);
+                                                    $("#tipocalibreescondido").val(tipocalibre);
+
+                                                    $("#test").text(bobina + "--" + tipocalibre + "--" + operacion + "--" + calibre + "--"  + kilos + " - " + numeropads + " - " + alto+ " - " +  largo+ " - "  + gramos );
                      }).keyup();
+
+
 
                                                     
 
