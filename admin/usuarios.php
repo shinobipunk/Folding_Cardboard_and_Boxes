@@ -14,19 +14,8 @@ session_start();
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
 
-        <link rel="shortcut icon" href="../favicon.ico">
-        <link rel="stylesheet" href="../css/bootstrap.min.css">
-        <style>
-            body {
-                padding-top: 60px;
-                padding-bottom: 40px;
-            }
-        </style>
-        <link rel="stylesheet" href="../css/bootstrap-responsive.min.css">
-        <link rel="stylesheet" href="../css/main.css">
-        <link rel="stylesheet" href="../css/icon.css" />
-
-        <script src="../js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>        
+        <?php include '../encabezado.php'; ?>
+                
     </head>
     <body>
         <!--[if lt IE 7]>

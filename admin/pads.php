@@ -13,32 +13,8 @@
                 <meta name="description" content="">
                 <meta name="viewport" content="width=device-width">
 
-                <link rel="shortcut icon" href="../favicon.ico">
-                <link rel="stylesheet" href="../css/bootstrap.min.css">
-                <style>
-                    body {
-                        padding-top: 60px;
-                        padding-bottom: 40px;
-                    }
-                </style>
-                <link rel="stylesheet" href="../css/bootstrap-responsive.min.css">
-                <link rel="stylesheet" href="../css/main.css">
-                <link rel="stylesheet" href="../css/icon.css" />
-                <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-                <script src="../js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>  
-                <script src="../js/jquery.tablesorter.js"></script>  
-                <script type="text/javascript" src="../js/moment.min.js"></script>
-                <script type="text/javascript">
-                $(document).ready(function() {
+             <?php include '../encabezado.php'; ?>
 
-                    
-
-                fecha = moment().format('MMMM Do YYYY, h:mm:ss a');
-                $("#fecha").val(fecha);
-                $("#fechaescondido").val(fecha);
-                });
-
-                </script>
             </head>
             <body>
                 <!--[if lt IE 7]>
@@ -135,7 +111,7 @@
                                  <label>Gramos</label><br/> 
                                  <input id="gr" type="text" name="gr" disabled /> <br/>
 
-                                 <input id="grescondido" type="hidden" name="grescondido" /> <br/>   
+                                 <input id="grescondido" type="hidden" name="grescondido" />    
                                  
 
                                 <label>Sub-Total</label> <br/>
@@ -160,7 +136,7 @@
                             <label>Precio x Kg</label> <br/>
                                 <input id="preciokg" type="text" name="preciokg" disabled /><br/>
 
-                                 <input id="preciokgescondido" type="hidden" name="preciokgescondido" /><br/>
+                                 <input id="preciokgescondido" type="hidden" name="preciokgescondido" />
 
                             <label>Factor U.</label> <br/>
                              <input id="factoru" type="text" name="factoru" disabled /><br/>  
@@ -286,12 +262,14 @@
 
                             <label>Kilos</label><br/> 
                              <input id="kg" type="text" name="kg" disabled /><br/>
-                             <input id="kgescondido" type="hidden" name="kgescondido" /><br/>
+                             <input id="kgescondido" type="hidden" name="kgescondido" />
                                 
                             <label>Total</label> <br/>
                              <input id="utilidad" type="text" name="utilidad" disabled /><br/>
 
                              <input id="utilidadescondido" type="hidden" name="utilidadescondido" />
+
+                             
             					
                              
 
@@ -310,14 +288,15 @@
                         <thead>
                             <tr>
                                 <th></th>
-                                <th>Pads x bobina</th>
-                                <th>Desperdicio</th>
+                                <th data-sort="int">Pads x bobina</th>
+                                <th data-sort="float">Desperdicio</th>
                                 <th>Bobina</th>
                                 <th>Material</th>
                                 <th>Calibre</th>
                                 <th>Largo</th>
                                 <th>Alto</th>
-                                <th>Total Unitario</th>
+                                <th>$ Unitario</th>
+                                <th>Total</th>
                                 <th>Posicion</th>
                                 <th>Area PAD</th>
                                 <th>Area Total</th>
@@ -341,14 +320,24 @@
                     <script type="text/javascript">
                //------------------------------------------------------------------------------     
                 //-----------------------------------------------------------------------------        
-                 //-----------------------------------------------------------------------------        
+                 //-----------------------------------------------------------------------------    
+
+                    
 
                      function checados(){
 
+                         
+
                         $("input:checkbox:checked").each(function(){
                           //cada elemento seleccionado
-                          alert($(this).val());
+                          alert($(this).val()); 
+                          document.getElementById("padarreglo").value = folio[$(this).val()];
+                                                                                           
                         });
+
+
+                    
+                    
                      }
 
 
@@ -410,6 +399,7 @@
 
                                                             porcdesp2 = (desperdicioalto * 100) / areadesperdicioalto;
                                                             porcdespred2 = porcdesp2.toFixed(3);
+                                                           
 
                                                             difalto = vbobina-alto;
                                                             diflargo = vbobina-largo;
@@ -443,15 +433,21 @@
 
                                                                     areapaddoble = areapaddoble.toFixed(3);                                                                   
                                                                     desperdiciodoble = desperdiciodoble.toFixed(3);
+
+                                                                    
+                                                                    
+                                                                    indicecheck= indicecheck + 1;
                                                                     
 
-                                                                     $('#tabla > tbody:last').append('<tr><td><input type="checkbox"  value="'+  vbobina +'"><td>'+ padlargo +'</td></td><td>'+ porcdespreddoble + '%' + '</td><td>'+ vbobina +'</td><td>'+ material +'</td><td>'+ tipocalibre +'</td><td>'+ largo +'</td><td>'+ alto +'</td><td>'+ total +'</td><td>Largo</td><td>'+ areapaddoble +'</td><td>'+ areadesperdiciodoble +'</td><td>'+ desperdiciodoble +'</td></tr>');
+
+                                                                     $('#tabla > tbody:last').append('<tr><td><input type="checkbox" name="listado[]"  value="'+  indicecheck +'"><td>'+ padlargo +'</td></td><td>'+ porcdespreddoble + '%' + '</td><td>'+ vbobina +'</td><td>'+ material +'</td><td>'+ tipocalibre +'</td><td>'+ largo +'</td><td>'+ alto +'</td><td>'+ unitario +'</td><td>'+ total +'</td><td>Largo</td><td>'+ areapaddoble +'</td><td>'+ areadesperdiciodoble +'</td><td>'+ desperdiciodoble +'</td></tr>');
 
 
 
                                                                 }else{
-
-                                                                    $('#tabla > tbody:last').append('<tr><td><input type="checkbox"  value="'+  vbobina +'"><td>'+ padlargo +'</td></td><td>'+ porcdespred + '%' + '</td><td>'+ vbobina +'</td><td>'+ material +'</td><td>'+ tipocalibre +'</td><td>'+ largo +'</td><td>'+ alto +'</td><td>'+ total +'</td><td>Largo</td><td>'+ areapad +'</td><td>'+ areadesperdicio +'</td><td>'+ desperdicio +'</td></tr>');
+                                                                    indicecheck= indicecheck + 1;
+                                                                    
+                                                                    $('#tabla > tbody:last').append('<tr><td><input type="checkbox" name="listado[]"  value="'+  indicecheck +'"><td>'+ padlargo +'</td></td><td>'+ porcdespred + '%' + '</td><td>'+ vbobina +'</td><td>'+ material +'</td><td>'+ tipocalibre +'</td><td>'+ largo +'</td><td>'+ alto +'</td><td>'+ unitario +'</td><td>'+ total +'</td><td>Largo</td><td>'+ areapad +'</td><td>'+ areadesperdicio +'</td><td>'+ desperdicio +'</td></tr>');
                                                                 }
 
                                                                 
@@ -463,6 +459,7 @@
                                                             if ( difalto < 0 ){
 
                                                             } else{
+                                                                
                                                                 
 
 
@@ -485,14 +482,18 @@
                                                                     areadesperdicioaltodb = areadesperdicioaltodb.toFixed(3);
                                                                     desperdicioaltodb = desperdicioaltodb.toFixed(3);
 
+                                                                    indicecheck= indicecheck + 1;
+
                                                                
-                                                                     $('#tabla > tbody:last').append('<tr><td><input type="checkbox"  value="'+  vbobina +'"></td><td>'+ padalto +'</td><td>'+ porcdespred2db + '%' + '</td><td>'+ vbobina +'</td><td>'+ material +'</td><td>'+ tipocalibre +'</td><td>'+ largo +'</td><td>'+ alto +'</td><td>'+ total +'</td><td>Alto</td><td>'+ areapaddb +'</td><td>'+ areadesperdicioaltodb +'</td><td>'+ desperdicioaltodb +'</td></tr>');
+                                                                     $('#tabla > tbody:last').append('<tr><td><input type="checkbox" name="listado[]" value="'+  indicecheck +'"></td><td>'+ padalto +'</td><td>'+ porcdespred2db + '%' + '</td><td>'+ vbobina +'</td><td>'+ material +'</td><td>'+ tipocalibre +'</td><td>'+ largo +'</td><td>'+ alto +'</td><td>'+ unitario +'</td><td>'+ total +'</td><td>Alto</td><td>'+ areapaddb +'</td><td>'+ areadesperdicioaltodb +'</td><td>'+ desperdicioaltodb +'</td></tr>');
 
 
 
                                                                 }else{
 
-                                                                    $('#tabla > tbody:last').append('<tr><td><input type="checkbox"  value="'+  vbobina +'"></td><td>'+ padalto +'</td><td>'+ porcdespred2 + '%' + '</td><td>'+ vbobina +'</td><td>'+ material +'</td><td>'+ tipocalibre +'</td><td>'+ largo +'</td><td>'+ alto +'</td><td>'+ total +'</td><td>Alto</td><td>'+ areapad +'</td><td>'+ areadesperdicioalto +'</td><td>'+ desperdicioalto +'</td></tr>');
+                                                                    indicecheck= indicecheck + 1;
+
+                                                                    $('#tabla > tbody:last').append('<tr><td><input type="checkbox" name="listado[]" value="'+  indicecheck +'"></td><td>'+ padalto +'</td><td>'+ porcdespred2 + '%' + '</td><td>'+ vbobina +'</td><td>'+ material +'</td><td>'+ tipocalibre +'</td><td>'+ largo +'</td><td>'+ alto +'</td><td>'+ unitario +'</td><td>'+ total +'</td><td>Alto</td><td>'+ areapad +'</td><td>'+ areadesperdicioalto +'</td><td>'+ desperdicioalto +'</td></tr>');
                                                                 }
 
 
@@ -557,6 +558,9 @@
 
                         $(document).ready(function() {
 
+                            var folio = new Array(); 
+                 indicecheck = 0;
+
                                                              
                                 $('#material').change(materialSeleccion );
                                  materialSeleccion();
@@ -607,6 +611,9 @@
                                                             total = subtotal * factor;
                                                             total=total.toFixed(3);
 
+                                                            unitario = total / numeropads;
+                                                            unitario = unitario.toFixed(3);
+
                                                             
                                                             
 
@@ -654,6 +661,9 @@
                                                             factor =2;
                                                             total = subtotal * factor;
                                                             total=total.toFixed(3);
+
+                                                            unitario = total / numeropads;
+                                                            unitario = unitario.toFixed(3);
 
                                                             $("#kg").val(kilos);
                                                             $("#kgescondido").val(kilos);

@@ -1,6 +1,8 @@
 <?php
 
 
+$listado = join(", ", $_POST['listado']);
+
 $fecha = $_POST['fechaescondido'];
 $noparte = $_POST['noparte'];
 $cliente = $_POST['cliente'];
@@ -20,7 +22,7 @@ $total = $_POST['utilidadescondido'];
 
 
 $subject = "Cotizacion Folding Cardboard & Boxes Inc" . $cliente;
-$message = "Fecha:" . $fecha . "\n# de parte: ". $noparte . "\n# de Pads: " . $nopads . "\nLargo: " . $largo . "\nAlto: " . $alto . "\nMaterial: " . $material . "\nCalibre: " . $calibre . "\nBobina: " . $bobina .  "\nGramos: " . $gramos. "\nKg: " . $kg . "\nPrecio x Kg: " . $preciokg .  "\nSubtotal: " . $subtotal ."\nTotal: " . $total ;
+$message = "Listado" . $listado ."Fecha:" . $fecha . "\n# de parte: ". $noparte . "\n# de Pads: " . $nopads . "\nLargo: " . $largo . "\nAlto: " . $alto . "\nMaterial: " . $material . "\nCalibre: " . $calibre . "\nBobina: " . $bobina .  "\nGramos: " . $gramos. "\nKg: " . $kg . "\nPrecio x Kg: " . $preciokg .  "\nSubtotal: " . $subtotal ."\nTotal: " . $total ;
 
 
 
