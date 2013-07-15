@@ -39,14 +39,14 @@ if($_SESSION["nivel"] == "AD"){
                                     <ul class="nav">
                                         <li class="active"><a href="usuario.php">Menu</a></li>
                                         <li><a href="pads.php">PADS</a></li>
-                                        <li><a href="#">Particiones</a></li>
+                                        <li><a href="particiones.php">Particiones</a></li>
                                                                     
                                         <li class="dropdown">
                                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Administrador <b class="caret"></b></a>
                                             <ul class="dropdown-menu">
-                                               <li><a href="#">Clientes</a></li>
-            		                            <li><a href="#">Cotizaciones</a></li>
-            		                            <li><a href="#">Almacen</a></li>		                            
+                                               <li><a href="clientes.php">Clientes</a></li>
+            		                            <li><a href="cotizaciones.php">Cotizaciones</a></li>
+            		                            <li><a href="almacen.php">Almacen</a></li>		                            
                                                 <li class="divider"></li>
                                                 <li class="nav-header">Seguridad</li>
                                                 <li><a href="usuarios.php">Usuarios</a></li>
@@ -82,22 +82,22 @@ if($_SESSION["nivel"] == "AD"){
                                 <h2>PADS</h2>                                        
                             </div></a>
                             
-                            <a href="#"><div class="span4">
+                            <a href="particiones.php"><div class="span4">
                                 <div class="icon" aria-hidden="true" data-icon="&#xe000;"></div>
                                 <h2>Particiones</h2>                                        
-                           </div></a>
+                            </div></a>
                             
-                            <a href="#"><div class="span4">
+                            <a href="clientes.php"><div class="span4">
                                 <div class="icon" aria-hidden="true" data-icon="&#xe004;"></div>
                                 <h2>Clientes</h2>                                        
                             </div></a>
                             
-                            <a href="#"><div class="span4">
+                            <a href="cotizaciones.php"><div class="span4">
                                 <div class="icon" aria-hidden="true" data-icon="&#xe005;"></div>
                                 <h2>Cotizaciones</h2>                                        
                             </div></a>
                             
-                            <a href="#"><div class="span4">
+                            <a href="almacen.php"><div class="span4">
                                 <div class="icon" aria-hidden="true" data-icon="&#xe002;"></div>
                                 <h2>Almacen</h2>                                        
                             </div></a>

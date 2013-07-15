@@ -10,7 +10,7 @@ session_start();
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>Sistema de Cotizaciones | Usuarios</title>
+        <title>Sistema de Cotizaciones | Clientes</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
 
@@ -35,14 +35,14 @@ session_start();
                         <ul class="nav">
                             <li><a href="usuario.php">Menu</a></li>
                             <li><a href="pads.php">PADS</a></li>
-                            <li><a href="#">Particiones</a></li>
+                            <li><a href="particiones.php">Particiones</a></li>
                                                         
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Administrador <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
-                                   <li><a href="#">Clientes</a></li>
-		                            <li><a href="#">Cotizaciones</a></li>
-		                            <li><a href="#">Almacen</a></li>		                            
+                                   <li><a href="clientes.php">Clientes</a></li>
+		                            <li><a href="cotizaciones.php">Cotizaciones</a></li>
+		                            <li><a href="almacen.php">Almacen</a></li>		                            
                                     <li class="divider"></li>
                                     <li class="nav-header">Seguridad</li>
                                     <li class="active"><a href="usuarios.php">Usuarios</a></li>
@@ -105,47 +105,24 @@ session_start();
 
 				        ?>
 
-
-
-        <h2>Usuarios</h2>
-			<form name="user_form" action="../procesos/crea_usuarios.php" method="POST"><div class="items_pad1">Nombre de Usuario(nick):<br />
-				<input type="text" name="login" size="30" maxlength="100" required />
-					<br /> Contraseña:
+            <h2>Clientes</h2>
+			<form name="user_form" action="../procesos/crea_usuarios.php" method="POST">Nombre de la Empresa:<br />
+				<input type="text" name="empresan" size="30" maxlength="100" required />
+					<br /> Numero de Parte:
 					<br />	
-				<input id="pass1" type="password" name="pass1" required />
-					<br />Repite Contraseña:
+				<input id="noparte" type="text" name="noparte" required />
+					<br />Direccion:
 					<br />
-				<input id="pass2" type="password" name="pass2" required  />
-					<br />Nombre:
+				<input id="direccion" type="text" name="direccion" required  />
+					<br />Telefono:
 					<br />	
-				<input type="text" name="nombre" size="30" maxlength="100" required />
+				<input type="text" name="telefono" size="30" maxlength="100" required />
 					<br />
-					Apellido Paterno:
+					E-mail:
 					<br />
-				<input type="text" name="apaterno" size="30" maxlength="100" required />
-					<br />Apellido Materno:
-					<br />
-				<input type="text" name="amaterno" size="30" maxlength="100" required />
-					<br />E-mail:
-					<br />
-				<input type="email" name="email" size="30" maxlength="100" required />
-					<br />Nivel del Usuario:
-					<br />
-				<select name="nivel">
-			        <option value="AD">Administrador</option>
-			    	<option value="UN">Uusario Normal</option>
-			    </select>
-					<br />
+				<input type="email" name="email" size="30" maxlength="100" required />					
 			        <br />
-				<input type="submit" name="crear" value="Crear Usuario" />
-            </div> <div class="items_pad1">
-            <h2>Baja</h2>
-                <div class="items_pad1">Nombre de Usuario(nick):<br />
-                <input type="text" name="nombre" size="30" maxlength="100" required />
-                <input type="button" name="crear" value="Eliminar Usuario" />
-
-
-            </div> <div class="items_pad2"></div>
+				<input type="submit" name="crear" value="Crear Cliente" />
 			</form>
 
 	<?php } else {
@@ -153,9 +130,11 @@ session_start();
 	}
 	?>         
            
-            
+            <hr>
 
-            
+            <footer>
+                <p class="alert alert-info">&copy; Nanolabs 2013</p>
+            </footer>
 
         </div> 
 

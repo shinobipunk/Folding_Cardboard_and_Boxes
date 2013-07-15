@@ -22,6 +22,7 @@
                 fecha = moment().format('MMMM Do YYYY, h:mm:ss a');
                 $("#fecha").val(fecha);
                 $("#fechaescondido").val(fecha);
+                $("#folioescondido").val(folio);
                 });
 
                 </script>

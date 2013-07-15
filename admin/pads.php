@@ -33,8 +33,8 @@
                             <div class="nav-collapse collapse">
                                 <ul class="nav">
                                     <li><a href="usuario.php">Menu</a></li>
-                                    <li class="active"><a href="#">PADS</a></li>
-                                    <li><a href="#">Particiones</a></li>
+                                    <li class="active"><a href="pads.php">PADS</a></li>
+                                    <li><a href="particiones.php">Particiones</a></li>
                                                                 
                                     <li class="dropdown">
                                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Administrador <b class="caret"></b></a>
@@ -85,7 +85,7 @@
 
         			<h1>Cotizacion de PADS</h1>
 
-        			<form name="user_form" action="../procesos/crea_pads.php" method="POST">
+        			<form name="user_form" action="../procesos/crea_pads.php" method="POST" >
 
                         <label>Fecha</label>            
                                 <input id="fecha" type="text" name="fecha" disabled /> 
@@ -94,7 +94,9 @@
                                  
 
                         <label style="margin-left:2%">Folio #</label>            
-                                <input id="folio" type="text" name="folio" disabled="disabled" /><br/>        
+                                <input id="folio" type="text" name="folio" value="12345" required /><br/> 
+
+
                         
                         <div class="items_pad1">                    
                                 
@@ -104,6 +106,7 @@
                                                       
                                 <label>Cliente</label>  <br/>           
                                 <input id="cliente" type="text" name="cliente" value="Nanolabs" required /> <br/>
+                                
                                           
                                 <label>Email</label> <br/>            
                                 <input id="email" type="email" name="email" value="eliasstaticx@hotmail.com" required /> <br/>
@@ -297,10 +300,7 @@
                                 <th>Alto</th>
                                 <th>$ Unitario</th>
                                 <th>Total</th>
-                                <th>Posicion</th>
-                                <th>Area PAD</th>
-                                <th>Area Total</th>
-                                <th>Area Desperdicio</th>
+                                <th>Posicion</th>                                
                             </tr>
                         </thead>
 
@@ -311,10 +311,9 @@
                         </tbody>
                         
                     </table>
-                    <input type="button" name="desperdiciobtn" value="Desperdicio en todas las bobinas" onclick="calcularDesperdicio()" />
-                     <input type="button" name="desperdiciobtn" value="Checados" onclick="checados()" />
-
-                    <input type="submit" name="cotizarpad" value="Cotizar PAD" />
+                    <input id="btndesperdicio" type="button" name="desperdiciobtn" value="Cotizar" onclick="calcularDesperdicio()" />
+                     <br><br>
+                    <input id="btncotizar" type="submit" name="cotizarpad" value="Enviar Cotizacion"  />
 
                 <!-- Codigo de seleccion de Material con Calibre-->
                     <script type="text/javascript">
@@ -324,24 +323,11 @@
 
                     
 
-                     function checados(){
-
-                         
-
-                        $("input:checkbox:checked").each(function(){
-                          //cada elemento seleccionado
-                          alert($(this).val()); 
-                          document.getElementById("padarreglo").value = folio[$(this).val()];
-                                                                                           
-                        });
-
-
-                    
-                    
-                     }
 
 
                      function calcularDesperdicio() {
+                        document.getElementById("btncotizar").style.display="block";
+                        document.getElementById("tabla").style.display="block";
 
                             if (1==0){
                                 
@@ -440,14 +426,14 @@
                                                                     
 
 
-                                                                     $('#tabla > tbody:last').append('<tr><td><input type="checkbox" name="listado[]"  value="'+  indicecheck +'"><td>'+ padlargo +'</td></td><td>'+ porcdespreddoble + '%' + '</td><td>'+ vbobina +'</td><td>'+ material +'</td><td>'+ tipocalibre +'</td><td>'+ largo +'</td><td>'+ alto +'</td><td>'+ unitario +'</td><td>'+ total +'</td><td>Largo</td><td>'+ areapaddoble +'</td><td>'+ areadesperdiciodoble +'</td><td>'+ desperdiciodoble +'</td></tr>');
+                                                                     $('#tabla > tbody:last').append('<tr><td><input type="checkbox" name="listado[]"  value="'+numeropads + '-   -' + largo + '-   -' + alto + '-   -'  + material + '-   -' + tipocalibre + '-   -'  +unitario + '-   -' + total +'"><td>'+ padlargo +'</td></td><td>'+ porcdespreddoble + '%' + '</td><td>'+ vbobina +'</td><td>'+ material +'</td><td>'+ tipocalibre +'</td><td>'+ largo +'</td><td>'+ alto +'</td><td class="resaltado">'+ unitario +'</td><td class="resaltado">'+ total +'</td><td>Largo</td><td>');
 
 
 
                                                                 }else{
                                                                     indicecheck= indicecheck + 1;
                                                                     
-                                                                    $('#tabla > tbody:last').append('<tr><td><input type="checkbox" name="listado[]"  value="'+  indicecheck +'"><td>'+ padlargo +'</td></td><td>'+ porcdespred + '%' + '</td><td>'+ vbobina +'</td><td>'+ material +'</td><td>'+ tipocalibre +'</td><td>'+ largo +'</td><td>'+ alto +'</td><td>'+ unitario +'</td><td>'+ total +'</td><td>Largo</td><td>'+ areapad +'</td><td>'+ areadesperdicio +'</td><td>'+ desperdicio +'</td></tr>');
+                                                                    $('#tabla > tbody:last').append('<tr><td><input type="checkbox" name="listado[]"  value="'+numeropads + '-   -' + largo + '-   -' + alto + '-   -'  + material + '-   -' + tipocalibre + '-   -' +unitario + '-   -' + total +'"><td>'+ padlargo +'</td></td><td>'+ porcdespred + '%' + '</td><td>'+ vbobina +'</td><td>'+ material +'</td><td>'+ tipocalibre +'</td><td>'+ largo +'</td><td>'+ alto +'</td><td class="resaltado">'+ unitario +'</td><td class="resaltado">'+ total +'</td><td>Largo</td><td>');
                                                                 }
 
                                                                 
@@ -485,7 +471,7 @@
                                                                     indicecheck= indicecheck + 1;
 
                                                                
-                                                                     $('#tabla > tbody:last').append('<tr><td><input type="checkbox" name="listado[]" value="'+  indicecheck +'"></td><td>'+ padalto +'</td><td>'+ porcdespred2db + '%' + '</td><td>'+ vbobina +'</td><td>'+ material +'</td><td>'+ tipocalibre +'</td><td>'+ largo +'</td><td>'+ alto +'</td><td>'+ unitario +'</td><td>'+ total +'</td><td>Alto</td><td>'+ areapaddb +'</td><td>'+ areadesperdicioaltodb +'</td><td>'+ desperdicioaltodb +'</td></tr>');
+                                                                     $('#tabla > tbody:last').append('<tr><td><input type="checkbox" name="listado[]" value="'+ numeropads + '-   -' +  largo + '-   -' + alto + '-   -' + material + '-   -' + tipocalibre + '-   -'  + unitario + '-   -' + total  +'"></td><td>'+ padalto +'</td><td>'+ porcdespred2db + '%' + '</td><td>'+ vbobina +'</td><td>'+ material +'</td><td>'+ tipocalibre +'</td><td>'+ largo +'</td><td>'+ alto +'</td><td class="resaltado">'+ unitario +'</td><td class="resaltado">'+ total +'</td><td>Alto</td><td>');
 
 
 
@@ -493,7 +479,7 @@
 
                                                                     indicecheck= indicecheck + 1;
 
-                                                                    $('#tabla > tbody:last').append('<tr><td><input type="checkbox" name="listado[]" value="'+  indicecheck +'"></td><td>'+ padalto +'</td><td>'+ porcdespred2 + '%' + '</td><td>'+ vbobina +'</td><td>'+ material +'</td><td>'+ tipocalibre +'</td><td>'+ largo +'</td><td>'+ alto +'</td><td>'+ unitario +'</td><td>'+ total +'</td><td>Alto</td><td>'+ areapad +'</td><td>'+ areadesperdicioalto +'</td><td>'+ desperdicioalto +'</td></tr>');
+                                                                    $('#tabla > tbody:last').append('<tr><td><input type="checkbox" name="listado[]" value="'+ numeropads + '-   -' +  largo + '-   -' + alto + '-   -' + material + '-   -' + tipocalibre + '-   -'  + unitario + '-   -' + total  +'"></td><td>'+ padalto +'</td><td>'+ porcdespred2 + '%' + '</td><td>'+ vbobina +'</td><td>'+ material +'</td><td>'+ tipocalibre +'</td><td>'+ largo +'</td><td>'+ alto +'</td><td class="resaltado">'+ unitario +'</td><td class="resaltado">'+ total +'</td><td>Alto</td><td>');
                                                                 }
 
 
@@ -558,8 +544,9 @@
 
                         $(document).ready(function() {
 
-                            var folio = new Array(); 
-                 indicecheck = 0;
+
+                                document.getElementById("btncotizar").style.display="none";
+                                indicecheck = 0;
 
                                                              
                                 $('#material').change(materialSeleccion );
