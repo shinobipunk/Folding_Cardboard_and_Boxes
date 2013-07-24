@@ -85,7 +85,7 @@
 
         			<h1>Cotizacion de PADS</h1>
 
-        			<form name="user_form" action="../procesos/crea_pads.php" method="POST" >
+        			<form name="formulario" action="../procesos/crea_pads.php" method="POST" >
 
                         <label>Fecha</label>            
                                 <input id="fecha" type="text" name="fecha" disabled /> 
@@ -288,6 +288,33 @@
                     
                    <!--  <div id="tablapad"></div> -->
                     <table id="tabla" border="0" cellpadding="10" align="center" style="text-align:center;">
+                        <h1>Opciones</h1>
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th data-sort="int">Pads x bobina</th>
+                                <th data-sort="float">Desperdicio</th>
+                                <th>Bobina</th>
+                                <th>Material</th>
+                                <th>Calibre</th>
+                                <th>Largo</th>
+                                <th>Alto</th>
+                                <th>$ Unitario</th>
+                                <th>Total</th>
+                                <th>Posicion</th>                                
+                            </tr>
+                        </thead>
+
+                        <tbody id="tablaelementos">
+                            <tr>
+                                                       
+                            </tr>
+                        </tbody>
+                        
+                    </table>
+
+                     <table id="tablaagregados" border="0" cellpadding="10" align="center" style="text-align:center;">
+                        <h1>Seleccionados</h1>
                         <thead>
                             <tr>
                                 <th></th>
@@ -311,9 +338,13 @@
                         </tbody>
                         
                     </table>
-                    <input id="btndesperdicio" type="button" name="desperdiciobtn" value="Cotizar" onclick="calcularDesperdicio()" />
+
+
+
+                    <input id="btncotizar" type="button" name="btncotizar" value="Cotizar" onclick="calcularDesperdicio()" />
+                    <input id="btnagregar" type="button" name="btnagregar" value="Agregar Cotizacion" onclick="anadiroptimos()" />
                      <br><br>
-                    <input id="btncotizar" type="submit" name="cotizarpad" value="Enviar Cotizacion"  />
+                    <input id="btnenviar" type="submit" name="btnenviar" value="Enviar Cotizacion"  />
 
                 <!-- Codigo de seleccion de Material con Calibre-->
                     <script type="text/javascript">
@@ -321,13 +352,121 @@
                 //-----------------------------------------------------------------------------        
                  //-----------------------------------------------------------------------------    
 
-                    
+                    arreglopads = new Array();
+                    x=0;
+                    y=0; //contador para checar los seleccionados
+                    p=0; // contador para  los elementos del array
+                    verchecks = 0;
+
+                    function anadiroptimos(){
+
+
+                        document.getElementById("tablaagregados").style.display="block";
+                        seleccionado = document.getElementsByClassName("campo");
+                           iteraciones = seleccionado.length;
+
+                        $("#tablaelementos").find('tr').each(function(){
+
+                            if (seleccionado[y].checked){
+                                verchecks = verchecks + 1;
+                            }
+                            y=y+1;
+
+                        });
+
+                        if (verchecks > 0){
+
+
+
+                                $("#tablaelementos").find('tr').each(function(){
+
+                                    
+                                   
+
+                                   
+                                  // for(x=0; x<iteraciones; x++){
+                                    alert(p);
+                                    
+                                        if (seleccionado[x].checked){
+                                            objetoseleccionado = arreglopads[p];
+                                            casilla = seleccionado[x];
+                                            
+                                           $('#tablaagregados > tbody:last').append('<tr><td><input class="seleccionados"  type="checkbox" name="listado[]" value="' + casilla.value +' " checked></td><td>'+ objetoseleccionado.cantidad +'</td><td>'+ objetoseleccionado.desperdicio + '%' + '</td><td>'+ objetoseleccionado.bobina +'</td><td>'+ objetoseleccionado.material +'</td><td>'+ objetoseleccionado.calibre +'</td><td>'+ objetoseleccionado.largo +'</td><td>'+ objetoseleccionado.alto +'</td><td class="resaltado">'+ objetoseleccionado.unitario +'</td><td class="resaltado">'+ objetoseleccionado.total +'</td><td>Alto</td><td>');                                                                                                                       
+                                        seleccionado[x].checked = false;
+                                        }else{
+                                            alert('no seleccionado');
+                                            
+                                        }
+
+
+                                  // }
+
+                                   x=x+1;
+                                   p=p+1;
+                                 });
+                        }else{
+                            alert("Tiene que seleccionar al menos una cotizacion");
+                        }
+                        //vaciar arreglopads
+                       /* tamarreglopads = arreglopads.length;
+                        for(var i = 0; i < tamarreglopads; i++) {
+                            arreglopads.pop();   
+                        }*/
+                        
+                        x=0;
+                        y=0;
+                        verchecks = 0;
+
+
+                    }
+
+                    function eliminarelementos(){
+                        var Parent = document.getElementById("tablaelementos");
+                    while(Parent.hasChildNodes())
+                    {
+                       Parent.removeChild(Parent.firstChild);
+                    }
+                    }
 
 
 
                      function calcularDesperdicio() {
-                        document.getElementById("btncotizar").style.display="block";
+                        eliminarelementos();
+                        document.getElementById("btnenviar").style.display="block";
                         document.getElementById("tabla").style.display="block";
+
+                         
+
+                        
+
+                         function optimolargo(cantidad,desperdicio,bobina,material,calibre,largo, alto, unitario, total)
+                            {
+                            this.cantidad=cantidad;
+                            this.desperdicio=desperdicio;
+                            this.bobina=bobina;
+                            this.material=material;
+                            this.calibre = calibre;
+                            this.largo = largo;
+                            this.alto = alto;
+                            this.unitario = unitario;
+                            this.total = total;
+                            }
+
+                            function optimoalto(cantidad,desperdicio,bobina,material,calibre,largo, alto, unitario, total)
+                            {
+                            this.cantidad=cantidad;
+                            this.desperdicio=desperdicio;
+                            this.bobina=bobina;
+                            this.material=material;
+                            this.calibre = calibre;
+                            this.largo = largo;
+                            this.alto = alto;
+                            this.unitario = unitario;
+                            this.total = total;
+                            }
+
+
+
 
                             if (1==0){
                                 
@@ -361,10 +500,10 @@
                                                     $("#"+ idSelect).find('option').each(function()
                                                         {
                                                            
-                                                           vbobina = $(this).val(); 
+                                                            objetol = new optimolargo();
+                                                            objetoa = new optimoalto();
 
-
-
+                                                            vbobina = $(this).val(); 
                                                             padlargo = 1;
                                                             padalto = 1;
                                                             areapad = alto * largo;
@@ -396,6 +535,16 @@
                                                            desperdicio = desperdicio.toFixed(3);
                                                            desperdicioalto = desperdicioalto.toFixed(3);
 
+                                                           if ((diflargo > 0) || (difalto > 0)){
+                                                            objetol.desperdicio = 110;
+                                                            objetoa.desperdicio = 110;
+                                                           }
+
+
+
+
+
+
 
 
                                                             if (  diflargo < 0 ){
@@ -422,18 +571,36 @@
 
                                                                     
                                                                     
-                                                                    indicecheck= indicecheck + 1;
                                                                     
+                                                                    objetol.cantidad = padlargo; 
+                                                                    objetol.desperdicio = porcdespreddoble;
+
+                                                                    objetol.bobina=vbobina;
+                                                                    objetol.material=material;
+                                                                    objetol.calibre = tipocalibre;
+                                                                    objetol.largo = largo;
+                                                                    objetol.alto = alto;
+                                                                    objetol.unitario = unitario;
+                                                                    objetol.total = total;
 
 
-                                                                     $('#tabla > tbody:last').append('<tr><td><input type="checkbox" name="listado[]"  value="'+numeropads + '-   -' + largo + '-   -' + alto + '-   -'  + material + '-   -' + tipocalibre + '-   -'  +unitario + '-   -' + total +'"><td>'+ padlargo +'</td></td><td>'+ porcdespreddoble + '%' + '</td><td>'+ vbobina +'</td><td>'+ material +'</td><td>'+ tipocalibre +'</td><td>'+ largo +'</td><td>'+ alto +'</td><td class="resaltado">'+ unitario +'</td><td class="resaltado">'+ total +'</td><td>Largo</td><td>');
+                                                                     //$('#tabla > tbody:last').append('<tr><td><input type="checkbox" name="listado[]"  value="'+numeropads + '-   -' + largo + '-   -' + alto + '-   -'  + material + '-   -' + tipocalibre + '-   -'  +unitario + '-   -' + total +'"><td>'+ padlargo +'</td></td><td>'+ porcdespreddoble + '%' + '</td><td>'+ vbobina +'</td><td>'+ material +'</td><td>'+ tipocalibre +'</td><td>'+ largo +'</td><td>'+ alto +'</td><td class="resaltado">'+ unitario +'</td><td class="resaltado">'+ total +'</td><td>Largo</td><td>');
 
 
 
                                                                 }else{
-                                                                    indicecheck= indicecheck + 1;
                                                                     
-                                                                    $('#tabla > tbody:last').append('<tr><td><input type="checkbox" name="listado[]"  value="'+numeropads + '-   -' + largo + '-   -' + alto + '-   -'  + material + '-   -' + tipocalibre + '-   -' +unitario + '-   -' + total +'"><td>'+ padlargo +'</td></td><td>'+ porcdespred + '%' + '</td><td>'+ vbobina +'</td><td>'+ material +'</td><td>'+ tipocalibre +'</td><td>'+ largo +'</td><td>'+ alto +'</td><td class="resaltado">'+ unitario +'</td><td class="resaltado">'+ total +'</td><td>Largo</td><td>');
+                                                                    objetol.cantidad = padlargo; 
+                                                                    objetol.desperdicio = porcdespred;
+
+                                                                    objetol.bobina= vbobina;
+                                                                    objetol.material=material;
+                                                                    objetol.calibre = tipocalibre;
+                                                                    objetol.largo = largo;
+                                                                    objetol.alto = alto;
+                                                                    objetol.unitario = unitario;
+                                                                    objetol.total = total;
+                                                                    //$('#tabla > tbody:last').append('<tr><td><input type="checkbox" name="listado[]"  value="'+numeropads + '-   -' + largo + '-   -' + alto + '-   -'  + material + '-   -' + tipocalibre + '-   -' +unitario + '-   -' + total +'"><td>'+ padlargo +'</td></td><td>'+ porcdespred + '%' + '</td><td>'+ vbobina +'</td><td>'+ material +'</td><td>'+ tipocalibre +'</td><td>'+ largo +'</td><td>'+ alto +'</td><td class="resaltado">'+ unitario +'</td><td class="resaltado">'+ total +'</td><td>Largo</td><td>');
                                                                 }
 
                                                                 
@@ -468,31 +635,97 @@
                                                                     areadesperdicioaltodb = areadesperdicioaltodb.toFixed(3);
                                                                     desperdicioaltodb = desperdicioaltodb.toFixed(3);
 
-                                                                    indicecheck= indicecheck + 1;
+                                                                    
 
-                                                               
-                                                                     $('#tabla > tbody:last').append('<tr><td><input type="checkbox" name="listado[]" value="'+ numeropads + '-   -' +  largo + '-   -' + alto + '-   -' + material + '-   -' + tipocalibre + '-   -'  + unitario + '-   -' + total  +'"></td><td>'+ padalto +'</td><td>'+ porcdespred2db + '%' + '</td><td>'+ vbobina +'</td><td>'+ material +'</td><td>'+ tipocalibre +'</td><td>'+ largo +'</td><td>'+ alto +'</td><td class="resaltado">'+ unitario +'</td><td class="resaltado">'+ total +'</td><td>Alto</td><td>');
+                                                                objetoa.cantidad = padalto;
+                                                                objetoa.desperdicio = porcdespred2db;
+                                                                objetoa.bobina=vbobina;
+                                                                objetoa.material=material;
+                                                                objetoa.calibre = tipocalibre;
+                                                                objetoa.largo = largo;
+                                                                objetoa.alto = alto;
+                                                                objetoa.unitario = unitario;
+                                                                objetoa.total = total;
+                                                                   //  $('#tabla > tbody:last').append('<tr><td><input type="checkbox" name="listado[]" value="'+ numeropads + '-   -' +  largo + '-   -' + alto + '-   -' + material + '-   -' + tipocalibre + '-   -'  + unitario + '-   -' + total  +'"></td><td>'+ padalto +'</td><td>'+ porcdespred2db + '%' + '</td><td>'+ vbobina +'</td><td>'+ material +'</td><td>'+ tipocalibre +'</td><td>'+ largo +'</td><td>'+ alto +'</td><td class="resaltado">'+ unitario +'</td><td class="resaltado">'+ total +'</td><td>Alto</td><td>');
 
 
 
                                                                 }else{
 
-                                                                    indicecheck= indicecheck + 1;
+                                                                objetoa.cantidad = padalto;
+                                                                objetoa.desperdicio = porcdespred2;
+                                                                objetoa.bobina=vbobina;
+                                                                objetoa.material=material;
+                                                                objetoa.calibre = tipocalibre;
+                                                                objetoa.largo = largo;
+                                                                objetoa.alto = alto;
+                                                                objetoa.unitario = unitario;
+                                                                objetoa.total = total;
 
-                                                                    $('#tabla > tbody:last').append('<tr><td><input type="checkbox" name="listado[]" value="'+ numeropads + '-   -' +  largo + '-   -' + alto + '-   -' + material + '-   -' + tipocalibre + '-   -'  + unitario + '-   -' + total  +'"></td><td>'+ padalto +'</td><td>'+ porcdespred2 + '%' + '</td><td>'+ vbobina +'</td><td>'+ material +'</td><td>'+ tipocalibre +'</td><td>'+ largo +'</td><td>'+ alto +'</td><td class="resaltado">'+ unitario +'</td><td class="resaltado">'+ total +'</td><td>Alto</td><td>');
+                                                                  //  $('#tabla > tbody:last').append('<tr><td><input type="checkbox" name="listado[]" value="'+ numeropads + '-   -' +  largo + '-   -' + alto + '-   -' + material + '-   -' + tipocalibre + '-   -'  + unitario + '-   -' + total  +'"></td><td>'+ padalto +'</td><td>'+ porcdespred2 + '%' + '</td><td>'+ vbobina +'</td><td>'+ material +'</td><td>'+ tipocalibre +'</td><td>'+ largo +'</td><td>'+ alto +'</td><td class="resaltado">'+ unitario +'</td><td class="resaltado">'+ total +'</td><td>Alto</td><td>');
                                                                 }
-
-
-
-
-
-
 
 
                                                                 
                                                                
                                                             }
+
+                                                            cl = parseFloat(objetol.desperdicio);
+                                                            ca = parseFloat(objetoa.desperdicio);
                                                            
+                                                           /*if ( cl > ca){
+                                                            alert("x");
+                                                            arreglopads[indicecheck] = objetoa;
+                                                            alert("a");
+
+                                                           }*/
+
+                                                           if (cl > ca){
+                                                            arreglopads[indicecheck] = objetoa;
+                                                            indicecheck= indicecheck + 1;
+                                                            $('#tabla > tbody:last').append('<tr><td><input class="campo" type="checkbox" name="listado[]" value="'+ numeropads + '-   -' +  largo + '-   -' + alto + '-   -' + material + '-   -' + tipocalibre + '-   -'  + unitario + '-   -' + total  +'"></td><td>'+ objetoa.cantidad +'</td><td>'+ objetoa.desperdicio + '%' + '</td><td>'+ objetoa.bobina +'</td><td>'+ objetoa.material +'</td><td>'+ objetoa.calibre +'</td><td>'+ objetoa.largo +'</td><td>'+ objetoa.alto +'</td><td class="resaltado">'+ objetoa.unitario +'</td><td class="resaltado">'+ objetoa.total +'</td><td>Alto</td><td>');                                                                                                                      
+                                                          //  alert("a");
+
+                                                           }
+
+
+                                                           if (cl < ca){
+                                                            arreglopads[indicecheck] = objetol;
+                                                            indicecheck= indicecheck + 1;
+                                                            $('#tabla > tbody:last').append('<tr><td><input class="campo"  type="checkbox" name="listado[]" value="'+ numeropads + '-   -' +  largo + '-   -' + alto + '-   -' + material + '-   -' + tipocalibre + '-   -'  + unitario + '-   -' + total  +'"></td><td>'+ objetol.cantidad +'</td><td>'+ objetol.desperdicio + '%' + '</td><td>'+ objetol.bobina +'</td><td>'+ objetol.material +'</td><td>'+ objetol.calibre +'</td><td>'+ objetol.largo +'</td><td>'+ objetol.alto +'</td><td class="resaltado">'+ objetol.unitario +'</td><td class="resaltado">'+ objetol.total +'</td><td>Alto</td><td>');                                                                                                                      
+                                                           // alert("l");
+
+                                                           }
+
+                                                           if (cl == ca){
+                                                            
+                                                                if (objetol.cantidad > objetoa.cantidad){
+                                                                    arreglopads[indicecheck] = objetol;
+                                                                    $('#tabla > tbody:last').append('<tr><td><input class="campo"  type="checkbox" name="listado[]" value="'+ numeropads + '-   -' +  largo + '-   -' + alto + '-   -' + material + '-   -' + tipocalibre + '-   -'  + unitario + '-   -' + total  +'"></td><td>'+ objetol.cantidad +'</td><td>'+ objetol.desperdicio + '%' + '</td><td>'+ objetol.bobina +'</td><td>'+ objetol.material +'</td><td>'+ objetol.calibre +'</td><td>'+ objetol.largo +'</td><td>'+ objetol.alto +'</td><td class="resaltado">'+ objetol.unitario +'</td><td class="resaltado">'+ objetol.total +'</td><td>Alto</td><td>');                                                                                                                      
+                                                                    indicecheck= indicecheck + 1;
+                                                                  //  alert("=l");
+                                                                }
+
+                                                                if (objetol.cantidad < objetoa.cantidad){
+                                                                    arreglopads[indicecheck] = objetoa;
+                                                                    $('#tabla > tbody:last').append('<tr><td><input class="campo"  type="checkbox" name="listado[]" value="'+ numeropads + '-   -' +  largo + '-   -' + alto + '-   -' + material + '-   -' + tipocalibre + '-   -'  + unitario + '-   -' + total  +'"></td><td>'+ objetoa.cantidad +'</td><td>'+ objetoa.desperdicio + '%' + '</td><td>'+ objetoa.bobina +'</td><td>'+ objetoa.material +'</td><td>'+ objetoa.calibre +'</td><td>'+ objetoa.largo +'</td><td>'+ objetoa.alto +'</td><td class="resaltado">'+ objetoa.unitario +'</td><td class="resaltado">'+ objetoa.total +'</td><td>Alto</td><td>');                                                                                                                      
+                                                                    indicecheck= indicecheck + 1;
+                                                                   // alert("=a");
+                                                                }
+
+                                                                if (objetol.cantidad == objetoa.cantidad){
+                                                                    arreglopads[indicecheck] = objetol;
+                                                                    $('#tabla > tbody:last').append('<tr><td><input class="campo"  type="checkbox" name="listado[]" value="'+ numeropads + '-   -' +  largo + '-   -' + alto + '-   -' + material + '-   -' + tipocalibre + '-   -'  + unitario + '-   -' + total  +'"></td><td>'+ objetol.cantidad +'</td><td>'+ objetol.desperdicio + '%' + '</td><td>'+ objetol.bobina +'</td><td>'+ objetol.material +'</td><td>'+ objetol.calibre +'</td><td>'+ objetol.largo +'</td><td>'+ objetol.alto +'</td><td class="resaltado">'+ objetol.unitario +'</td><td class="resaltado">'+ objetol.total +'</td><td>Alto</td><td>');                                                                                                                      
+                                                                    indicecheck= indicecheck + 1;
+                                                                  //  alert("==");
+                                                                }
+                                                            
+
+                                                           }
+
+                                                                                                                                                                               
+                                                            
+
 
                                                             
                                                            
@@ -545,7 +778,7 @@
                         $(document).ready(function() {
 
 
-                                document.getElementById("btncotizar").style.display="none";
+                                document.getElementById("btnenviar").style.display="none";
                                 indicecheck = 0;
 
                                                              
@@ -730,7 +963,7 @@
                 checkPasswordValidity();
                 if (!this.checkValidity()) {
                     event.preventDefault();
-                    //Implement you own means of displaying error messages to the user here.
+                    //Implement you own means of displaying error messbobinas to the user here.
                     password1.focus();
                 }
             }, false);
