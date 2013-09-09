@@ -1,6 +1,11 @@
 <?php
 session_start();
+
+include dirname(dirname(__FILE__))."/config.php";
+
+$link=Conectarse();
 ?>
+
 
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
@@ -86,6 +91,13 @@ session_start();
 
 				        ?>
 
+                        <?php 
+                            if (isset($_GET["noexiste"]) AND $_GET["noexiste"] == 1) { 
+                                  echo "<h2 class=\"alert alert-error\">El cliente no existe en la Base de Datos</h2>";
+                                } 
+
+                        ?>
+
 				        
 						<?php 
 							if (isset($_GET["error"]) AND $_GET["error"] == 1) { 
@@ -101,31 +113,83 @@ session_start();
 
 				        ?>
 
+                        <?php 
+                            if (isset($_GET["exitoborrado"]) AND $_GET["exitoborrado"] == 1) { 
+                                  echo "<h2 class=\"alert alert-success\">Cliente eliminado con exito!</h2>";
+                                } 
 
-			<form name="user_form" action="../procesos/crea_clientes.php" method="POST">Nombre de la empresa:<br />
-				<input type="text" name="empresa" size="30" maxlength="100" required />
-                    <br />E-mail:
-                    <br />
-                <input type="email" name="email" size="30" maxlength="100" required />
-					<br /> Direccion:
-					<br />	
-				<input id="direccion" type="text" name="direccion" required />
-                    <br /> Codigo Postal:
-                    <br />  
-                <input id="cp" type="text" name="cp" required />
-					<br />Telefono:
-					<br />
-				<input id="telefono" type="text" name="telefono" required  />
-					<br />Ciudad:
-					<br />	
-				<input type="text" name="ciudad" size="30" maxlength="100" required />
-					<br />Pais:
-					<br />
-				<input type="text" name="pais" size="30" maxlength="100" required />				
-					<br />
-			        <br />
-				<input type="submit" name="crear" value="Agregar Cliente" />
-			</form>
+                        ?>
+
+            <div id="bloque">
+                <h1>Alta</h1>
+        			<form name="user_form" action="../procesos/crea_clientes.php" method="POST">Nombre de la empresa:<br />
+        				<input type="text" name="empresa" size="30" maxlength="100" required />
+                            <br />E-mail:
+                            <br />
+                        <input type="email" name="email" size="30" maxlength="100" required />
+        					<br /> Direccion:
+        					<br />	
+        				<input id="direccion" type="text" name="direccion" required />
+                            <br /> Codigo Postal:
+                            <br />  
+                        <input id="cp" type="text" name="cp" required />
+        					<br />Telefono:
+        					<br />
+        				<input id="telefono" type="text" name="telefono" required  />
+        					<br />Ciudad:
+        					<br />	
+        				<input type="text" name="ciudad" size="30" maxlength="100" required />
+        					<br />Pais:
+        					<br />
+        				<input type="text" name="pais" size="30" maxlength="100" required />				
+        					<br />
+        			        <br />
+        				<input type="submit" name="crear" value="Agregar Cliente" />
+                                      
+        			</form>
+            </div> 
+            <div id="bloque">
+                 <h1>Baja</h1>
+                <form name="user_form" action="../procesos/elimina_cliente.php" method="POST">
+                        
+                        <label for="empresaeliminar">Empresa</label><br>
+                            <select name='empresaeliminar'><option value=""> --Escoje una Empresa-- </option>
+                                <?php 
+                                    $query = sprintf("SELECT empresa FROM clientes where 1 ORDER BY empresa ASC ");
+                                    $result=mysql_query($query,$link) or die(mysql_error()); 
+                                    while($row=mysql_fetch_array($result,MYSQLI_NUM)){
+                                    echo "<OPTION VALUE='".$row[0]."'>".$row[0]."</OPTION>";
+                                        }
+                                ?>
+                            </select>              
+                            <br />
+                            <br />
+                        <input type="submit" name="eliminar" value="Eliminar Cliente" />                
+                    </form>
+            
+            </div> 
+            <div id="bloque"> 
+             <h1>Editar</h1>         
+                    <form name="user_form" action="../procesos/edita_clientes.php" method="POST">                          
+
+                     
+                           
+                            <label for="empresaeditar">Empresa</label><br>
+                            <select name=cat><option value=""> --Escoje una Empresa-- </option>
+                                <?php 
+                                    $query = sprintf("SELECT empresa FROM clientes where 1 ORDER BY empresa ASC ");
+                                    $result=mysql_query($query,$link) or die(mysql_error()); 
+                                    while($row=mysql_fetch_array($result,MYSQLI_NUM)){
+                                    echo "<OPTION VALUE='".$row[0]."'>".$row[0]."</OPTION>";
+                                        }
+                                ?>
+                            </select>
+                                   
+                            <br />
+                            <br />
+                        <input type="submit" name="editar" value="Editar Cliente" />                
+                    </form>
+            </div> 
 
 	<?php } else {
 		echo "<h2 class=\"alert alert-error\">No tiene acceso a esta seccion</h2>";

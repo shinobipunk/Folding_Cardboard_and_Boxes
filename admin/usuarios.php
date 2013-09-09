@@ -1,5 +1,8 @@
 <?php
 session_start();
+include dirname(dirname(__FILE__))."/config.php";
+
+$link=Conectarse();
 ?>
 
 <!DOCTYPE html>
@@ -106,8 +109,24 @@ session_start();
 
 				        ?>
 
+                        <?php 
+                            if (isset($_GET["noexiste"]) AND $_GET["noexiste"] == 1) { 
+                                  echo "<h2 class=\"alert alert-error\">El usuario no existe en la Base de Datos</h2>";
+                                } 
 
-			<form name="user_form" action="../procesos/crea_usuarios.php" method="POST">Nombre de Usuario(nick):<br />
+                        ?>
+
+                        <?php 
+                            if (isset($_GET["exitoborrado"]) AND $_GET["exitoborrado"] == 1) { 
+                                  echo "<h2 class=\"alert alert-success\">Usuario eliminado con exito!</h2>";
+                                } 
+
+                        ?>
+
+
+			<div id="bloque">
+                <h1>Alta</h1>
+            <form name="user_form" action="../procesos/crea_usuarios.php" method="POST">Nombre de Usuario(nick):<br />
 				<input type="text" name="login" size="30" maxlength="100" required />
 					<br /> Contraseña:
 					<br />	
@@ -132,12 +151,55 @@ session_start();
 					<br />
 				<select name="nivel">
 			        <option value="AD">Administrador</option>
-			    	<option value="UN">Uusario Normal</option>
+			    	<option value="UN">Usuario Normal</option>
+                    <option value="ES">Usuario Especial</option>
 			    </select>
 					<br />
 			        <br />
 				<input type="submit" name="crear" value="Crear Usuario" />
 			</form>
+        </div>
+
+        <div id="bloque">
+                <h1>Baja</h1>
+                <form name="user_form" action="../procesos/elimina_usuarios.php" method="POST">
+                        
+                        <label for="usuarioeliminar">Nick</label><br>
+                            <select name='usuarioeliminar'><option value=""> --Escoje un Usuario-- </option>
+                                <?php 
+                                    $query = sprintf("SELECT login FROM usuarios where 1 ORDER BY login ASC ");
+                                    $result=mysql_query($query,$link) or die(mysql_error()); 
+                                    while($row=mysql_fetch_array($result,MYSQLI_NUM)){
+                                    echo "<OPTION VALUE='".$row[0]."'>".$row[0]."</OPTION>";
+                                        }
+                                ?>
+                            </select>              
+                            <br />
+                            <br />
+                        <input type="submit" name="eliminar" value="Eliminar Usuario" />                
+                    </form>
+        </div>
+
+         <div id="bloque">
+                <h1>Editar</h1>
+                <form name="user_form" action="../procesos/edita_usuarios.php" method="POST"> 
+                           
+                            <label for="usuarioeditar">Nick</label><br>
+                            <select name=cat><option value=""> --Escoje un Usuario-- </option>
+                                <?php 
+                                    $query = sprintf("SELECT login FROM usuarios where 1 ORDER BY login ASC ");
+                                    $result=mysql_query($query,$link) or die(mysql_error()); 
+                                    while($row=mysql_fetch_array($result,MYSQLI_NUM)){
+                                    echo "<OPTION VALUE='".$row[0]."'>".$row[0]."</OPTION>";
+                                        }
+                                ?>
+                            </select>
+                                   
+                            <br />
+                            <br />
+                        <input type="submit" name="editar" value="Editar Usuario" />                
+                    </form>
+        </div>
 
 	<?php } else {
 		echo "<h2 class=\"alert alert-error\">No tiene acceso a esta seccion</h2>";

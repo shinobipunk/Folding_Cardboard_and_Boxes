@@ -25,7 +25,8 @@
 	box-sizing: border-box
 }
 article,aside,details,figcaption,figure,footer,header,hgroup,nav,section {
-	display: block
+	display: block;
+	clear: both;
 }
 audio,canvas,video {
 	display: inline-block;
@@ -4587,3 +4588,8 @@ option:focus {
 }
 
 
+#bloque{
+	width: 33%;
+	display: inline-block;
+	float: left;
+}
