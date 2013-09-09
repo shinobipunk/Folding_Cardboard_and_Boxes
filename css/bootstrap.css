@@ -162,7 +162,7 @@ a {
 }
 a:hover,a:focus {
 	color: crimson;
-	text-decoration: underline
+	
 }
 .img-rounded {
 	-webkit-border-radius: 6px;
@@ -184,7 +184,7 @@ a:hover,a:focus {
 	border-radius: 500px
 }
 .row {
-	background-color: lightcyan;
+	background-color: #ddd;
 	border-radius: 3em;
 	text-align: center;
 	padding-bottom: 3em;

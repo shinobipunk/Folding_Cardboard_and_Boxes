@@ -35,17 +35,17 @@ session_start();
                         <ul class="nav">
                             <li><a href="usuario.php">Menu</a></li>
                             <li><a href="pads.php">PADS</a></li>
-                            <li><a href="particiones.php">Particiones</a></li>
+                            <li><a href="#">Particiones</a></li>
                                                         
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Administrador <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
-                                   <li><a href="clientes.php">Clientes</a></li>
-		                            <li><a href="cotizaciones.php">Cotizaciones</a></li>
-		                            <li><a href="almacen.php">Almacen</a></li>		                            
+                                   <li class="active"><a href="clientes.php">Clientes</a></li>
+		                            <li><a href="../cotizaciones/archivos.php">Cotizaciones</a></li>
+		                            <li><a href="#">Almacen</a></li>		                            
                                     <li class="divider"></li>
                                     <li class="nav-header">Seguridad</li>
-                                    <li class="active"><a href="usuarios.php">Usuarios</a></li>
+                                    <li><a href="usuarios.php">Usuarios</a></li>
                                 </ul>
                             </li>
                         </ul>                      
@@ -63,6 +63,8 @@ session_start();
 
         <div class="container">
 
+            <h1>Clientes</h1><br>
+
                                <?php if (isset($_GET["incorrecto"]) AND $_GET["incorrecto"] == 1) { 
 
                         echo "<h2 class=\"alert alert-error\">Usuario o Contraseña Incorrectos</h2>";
@@ -79,18 +81,12 @@ session_start();
 
 						 <?php 
 							if (isset($_GET["existe"]) AND $_GET["existe"] == 1) { 
-				                  echo "<h2 class=\"alert alert-error\">El usuario ya existe en la Base de Datos</h2>";
+				                  echo "<h2 class=\"alert alert-error\">El cliente ya existe en la Base de Datos</h2>";
 				                } 
 
 				        ?>
 
-				        <?php 
-							if (isset($_GET["coincidir"]) AND $_GET["coincidir"] == 1) { 
-				                  echo "<p class=\"alert alert-error\">Las Contraseñas deben de coincidir</p>";
-				                } 
-
-				        ?>
-
+				        
 						<?php 
 							if (isset($_GET["error"]) AND $_GET["error"] == 1) { 
 				                  echo "<h2 class=\"alert alert-error\">Ocurrio un Error al Introducir los Datos</h2>";
@@ -100,29 +96,35 @@ session_start();
 
 				        <?php 
 							if (isset($_GET["exito"]) AND $_GET["exito"] == 1) { 
-				                  echo "<h2 class=\"alert alert-success\">Usuario creado con exito!</h2>";
+				                  echo "<h2 class=\"alert alert-success\">Cliente creado con exito!</h2>";
 				                } 
 
 				        ?>
 
-            <h2>Clientes</h2>
-			<form name="user_form" action="../procesos/crea_usuarios.php" method="POST">Nombre de la Empresa:<br />
-				<input type="text" name="empresan" size="30" maxlength="100" required />
-					<br /> Numero de Parte:
+
+			<form name="user_form" action="../procesos/crea_clientes.php" method="POST">Nombre de la empresa:<br />
+				<input type="text" name="empresa" size="30" maxlength="100" required />
+                    <br />E-mail:
+                    <br />
+                <input type="email" name="email" size="30" maxlength="100" required />
+					<br /> Direccion:
 					<br />	
-				<input id="noparte" type="text" name="noparte" required />
-					<br />Direccion:
-					<br />
-				<input id="direccion" type="text" name="direccion" required  />
+				<input id="direccion" type="text" name="direccion" required />
+                    <br /> Codigo Postal:
+                    <br />  
+                <input id="cp" type="text" name="cp" required />
 					<br />Telefono:
+					<br />
+				<input id="telefono" type="text" name="telefono" required  />
+					<br />Ciudad:
 					<br />	
-				<input type="text" name="telefono" size="30" maxlength="100" required />
+				<input type="text" name="ciudad" size="30" maxlength="100" required />
+					<br />Pais:
 					<br />
-					E-mail:
+				<input type="text" name="pais" size="30" maxlength="100" required />				
 					<br />
-				<input type="email" name="email" size="30" maxlength="100" required />					
 			        <br />
-				<input type="submit" name="crear" value="Crear Cliente" />
+				<input type="submit" name="crear" value="Agregar Cliente" />
 			</form>
 
 	<?php } else {

@@ -40,7 +40,7 @@
                                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Administrador <b class="caret"></b></a>
                                             <ul class="dropdown-menu">
                                                <li><a href="clientes.php">Clientes</a></li>
-            		                            <li><a href="cotizaciones.php">Cotizaciones</a></li>
+            		                            <li><a href="../cotizaciones/archivos.php">Cotizaciones</a></li>
             		                            <li><a href="almacen.php">Almacen</a></li>		                            
                                                 <li class="divider"></li>
                                                 <li class="nav-header">Seguridad</li>
@@ -704,7 +704,6 @@
 
 
                                                                 subtotal = subtotala + subtotalb;
-                                                                subtotalx = subtotalax + subtotalbx;
 
                                                                 factor =2;
                                                                 totala = subtotala * factor;
@@ -810,7 +809,6 @@
                                                                 subtotalbx = kilosbx * pxkg;
 
                                                                 subtotal = subtotala + subtotalb;
-                                                                subtotalx = subtotalax + subtotalbx;
 
 
 

@@ -45,7 +45,7 @@ if($_SESSION["nivel"] == "AD"){
                                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Administrador <b class="caret"></b></a>
                                             <ul class="dropdown-menu">
                                                <li><a href="clientes.php">Clientes</a></li>
-            		                            <li><a href="cotizaciones.php">Cotizaciones</a></li>
+            		                            <li><a href="../cotizaciones/archivos.php">Cotizaciones</a></li>
             		                            <li><a href="almacen.php">Almacen</a></li>		                            
                                                 <li class="divider"></li>
                                                 <li class="nav-header">Seguridad</li>
@@ -92,7 +92,7 @@ if($_SESSION["nivel"] == "AD"){
                                 <h2>Clientes</h2>                                        
                             </div></a>
                             
-                            <a href="cotizaciones.php"><div class="span4">
+                            <a href="../cotizaciones/archivos.php"><div class="span4">
                                 <div class="icon" aria-hidden="true" data-icon="&#xe005;"></div>
                                 <h2>Cotizaciones</h2>                                        
                             </div></a>
@@ -152,7 +152,7 @@ if($_SESSION["nivel"] == "AD"){
                     <meta name="description" content="">
                     <meta name="viewport" content="width=device-width">
 
-                    <link rel="shortcut icon" href="../favicon.ico">
+                   
                     <link rel="stylesheet" href="../css/bootstrap.min.css">
                     <style>
                         body {

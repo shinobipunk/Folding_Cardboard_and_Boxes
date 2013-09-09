@@ -6,14 +6,14 @@ function Conectarse(){
 
 tutorial desde tu PC con WampServer deja estos datos como estan */
 
-if (!($link=mysql_connect("localhost","root","afireinside"))) {
+if (!($link=mysql_connect("graficasistema.db.8976774.hostedresource.com","graficasistema","Grafica1!"))) {
 echo "Error conectando a la base de datos.";
 exit();
-} 
+}
 
 /*en nombre_BD va el nombre de la BD que creaste al principio*/
 
-if (!mysql_select_db("usuario_login",$link)){
+if (!mysql_select_db("graficasistema",$link)){
 echo "Error seleccionando la base de datos.";
 exit();
 }

@@ -41,7 +41,7 @@ session_start();
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Administrador <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                    <li><a href="#">Clientes</a></li>
-		                            <li><a href="#">Cotizaciones</a></li>
+		                            <li><a href="../cotizaciones/archivos.php">Cotizaciones</a></li>
 		                            <li><a href="#">Almacen</a></li>		                            
                                     <li class="divider"></li>
                                     <li class="nav-header">Seguridad</li>
@@ -62,6 +62,7 @@ session_start();
         </div>
 
         <div class="container">
+            <h1>Usuarios</h1><br>
 
                                <?php if (isset($_GET["incorrecto"]) AND $_GET["incorrecto"] == 1) { 
 
@@ -106,9 +107,7 @@ session_start();
 				        ?>
 
 
-
-        <h2>Usuarios</h2>
-			<form name="user_form" action="../procesos/crea_usuarios.php" method="POST"><div class="items_pad1">Nombre de Usuario(nick):<br />
+			<form name="user_form" action="../procesos/crea_usuarios.php" method="POST">Nombre de Usuario(nick):<br />
 				<input type="text" name="login" size="30" maxlength="100" required />
 					<br /> Contraseña:
 					<br />	
@@ -138,14 +137,6 @@ session_start();
 					<br />
 			        <br />
 				<input type="submit" name="crear" value="Crear Usuario" />
-            </div> <div class="items_pad1">
-            <h2>Baja</h2>
-                <div class="items_pad1">Nombre de Usuario(nick):<br />
-                <input type="text" name="nombre" size="30" maxlength="100" required />
-                <input type="button" name="crear" value="Eliminar Usuario" />
-
-
-            </div> <div class="items_pad2"></div>
 			</form>
 
 	<?php } else {
@@ -153,9 +144,11 @@ session_start();
 	}
 	?>         
            
-            
+            <hr>
 
-            
+            <footer>
+                <p class="alert alert-info">&copy; Nanolabs 2013</p>
+            </footer>
 
         </div> 
 

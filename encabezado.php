@@ -1,5 +1,5 @@
 
-<?php  define("RUTA", "http://localhost/graficasistema");  ?>
+<?php  define("RUTA", "http://nanolabs.com.mx/Elias/graficasistema");  ?>
 <link rel="shortcut icon" href="favicon.ico">
         <link rel="stylesheet" href="<?php echo RUTA; ?>/css/bootstrap.css">
         <style>
@@ -22,7 +22,7 @@
                 fecha = moment().format('MMMM Do YYYY, h:mm:ss a');
                 $("#fecha").val(fecha);
                 $("#fechaescondido").val(fecha);
-                $("#folioescondido").val(folio);
+                $("#folioescondido").val("12345");
                 });
 
                 </script>
