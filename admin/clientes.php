@@ -20,6 +20,35 @@ $link=Conectarse();
         <meta name="viewport" content="width=device-width">
 
         <?php include '../encabezado.php'; ?>
+
+        <script>
+            function mostrarclientes(str)
+            {
+            if (str=="")
+              {
+              document.getElementById("insertarcliente").innerHTML="";
+              return;
+              } 
+            if (window.XMLHttpRequest)
+              {// code for IE7+, Firefox, Chrome, Opera, Safari
+              xmlhttp=new XMLHttpRequest();
+              }
+            else
+              {// code for IE6, IE5
+              xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+              }
+            xmlhttp.onreadystatechange=function()
+              {
+              if (xmlhttp.readyState==4 && xmlhttp.status==200)
+                {
+                document.getElementById("insertarcliente").innerHTML=xmlhttp.responseText;
+                }
+              }
+            xmlhttp.open("GET","obtenercliente.php?q="+str,true);
+            xmlhttp.send();            
+            }
+
+        </script>
                 
     </head>
     <body>
@@ -120,9 +149,18 @@ $link=Conectarse();
 
                         ?>
 
+                        <?php 
+                            if (isset($_GET["exitoedit"]) AND $_GET["exitoedit"] == 1) { 
+                                  echo "<h2 class=\"alert alert-success\">Cliente modificado con exito!</h2>";
+                                } 
+
+                        ?>
+
+                        
+
             <div id="bloque">
                 <h1>Alta</h1>
-        			<form name="user_form" action="../procesos/crea_clientes.php" method="POST">Nombre de la empresa:<br />
+        			<form name="agregarcliente" action="../procesos/crea_clientes.php" method="POST">Nombre de la empresa:<br />
         				<input type="text" name="empresa" size="30" maxlength="100" required />
                             <br />E-mail:
                             <br />
@@ -150,7 +188,7 @@ $link=Conectarse();
             </div> 
             <div id="bloque">
                  <h1>Baja</h1>
-                <form name="user_form" action="../procesos/elimina_cliente.php" method="POST">
+                <form name="eliminarcliente" action="../procesos/elimina_cliente.php" method="POST">
                         
                         <label for="empresaeliminar">Empresa</label><br>
                             <select name='empresaeliminar'><option value=""> --Escoje una Empresa-- </option>
@@ -170,12 +208,12 @@ $link=Conectarse();
             </div> 
             <div id="bloque"> 
              <h1>Editar</h1>         
-                    <form name="user_form" action="../procesos/edita_clientes.php" method="POST">                          
+                    <form name="importarcliente" action="../procesos/edita_clientes.php" method="GET">                          
 
                      
                            
                             <label for="empresaeditar">Empresa</label><br>
-                            <select name=cat><option value=""> --Escoje una Empresa-- </option>
+                            <select name=cat onchange="mostrarclientes(this.value)"><option value=""> --Escoje una Empresa-- </option>
                                 <?php 
                                     $query = sprintf("SELECT empresa FROM clientes where 1 ORDER BY empresa ASC ");
                                     $result=mysql_query($query,$link) or die(mysql_error()); 
@@ -184,11 +222,11 @@ $link=Conectarse();
                                         }
                                 ?>
                             </select>
-                                   
-                            <br />
-                            <br />
-                        <input type="submit" name="editar" value="Editar Cliente" />                
-                    </form>
+
+                    </form>                                                               
+                            <div id="insertarcliente"></div>
+                        
+                    
             </div> 
 
 	<?php } else {
@@ -246,5 +284,7 @@ $link=Conectarse();
         }
     }, false);
 </script>
+
+
     </body>
 </html>

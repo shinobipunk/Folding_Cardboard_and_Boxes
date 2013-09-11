@@ -12,6 +12,7 @@ $apaterno=$_POST['apaterno'];
 $amaterno= $_POST['amaterno'];
 $email = $_POST['email'];
 $nivel = $_POST['nivel'];
+$creado = $_POST['creado'];
 
 $query = sprintf("SELECT login FROM usuarios WHERE usuarios.login = '%s'" ,
 $login);
@@ -29,9 +30,9 @@ if(mysql_num_rows($result)){
 
 		$pass1=sha1(md5($pass1));
 
-		$query = sprintf("INSERT INTO usuarios (login, nombre, apaterno, amaterno, password, email, nivel)
+		$query = sprintf("INSERT INTO usuarios (login, nombre, apaterno, amaterno, password, email, nivel, creado)
 
-VALUES ('%s', '%s', '%s', '%s', '%s', '%s','%s')",$login, $nombre, $apaterno,$amaterno, $pass1, $email, $nivel);
+VALUES ('%s', '%s', '%s', '%s', '%s', '%s','%s','%s')",$login, $nombre, $apaterno,$amaterno, $pass1, $email, $nivel, $creado);
 
 		$result=mysql_query($query,$link) or die(mysql_error()); 
 

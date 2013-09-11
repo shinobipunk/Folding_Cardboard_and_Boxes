@@ -18,6 +18,35 @@ $link=Conectarse();
         <meta name="viewport" content="width=device-width">
 
         <?php include '../encabezado.php'; ?>
+
+        <script>
+            function mostrarusuarios(str)
+            {
+            if (str=="")
+              {
+              document.getElementById("insertarusuario").innerHTML="";
+              return;
+              } 
+            if (window.XMLHttpRequest)
+              {// code for IE7+, Firefox, Chrome, Opera, Safari
+              xmlhttp=new XMLHttpRequest();
+              }
+            else
+              {// code for IE6, IE5
+              xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+              }
+            xmlhttp.onreadystatechange=function()
+              {
+              if (xmlhttp.readyState==4 && xmlhttp.status==200)
+                {
+                document.getElementById("insertarusuario").innerHTML=xmlhttp.responseText;
+                }
+              }
+            xmlhttp.open("GET","obtenerusuario.php?q="+str,true);
+            xmlhttp.send();            
+            }
+
+        </script>
                 
     </head>
     <body>
@@ -43,7 +72,7 @@ $link=Conectarse();
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Administrador <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
-                                   <li><a href="#">Clientes</a></li>
+                                   <li><a href="clientes.php">Clientes</a></li>
 		                            <li><a href="../cotizaciones/archivos.php">Cotizaciones</a></li>
 		                            <li><a href="#">Almacen</a></li>		                            
                                     <li class="divider"></li>
@@ -90,7 +119,7 @@ $link=Conectarse();
 
 				        <?php 
 							if (isset($_GET["coincidir"]) AND $_GET["coincidir"] == 1) { 
-				                  echo "<p class=\"alert alert-error\">Las Contraseñas deben de coincidir</p>";
+				                  echo "<h2 class=\"alert alert-error\">Las Contraseñas deben de coincidir</h2>";
 				                } 
 
 				        ?>
@@ -123,10 +152,32 @@ $link=Conectarse();
 
                         ?>
 
+                        <?php 
+                            if (isset($_GET["exitoedit"]) AND $_GET["exitoedit"] == 1) { 
+                                  echo "<h2 class=\"alert alert-success\">Usuario Modificado con exito!</h2>";
+                                } 
+
+                        ?>
+
+                        <?php 
+                            if (isset($_GET["exitopass"]) AND $_GET["exitopass"] == 1) { 
+                                  echo "<h2 class=\"alert alert-success\">Contraseña modificada con exito!</h2>";
+                                } 
+
+                        ?>
+
+                        <?php 
+                            if (isset($_GET["coincidirpass"]) AND $_GET["coincidirpass"] == 1) { 
+                                  echo "<h2 class=\"alert alert-error\">Las Contraseñas deben de coincidir</h2>";
+                                } 
+
+                        ?>
+
+
 
 			<div id="bloque">
                 <h1>Alta</h1>
-            <form name="user_form" action="../procesos/crea_usuarios.php" method="POST">Nombre de Usuario(nick):<br />
+            <form name="altausuario" action="../procesos/crea_usuarios.php" method="POST">Nombre de Usuario(nick):<br />
 				<input type="text" name="login" size="30" maxlength="100" required />
 					<br /> Contraseña:
 					<br />	
@@ -154,15 +205,16 @@ $link=Conectarse();
 			    	<option value="UN">Usuario Normal</option>
                     <option value="ES">Usuario Especial</option>
 			    </select>
+                <input type="hidden" name="creado" size="30" maxlength="100" value="<?php echo $_SESSION["login"]?>" required />
 					<br />
 			        <br />
-				<input type="submit" name="crear" value="Crear Usuario" />
+				<input type="submit" name="crearusuario" value="Crear Usuario" />
 			</form>
         </div>
 
         <div id="bloque">
                 <h1>Baja</h1>
-                <form name="user_form" action="../procesos/elimina_usuarios.php" method="POST">
+                <form name="bajausuario" action="../procesos/elimina_usuarios.php" method="POST">
                         
                         <label for="usuarioeliminar">Nick</label><br>
                             <select name='usuarioeliminar'><option value=""> --Escoje un Usuario-- </option>
@@ -178,14 +230,12 @@ $link=Conectarse();
                             <br />
                         <input type="submit" name="eliminar" value="Eliminar Usuario" />                
                     </form>
-        </div>
-
-         <div id="bloque">
-                <h1>Editar</h1>
-                <form name="user_form" action="../procesos/edita_usuarios.php" method="POST"> 
-                           
-                            <label for="usuarioeditar">Nick</label><br>
-                            <select name=cat><option value=""> --Escoje un Usuario-- </option>
+                    <br>
+                <h1>Cambiar Pass</h1>
+                <form name="editapass" action="../procesos/edita_pass.php" method="POST">
+                        
+                        <label for="usuariopass">Nick</label><br>
+                            <select name='usuariopass'><option value=""> --Escoje un Usuario-- </option>
                                 <?php 
                                     $query = sprintf("SELECT login FROM usuarios where 1 ORDER BY login ASC ");
                                     $result=mysql_query($query,$link) or die(mysql_error()); 
@@ -193,12 +243,37 @@ $link=Conectarse();
                                     echo "<OPTION VALUE='".$row[0]."'>".$row[0]."</OPTION>";
                                         }
                                 ?>
-                            </select>
-                                   
-                            <br />
-                            <br />
-                        <input type="submit" name="editar" value="Editar Usuario" />                
+                            </select>              
+                                                              
+                    <br /> Nueva Contraseña:
+                    <br />                      
+                    <input id="pass1" type="password" name="pass1edit" required />
+                        <br />Repite la Nueva Contraseña:
+                        <br /> 
+                    <input id="pass2" type="password" name="pass2edit" required  />        
+                        <br />           
+                    <input type="submit" name="editapass" value="Edita Contraseña" />
+                    <input type='hidden' name='modificado' size='30' maxlength='100' value="<?php echo $_SESSION["login"]?>" required />
+                </form>
+
+        </div>
+
+         <div id="bloque">
+                <h1>Editar</h1>
+                <form name="importarusuario" action="../procesos/edita_usuarios.php" method="POST"> 
+                           
+                            <label for="usuarioeditar">Nick</label><br>
+                            <select name=cat onchange="mostrarusuarios(this.value)"><option value=""> --Escoje un Usuario-- </option>
+                                <?php 
+                                    $query = sprintf("SELECT login FROM usuarios where 1 ORDER BY login ASC ");
+                                    $result=mysql_query($query,$link) or die(mysql_error()); 
+                                    while($row=mysql_fetch_array($result,MYSQLI_NUM)){
+                                    echo "<OPTION VALUE='".$row[0]."'>".$row[0]."</OPTION>";
+                                        }
+                                ?>
+                            </select>                                                                 
                     </form>
+                    <div id="insertarusuario"></div>
         </div>
 
 	<?php } else {
