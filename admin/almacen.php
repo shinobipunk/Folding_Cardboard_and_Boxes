@@ -1,11 +1,9 @@
 <?php
 session_start();
-
 include dirname(dirname(__FILE__))."/config.php";
 
 $link=Conectarse();
 ?>
-
 
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
@@ -15,18 +13,45 @@ $link=Conectarse();
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>Sistema de Cotizaciones | Clientes</title>
+        <title>Almacen</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
 
         <?php include '../encabezado.php'; ?>
 
         <script>
-            function mostrarclientes(str)
+
+            function material_val()
+              {
+                var valor_option = document.getElementById('materialalmacen');
+               valormaterial = valor_option.options[valor_option.selectedIndex].value;
+                $("#valormaterial").val(valormaterial);
+
+              
+              }
+
+             function calibre_val()
+              {
+                var valor_option = document.getElementById('calibrealmacen');
+               valorcalibre = valor_option.options[valor_option.selectedIndex].value;
+                $("#valorcalibre").val(valorcalibre);
+              
+              }  
+
+              function bobina_val()
+              {
+                var valor_option = document.getElementById('bobinaalmacen');
+               valorbobina = valor_option.options[valor_option.selectedIndex].value;
+                $("#valorbobina").val(valorbobina);
+              
+              } 
+
+            function mostrararticulos(str)
             {
+                
             if (str=="")
               {
-              document.getElementById("insertarcliente").innerHTML="";
+              document.getElementById("insertarmaterial").innerHTML="";
               return;
               } 
             if (window.XMLHttpRequest)
@@ -41,12 +66,74 @@ $link=Conectarse();
               {
               if (xmlhttp.readyState==4 && xmlhttp.status==200)
                 {
-                document.getElementById("insertarcliente").innerHTML=xmlhttp.responseText;
+                document.getElementById("insertarmaterial").innerHTML=xmlhttp.responseText;
                 }
               }
-            xmlhttp.open("GET","obtenercliente.php?q="+str,true);
+
+
+
+            xmlhttp.open("GET","obteneralmacen.php?q="+str,true);
             xmlhttp.send();            
             }
+
+
+            function mostrarcalibre(str2)
+            {
+              
+            if (str2=='')
+              {
+              document.getElementById('insertarcalibre').innerHTML='';
+              return;
+              } 
+            if (window.XMLHttpRequest)
+              {// code for IE7+, Firefox, Chrome, Opera, Safari
+              xmlhttp=new XMLHttpRequest();
+              }
+            else
+              {// code for IE6, IE5
+              xmlhttp=new ActiveXObject('Microsoft.XMLHTTP');
+              }
+            xmlhttp.onreadystatechange=function()
+              {
+              if (xmlhttp.readyState==4 && xmlhttp.status==200)
+                {
+                document.getElementById('insertarcalibre').innerHTML=xmlhttp.responseText;
+                }
+              }
+            xmlhttp.open('GET','agrega_calibre.php?w='+str2+"&valormaterial="+valormaterial,true);
+            xmlhttp.send();            
+            }
+
+             function mostrarbobina(str3)
+            {
+               
+            if (str3=='')
+              {
+              document.getElementById('insertarbobina').innerHTML='';
+              return;
+              } 
+            if (window.XMLHttpRequest)
+              {// code for IE7+, Firefox, Chrome, Opera, Safari
+              xmlhttp=new XMLHttpRequest();
+              }
+            else
+              {// code for IE6, IE5
+              xmlhttp=new ActiveXObject('Microsoft.XMLHTTP');
+              }
+            xmlhttp.onreadystatechange=function()
+              {
+              if (xmlhttp.readyState==4 && xmlhttp.status==200)
+                {
+                document.getElementById('insertarbobina').innerHTML=xmlhttp.responseText;
+                }
+              }
+
+              
+            
+            xmlhttp.open("GET","mostrar_articulo.php?&m="+str3+"&valormaterial="+valormaterial+"&valorcalibre="+valorcalibre+"&valorbobina="+valorbobina,true);
+            xmlhttp.send();            
+            }            
+
 
         </script>
                 
@@ -69,14 +156,14 @@ $link=Conectarse();
                         <ul class="nav">
                             <li><a href="usuario.php">Menu</a></li>
                             <li><a href="pads.php">PADS</a></li>
-                            <li><a href="#">Particiones</a></li>
+                            <li><a href="particiones.php">Particiones</a></li>
                                                         
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Administrador <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
-                                   <li class="active"><a href="clientes.php">Clientes</a></li>
+                                   <li><a href="clientes.php">Clientes</a></li>
 		                            <li><a href="../cotizaciones/archivos.php">Cotizaciones</a></li>
-		                            <li><a href="#">Almacen</a></li>		                            
+		                            <li class="active"><a href="almacen.php">Almacen</a></li>		                            
                                     <li class="divider"></li>
                                     <li class="nav-header">Seguridad</li>
                                     <li><a href="usuarios.php">Usuarios</a></li>
@@ -96,10 +183,11 @@ $link=Conectarse();
         </div>
 
         <div class="container">
-
+            
                     <br>
-                    <div class="icon" aria-hidden="true" data-icon="">    Clientes</div>                                                                   
+                    <div class="icon" aria-hidden="true" data-icon="">    Almacen</div>                                                                   
                     <br>
+                
 
                                <?php if (isset($_GET["incorrecto"]) AND $_GET["incorrecto"] == 1) { 
 
@@ -117,19 +205,18 @@ $link=Conectarse();
 
 						 <?php 
 							if (isset($_GET["existe"]) AND $_GET["existe"] == 1) { 
-				                  echo "<h2 class=\"alert alert-error\">El cliente ya existe en la Base de Datos</h2>";
+				                  echo "<h2 class=\"alert alert-error\">El articulo ya existe en la Base de Datos</h2>";
 				                } 
 
 				        ?>
 
-                        <?php 
-                            if (isset($_GET["noexiste"]) AND $_GET["noexiste"] == 1) { 
-                                  echo "<h2 class=\"alert alert-error\">El cliente no existe en la Base de Datos</h2>";
-                                } 
+				        <?php 
+							if (isset($_GET["coincidir"]) AND $_GET["coincidir"] == 1) { 
+				                  echo "<h2 class=\"alert alert-error\">Las Contraseñas deben de coincidir</h2>";
+				                } 
 
-                        ?>
+				        ?>
 
-				        
 						<?php 
 							if (isset($_GET["error"]) AND $_GET["error"] == 1) { 
 				                  echo "<h2 class=\"alert alert-error\">Ocurrio un Error al Introducir los Datos</h2>";
@@ -139,98 +226,83 @@ $link=Conectarse();
 
 				        <?php 
 							if (isset($_GET["exito"]) AND $_GET["exito"] == 1) { 
-				                  echo "<h2 class=\"alert alert-success\">Cliente creado con exito!</h2>";
+				                  echo "<h2 class=\"alert alert-success\">Articulo creado con exito!</h2>";
 				                } 
 
 				        ?>
 
                         <?php 
-                            if (isset($_GET["exitoborrado"]) AND $_GET["exitoborrado"] == 1) { 
-                                  echo "<h2 class=\"alert alert-success\">Cliente eliminado con exito!</h2>";
+                            if (isset($_GET["noexiste"]) AND $_GET["noexiste"] == 1) { 
+                                  echo "<h2 class=\"alert alert-error\">El usuario no existe en la Base de Datos</h2>";
                                 } 
 
                         ?>
 
                         <?php 
-                            if (isset($_GET["exitoedit"]) AND $_GET["exitoedit"] == 1) { 
-                                  echo "<h2 class=\"alert alert-success\">Cliente modificado con exito!</h2>";
+                            if (isset($_GET["exitoborrado"]) AND $_GET["exitoborrado"] == 1) { 
+                                  echo "<h2 class=\"alert alert-success\">Usuario eliminado con exito!</h2>";
                                 } 
 
                         ?>
 
-                        
+                         <?php 
+                            if (isset($_GET["exitoedit"]) AND $_GET["exitoedit"] == 1) { 
+                            echo "<h2 class=\"alert alert-success\">Articulo editado con exito!</h2>";
+                        } 
 
-            <div id="bloque">
+                ?>
+
+
+
+			<div id="bloque">
                 <h1>Alta</h1>
-        			<form name="agregarcliente" action="../procesos/crea_clientes.php" method="POST">Nombre de la empresa:<br />
-        				<input type="text" name="empresa" size="30" maxlength="100" required />
-                            <br />E-mail:
-                            <br />
-                        <input type="email" name="email" size="30" maxlength="100" required />
-        					<br /> Direccion:
-        					<br />	
-        				<input id="direccion" type="text" name="direccion" required />
-                            <br /> Codigo Postal:
-                            <br />  
-                        <input id="cp" type="text" name="cp" required />
-        					<br />Telefono:
-        					<br />
-        				<input id="telefono" type="text" name="telefono" required  />
-        					<br />Ciudad:
-        					<br />	
-        				<input type="text" name="ciudad" size="30" maxlength="100" required />
-        					<br />Pais:
-        					<br />
-        				<input type="text" name="pais" size="30" maxlength="100" required />				
-        					<br />
-        			        <br />
-                        <input type="hidden" name="creado" size="30" maxlength="100" value="<?php echo $_SESSION["login"]?>" required />
-        				<input type="submit" name="crear" value="Agregar Cliente" />
-                                      
-        			</form>
-            </div> 
-            <div id="bloque">
-                 <h1>Baja</h1>
-                <form name="eliminarcliente" action="../procesos/elimina_cliente.php" method="POST">
-                        
-                        <label for="empresaeliminar">Empresa</label><br>
-                            <select name='empresaeliminar'><option value=""> --Escoje una Empresa-- </option>
-                                <?php 
-                                    $query = sprintf("SELECT empresa FROM clientes where 1 ORDER BY empresa ASC ");
-                                    $result=mysql_query($query,$link) or die(mysql_error()); 
-                                    while($row=mysql_fetch_array($result,MYSQLI_NUM)){
-                                    echo "<OPTION VALUE='".$row[0]."'>".$row[0]."</OPTION>";
-                                        }
-                                ?>
-                            </select>              
-                            <br />
-                            <br />
-                        <input type="submit" name="eliminar" value="Eliminar Cliente" />                
-                    </form>
-            
-            </div> 
-            <div id="bloque"> 
-             <h1>Editar</h1>         
-                    <form name="importarcliente" action="../procesos/edita_clientes.php" method="GET">                          
+            <form name="altaalmacen" action="../procesos/crea_almacen.php" method="POST">
+                    Calibre:<br />
+				<input type="text" name="calibre" required />
+					<br /> Material:
+					<br />	
+				<input type="text" name="material" required />
+					<br />Gramos:
+					<br />
+				<input type="text" name="gramos"  value="0.000" required />
+					<br />Bobina:
+					<br />	
+				<input type="text" name="bobina" required />
+					<br />Precio x Kg:
+					<br />
+				<input type="text" name="precio" required />					
+					<br />Existencia:
+					<br />
+				<input type="radio" name="existencia" value="SI" checked>SI<br>
+                <input type="radio" name="existencia" value="NO">NO<br>
+                <input type="hidden" name="creado" size="30" maxlength="100" value="<?php echo $_SESSION["login"]?>" required />
+					<br />
+				<input type="submit" name="creararticulo" value="Crear Articulo" />
+			</form>
+        </div>
 
-                     
+       <div id="bloque">
+                <h1>Editar</h1>
+                <form name="importararticulos" action="mostrar_articulo.php" method="GET"> 
                            
-                            <label for="empresaeditar">Empresa</label><br>
-                            <select name=cat onchange="mostrarclientes(this.value)"><option value=""> --Escoje una Empresa-- </option>
+                            <label for="almaceneditar">Material</label><br>
+                            <select id="materialalmacen" name="almacenmaterialedit" onclick ='material_val()' onchange="mostrararticulos(this.value)"><option value=""> --Escoge el Material-- </option>
                                 <?php 
-                                    $query = sprintf("SELECT empresa FROM clientes where 1 ORDER BY empresa ASC ");
+                                    $query = sprintf("SELECT material FROM almacen where 1 GROUP BY material");
                                     $result=mysql_query($query,$link) or die(mysql_error()); 
                                     while($row=mysql_fetch_array($result,MYSQLI_NUM)){
                                     echo "<OPTION VALUE='".$row[0]."'>".$row[0]."</OPTION>";
                                         }
                                 ?>
-                            </select>
-
-                    </form>                                                               
-                            <div id="insertarcliente"></div>
-                        
+                            </select>   
+                             <input id="valormaterial" type="hidden" name="valormaterial" required/>  
+                             </form>                                                            
+                            <div id="insertarmaterial"></div>
                     
-            </div> 
+        </div>
+        <div id="bloque">
+            <div id='insertarbobina'></div>
+        </div>
 
 	<?php } else {
 		echo "<h2 class=\"alert alert-error\">No tiene acceso a esta seccion</h2>";
@@ -287,7 +359,5 @@ $link=Conectarse();
         }
     }, false);
 </script>
-
-
     </body>
 </html>

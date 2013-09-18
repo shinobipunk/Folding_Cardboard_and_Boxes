@@ -765,7 +765,7 @@ pre code {
 	overflow-y: scroll
 }
 form {
-	margin: 0 0 20px
+	margin: 0 0 0
 }
 fieldset {
 	padding: 0;
@@ -4574,8 +4574,14 @@ option:focus {
     background: crimson;
 	color: white;
 }
-#btndesperdicio, #btncotizar{
-	padding: 11px 11px
+#btncotizar, #btnagregar, #btnenviar{
+	padding: 11px 11px;
+	width:30%;
+	font-size: 2em;
+	background-color: crimson;
+	color: white;
+	margin: 0 auto;
+	display: block;
 }
 
 #tabla, #tablab{
@@ -4593,3 +4599,10 @@ option:focus {
 	display: inline-block;
 	float: left;
 }
+
+#bloque2{
+	width: 66%;
+	display: inline-block;
+	float: left;
+}
+

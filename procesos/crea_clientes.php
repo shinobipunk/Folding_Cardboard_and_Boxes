@@ -11,6 +11,7 @@ $cp=$_POST['cp'];
 $telefono= $_POST['telefono'];
 $ciudad = $_POST['ciudad'];
 $pais = $_POST['pais'];
+$creado = $_POST['creado'];
 
 
 
@@ -26,9 +27,9 @@ if(mysql_num_rows($result)){
 
 		
 
-		$query = sprintf("INSERT INTO clientes (empresa, email, direccion, cp, telefono, ciudad, pais)
+		$query = sprintf("INSERT INTO clientes (empresa, email, direccion, cp, telefono, ciudad, pais, creado)
 
-VALUES ('%s', '%s', '%s', '%s', '%s', '%s','%s')",$empresa, $email, $direccion, $cp, $telefono, $ciudad, $pais);
+VALUES ('%s', '%s', '%s', '%s', '%s', '%s','%s','%s')",$empresa, $email, $direccion, $cp, $telefono, $ciudad, $pais, $creado);
 
 		$result=mysql_query($query,$link) or die(mysql_error()); 
 

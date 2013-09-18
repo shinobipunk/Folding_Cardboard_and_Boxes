@@ -94,7 +94,9 @@ $link=Conectarse();
         </div>
 
         <div class="container">
-            <h1>Usuarios</h1><br>
+                    <br>
+                    <div class="icon" aria-hidden="true" data-icon="">    Usuarios</div>                                                                   
+                    <br>
 
                                <?php if (isset($_GET["incorrecto"]) AND $_GET["incorrecto"] == 1) { 
 
@@ -177,7 +179,7 @@ $link=Conectarse();
 
 			<div id="bloque">
                 <h1>Alta</h1>
-            <form name="altausuario" action="../procesos/crea_usuarios.php" method="POST">Nombre de Usuario(nick):<br />
+            <form name="altausuario" action="../procesos/crea_usuarios.php" method="POST">Usuario(nick):<br />
 				<input type="text" name="login" size="30" maxlength="100" required />
 					<br /> Contraseña:
 					<br />	
@@ -216,7 +218,7 @@ $link=Conectarse();
                 <h1>Baja</h1>
                 <form name="bajausuario" action="../procesos/elimina_usuarios.php" method="POST">
                         
-                        <label for="usuarioeliminar">Nick</label><br>
+                        <label for="usuarioeliminar">Usuario</label><br>
                             <select name='usuarioeliminar'><option value=""> --Escoje un Usuario-- </option>
                                 <?php 
                                     $query = sprintf("SELECT login FROM usuarios where 1 ORDER BY login ASC ");
@@ -234,7 +236,7 @@ $link=Conectarse();
                 <h1>Cambiar Pass</h1>
                 <form name="editapass" action="../procesos/edita_pass.php" method="POST">
                         
-                        <label for="usuariopass">Nick</label><br>
+                        <label for="usuariopass">Usuario</label><br>
                             <select name='usuariopass'><option value=""> --Escoje un Usuario-- </option>
                                 <?php 
                                     $query = sprintf("SELECT login FROM usuarios where 1 ORDER BY login ASC ");
@@ -262,7 +264,7 @@ $link=Conectarse();
                 <h1>Editar</h1>
                 <form name="importarusuario" action="../procesos/edita_usuarios.php" method="POST"> 
                            
-                            <label for="usuarioeditar">Nick</label><br>
+                            <label for="usuarioeditar">Usuario</label><br>
                             <select name=cat onchange="mostrarusuarios(this.value)"><option value=""> --Escoje un Usuario-- </option>
                                 <?php 
                                     $query = sprintf("SELECT login FROM usuarios where 1 ORDER BY login ASC ");

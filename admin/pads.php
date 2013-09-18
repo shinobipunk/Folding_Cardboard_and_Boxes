@@ -1,7 +1,9 @@
 <?php
 
-  session_start();
+session_start();
+include dirname(dirname(__FILE__))."/config.php";
 
+$link=Conectarse();
 ?>
 
         <!DOCTYPE html>
@@ -30,710 +32,270 @@
 
              <?php include '../encabezado.php'; ?>
 
+            <script>
 
+            function valores(){
 
-            </head>
+                materialx = $('#materialalmacen').val();
+                calibrex = $('#calibrealmacen').val();
+                bobinax = $('#bobinaalmacen').val();
+                gramosx = $('#gramosalmacen').val();
+                preciokgx = $('#preciokgalmacen').val();
+                factorx = $('#factoru').val();
+                nopadsx = $('#nopads').val();
+                largox = $('#largo').val();
+                altox = $('#alto').val();
 
-            <body>
+              // alert(materialx + '-' + calibrex +'-' + bobinax +'-' +gramosx +'-' + preciokgx+'-' + factorx +'-' + nopadsx+'-' + largox+'-' + altox);
 
-                <!--[if lt IE 7]>
+            }
 
-                    <p class="chromeframe">Está utilizando un <strong> navegador obsoleto. </ strong> Por favor, <a href="http://browsehappy.com/"> actualice su navegador </ a> o <a href="http://www.google.com/chromeframe/?redirect=true"> active Google Chrome </ a> para mejorar su experiencia. </ p>
+            function calcular(){
 
-                   <![endif]-->
+              // ------ Operaciones ------------              
 
-        		
+              
 
-                <div class="navbar navbar-inverse navbar-fixed-top">
+                kilosx = parseFloat(nopadsx) * parseFloat(altox) * parseFloat(largox) *  parseFloat(gramosx);
 
-                    <div class="navbar-inner">
+                subtotalx = kilosx * preciokgx;                
 
-                        <div class="container">
+                totalx = subtotalx * factorx;
 
-                            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                totalx=totalx.toFixed(3);
 
-                                <span class="icon-bar"></span>
+                
 
-                                <span class="icon-bar"></span>
+                algoritmox = parseFloat(bobinax) * parseFloat(altox) * parseFloat(gramosx) * parseFloat(nopadsx);
 
-                                <span class="icon-bar"></span>
+               // alert("bobina--" + bobina + "alto--" + alto + "gramos--" + gramos + "pads--" + numeropads);
 
-                            </a>
+                kgalgoritmofacx = algoritmox * preciokgx;
 
-                            <a class="brand" href="#">Folding Cardboard & Boxes Inc.</a>
+                subtotalalgoritmox = kgalgoritmofacx * factorx;
 
-                            <div class="nav-collapse collapse">
+                enterox = bobinax / largox;
 
-                                <ul class="nav">
+                enterox = Math.floor(enterox);
 
-                                    <li><a href="usuario.php">Menu</a></li>
+                totalnewx =  subtotalalgoritmox / enterox;
 
-                                    <li class="active"><a href="pads.php">PADS</a></li>
+                totalnewx = totalnewx.toFixed(3);
 
-                                    <li><a href="particiones.php">Particiones</a></li>
+               // alert(totalnew);
 
-                                    <?php
 
-                    if( $_SESSION["nivel"] == "AD" ){
 
-                         ?>                                                                
+                unitariox = totalnewx / nopadsx;
 
-                                    <li class="dropdown">
+                unitariox = unitariox.toFixed(3);
 
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Administrador <b class="caret"></b></a>
 
-                                        <ul class="dropdown-menu">
 
-                                           <li><a href="#">Clientes</a></li>
 
-        		                            <li><a href="../cotizaciones/archivos.php">Cotizaciones</a></li>
 
-        		                            <li><a href="#">Almacen</a></li>		                            
+                algoritmo2x = parseFloat(bobinax) * parseFloat(largox) * parseFloat(gramosx) * parseFloat(nopadsx);
 
-                                            <li class="divider"></li>
+               // alert("bobina--" + bobina + "alto--" + alto + "gramos--" + gramos + "pads--" + numeropads);
 
-                                            <li class="nav-header">Seguridad</li>
+                kgalgoritmofac2x = algoritmo2x * preciokgx;
 
-                                            <li><a href="usuarios.php">Usuarios</a></li>
+                subtotalalgoritmo2x = kgalgoritmofac2x * factorx;
 
-                                        </ul>
+                entero2x = bobinax / altox;
 
-                                    </li>
-                        <?php
+                entero2x = Math.floor(entero2x);
 
-                    }
+                totalnew2x =  subtotalalgoritmo2x / entero2x;
 
-                         ?>                    
+                totalnew2x = totalnew2x.toFixed(3);
 
-                                </ul>                      
+               // alert(totalnew);
 
-                               
 
 
+                unitario2x = totalnew2x / nopadsx;
 
-                                <form id="Formulario" class="navbar-form pull-right" name ="FormLogin" action="logout.php" method="POST">
+                unitario2x = unitario2x.toFixed(3);
 
-        						<label id="usuariolog"> <?php echo $_SESSION["nombre"]." ".$_SESSION["apaterno"]." ".$_SESSION["amaterno"]; ?></label>                                                                                        
+                
+                //Asignacion
+               // alert('kilos' + kilosx + 'subtotal' + kgalgoritmofacx + 'Total 1 :' + totalnewx + 'Total 2 : ' + totalnew2x);
 
-                                <input class="btn" type="submit" value="Cerrar Sesion">
 
-                            </form>
+                $("#kg").val(kilosx);
 
-                                
+                $("#kgescondido").val(kilosx);                
 
-                            </div>
+                $("#subtotal").val(kgalgoritmofacx);
 
-                        </div>
+                $("#subtotalescondido").val(kgalgoritmofacx);
 
-                    </div>
+                $("#subtotall").val(kgalgoritmofac2x);
 
-                </div>
-
-
-
-                <div class="container">
-
-
-
-                                       <?php if (isset($_GET["incorrecto"]) AND $_GET["incorrecto"] == 1) { 
-
-
-
-                                echo "<h2 class=\"alert alert-error\">Usuario o Contraseña Incorrectos</h2>";
-
-                            }
-
-
-
-                            ?>
-
-
-
-
-
-
-
-
-
-        			<?php
-
-        			if( ($_SESSION["nivel"] == "AD")  || ($_SESSION["nivel"] == "UN") ){
-
-        				 ?>
-
-
-
-                         <?php 
-
-                                    if (isset($_GET["exito"]) AND $_GET["exito"] == 1) { 
-
-                                          echo "<h2 class=\"alert alert-success\">Cotizacion Enviada!</h2>";
-
-                                        } 
-
-
-
-                                ?>
-
-
-
-        			<h1>Cotizacion de PADS</h1>
-
-
-
-        			<form name="formulario" action="../procesos/crea_pads.php" method="POST" >
-
-
-
-                        <label>Fecha</label>            
-
-                                <input id="fecha" type="text" name="fecha" disabled /> 
-
-                                <input id="fechaescondido" type="hidden" name="fechaescondido" />
-
-                                
-
-                                 
-
-
-
-                        <label style="margin-left:2%">Folio #</label>            
-
-                                <input id="folio" type="text" name="folio" value="12345" required /><br/> 
-
-
-
-
-
-                        
-
-                        <div class="items_pad1">                    
-
-                                
-
-                                                                        
-
-                                <label># de parte</label> <br/>            
-
-                                <input id="noparte" type="text" name="noparte" value="1" required /> <br/>                                                                
-
-                                                      
-
-                                <label>Cliente</label>  <br/>           
-
-                                <input id="cliente" type="text" name="cliente" value="Nanolabs" required /> <br/>
-
-                                
-
-                                          
-
-                                <label>Email</label> <br/>            
-
-                                <input id="email" type="email" name="email" value="eliasstaticx@hotmail.com" required /> <br/>
-
-
-
-                                 <label>Gramos</label><br/> 
-
-                                 <input id="gr" type="text" name="gr" disabled /> <br/>
-
-
-
-                                 <input id="grescondido" type="hidden" name="grescondido" />    
-
-                                 
-
-
-
-                                <label>Sub-Total Alto</label> <br/>
-
-                                <input id="subtotal" type="text" name="subtotal" disabled /> <br/>
-
-
-
-                                <input id="subtotalescondido" type="hidden" name="subtotalescondido"  /> <br/>
-
-
-
-                                <label>Sub-Total Largo</label> <br/>
-
-                                <input id="subtotall" type="text" name="subtotal" disabled /> <br/>
-
-
-
-                                <input id="subtotalescondidol" type="hidden" name="subtotalescondido"  /> <br/>
-
-                                
-
-                                        
-
-                        </div>     
-
-
-
-                        <div class="items_pad1">
-
-
-
-                            <label># de PADS</label> <br/>              
-
-            				    <input id="nopads" type="text" name="nopads" autocomplete="off" required /><br/>
-
-
-
-            				<label>Largo</label> <br/>
-
-                                <input id="largo" type="text" name="largo" autocomplete="off" required /><br/>
-
-
-
-                            <label>Alto</label>	<br/>
-
-            				    <input id="alto" type="text" name="alto" autocomplete="off" required /><br/>
-
-
-
-                            <label>Precio x Kg</label> <br/>
-
-                                <input id="preciokg" type="text" name="preciokg" disabled /><br/>
-
-
-
-                                 <input id="preciokgescondido" type="hidden" name="preciokgescondido" />
-
-
-
-                            <label>Factor U.</label> <br/>
-
-                             <input id="factoru" type="text" name="factoru" disabled /><br/>  
-
-
-
-                              
-
-            				
-
-                        </div>
-
-
-
-                        <div class="items_pad2">
-
-
-
-                            <label>Material</label> <br/>     	
-
-            				<select id="material" name="material">
-
-            			        <option value="Seleccionar">Seleccionar</option>
-
-                                <option value="Kraft">Kraft</option>
-
-            			    	<option value="Wax">Wax</option>
-
-                                <option value="PolyWhite">Poly White</option>
-
-                                <option value="PolyKraft">Poly Kraft</option>
-
-            			    </select><br/>
-
-
-
-                            
-
-
-
-                            <label>Calibre</label><br/>
-
-        <!-- ///////////////////////// Kraft Calibre /////////////////////////////////////////////////-->
-
-                                    <select id="Kraft-seleccionado" class="sub-opcion hide">
-
-                                        <option value="20">20</option>
-
-                                        <option value="24">24</option>
-
-                                        <option value="26">26</option>
-
-                                        <option value="30">30</option>
-
-                                        <option value="40">40</option>
-
-                                        <option value="47">47</option>
-
-                                        <option value="55">55</option>
-
-                                    </select>
-
-        <!-- /////////////////////////////// Wax Calibre //////////////////////////////////////////////////-->
-
-                                     <select id="Wax-seleccionado" class="sub-opcion hide">
-
-                                        <option value="40">40</option>
-
-                                        <option value="47">47</option>                        
-
-                                    </select>
-
-        <!-- //////////////////////////// PolyWhite Calibre ////////////////////////////////////////////-->
-
-                                    <select id="PolyWhite-seleccionado" class="sub-opcion hide">                        
-
-                                        <option value="24">24</option>
-
-                                        <option value="26">26</option>                        
-
-                                    </select>
-
-        <!-- //////////////////////////// PolyWKraft Calibre ///////////////////////////////////////////-->
-
-                                    <select id="PolyKraft-seleccionado" class="sub-opcion hide">                        
-
-                                        <option value="30">30</option>
-
-                                        <option value="40">40</option>                        
-
-                                    </select>
-
-                               
-
-                            <input id="tipocalibreescondido" type="hidden"  name="tipocalibreescondido" />
-
-
-
-                            <br/>
-
-                            <label>Bobina</label><br/>
-
-        <!-- \\\\\\\\\\\\\\\\\\\\\\\\\\\ Kraft-20 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ -->                    
-
-                            <select id="Kraft-20" class="opcion-bobina hide">                        
-
-                                <option value="26" gramos="0.000230" pxkg="0.75">26</option>                        
-
-                            </select>
-
-
-
-        <!-- \\\\\\\\\\\\\\\\\\\\\\\\\\\ Kraft-24 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ -->                    
-
-                            <select id="Kraft-24" class="opcion-bobina hide">
-
-                                <option value="21" gramos="0.000259" pxkg="0.75">21</option>
-
-                                <option value="30" gramos="0.000259" pxkg="0.75">30</option>                        
-
-                            </select>
-
-        <!-- \\\\\\\\\\\\\\\\\\\\\\\\\\\ Kraft-26 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ -->                    
-
-                            <select id="Kraft-26" class="opcion-bobina hide">
-
-                                <option value="24" gramos="0.000270" pxkg="0.75">24</option>
-
-                                <option value="30" gramos="0.000270" pxkg="0.75">30</option>                        
-
-                            </select>
-
-        <!-- \\\\\\\\\\\\\\\\\\\\\\\\\\\ Kraft-30 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ -->                    
-
-                            <select id="Kraft-30" class="opcion-bobina hide">
-
-                                <option value="24" gramos="0.000355" pxkg="0.75">24</option>
-
-                                <option value="30" gramos="0.000355" pxkg="0.75">30</option>                        
-
-                            </select>
-
-        <!-- \\\\\\\\\\\\\\\\\\\\\\\\\\\ Kraft-40 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ -->                    
-
-                            <select id="Kraft-40" class="opcion-bobina hide">
-
-                                <option value="24" gramos="0.000432" pxkg="0.75">24</option>
-
-                                <option value="30" gramos="0.000432" pxkg="0.75">30</option>                        
-
-                            </select>                    
-
-        <!-- \\\\\\\\\\\\\\\\\\\\\\\\\\\ Kraft-47 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ -->                    
-
-                            <select id="Kraft-47" class="opcion-bobina hide">
-
-                                <option value="24" gramos="0.000503" pxkg="0.75">24</option>
-
-                                <option value="30" gramos="0.000503" pxkg="0.75">30</option>                        
-
-                            </select> 
-
-        <!-- \\\\\\\\\\\\\\\\\\\\\\\\\\\ Kraft-55 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ -->                    
-
-                            <select id="Kraft-55" class="opcion-bobina hide">
-
-                                <option value="24" gramos="0.000594" pxkg="0.75">24</option>
-
-                                <option value="30" gramos="0.000594" pxkg="0.75">30</option>                        
-
-                            </select> 
-
-
-
-        <!-- \\\\\\\\\\\\\\\\\\\\\\\\\\\ Wax-40 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ -->                    
-
-                            <select id="Wax-40" class="opcion-bobina hide">                        
-
-                                <option value="23" gramos="0.000432" pxkg="0.90">23</option>   
-
-                                <option value="30" gramos="0.000432" pxkg="0.90">30</option>                     
-
-                            </select>
-
-
-
-        <!-- \\\\\\\\\\\\\\\\\\\\\\\\\\\ Wax-47 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ -->                    
-
-                            <select id="Wax-47" class="opcion-bobina hide">
-
-                                <option value="30" gramos="0.000503" pxkg="0.90">30</option>                        
-
-                            </select>
-
-        <!-- \\\\\\\\\\\\\\\\\\\\\\\\\\\ PolyWhite-24 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ -->                    
-
-                            <select id="PolyWhite-24" class="opcion-bobina hide">
-
-                                <option value="25.8125" gramos="0.000259" pxkg="1.85">25.8125</option>
-
-                                <option value="26.6875" gramos="0.000259" pxkg="1.85">26.6875</option>                        
-
-                                <option value="27.5" gramos="0.000259" pxkg="1.85">27.5</option>
-
-                            </select>
-
-        <!-- \\\\\\\\\\\\\\\\\\\\\\\\\\\ PolyWhite-26 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ -->                    
-
-                            <select id="PolyWhite-26" class="opcion-bobina hide">
-
-                                <option value="25" gramos="0.000270" pxkg="1.85">25</option>                        
-
-                            </select>
-
-        <!-- \\\\\\\\\\\\\\\\\\\\\\\\\\\ PolyKraft-30 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ -->                    
-
-                            <select id="PolyKraft-30" class="opcion-bobina hide">
-
-                                <option value="18" gramos="0.000355" pxkg="1.2">18</option>
-
-                                <option value="24" gramos="0.000355" pxkg="1.2">24</option>                        
-
-                                <option value="30" gramos="0.000355" pxkg="1.2">30</option>
-
-                            </select>
-
-        <!-- \\\\\\\\\\\\\\\\\\\\\\\\\\\ PolyKraft-40 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ -->                    
-
-                            <select id="PolyKraft-40" class="opcion-bobina hide">
-
-                                <option value="18" gramos="0.000432" pxkg="1.2">18</option>
-
-                                <option value="24" gramos="0.000432" pxkg="1.2">24</option>                        
-
-                                <option value="30" gramos="0.000432" pxkg="1.2">30</option>                       
-
-                            </select><br/>
-
-
-
-                            <input id="bobinaescondido" type="hidden"  name="bobinaescondido" />
-
-
-
-
-
-                            <label>Kilos</label><br/> 
-
-                             <input id="kg" type="text" name="kg" disabled /><br/>
-
-                             <input id="kgescondido" type="hidden" name="kgescondido" />
-
-                                
-
-                            <label>Total por Alto</label> <br/>
-
-                             <input id="utilidad" type="text" name="utilidad" disabled /><br/>
-
-
-
-                             <input id="utilidadescondido" type="hidden" name="utilidadescondido" />
-
-
-
-                             <label>Total por Largo</label> <br/>
-
-                             <input id="utilidadl" type="text" name="utilidadl" disabled /><br/>
-
-
-
-                             <input id="utilidadescondidol" type="hidden" name="utilidadescondidol" />
-
-    
-
-                             
-
-            					
-
-                             
-
-
-
-
-
-                        </div>
-
-
-
-                        <div class="clearitem"></div>
-
-
-
-                    <!--    <div id="test">asd</div> -->
-
-                        
-
-
-
-        			
-
-                    
-
-                   <!--  <div id="tablapad"></div> -->
-
-                    <table id="tabla" border="0" cellpadding="10" align="center" style="text-align:center;">
-
-                        <h1>Opciones</h1>
-
-                        <thead>
-
-                            <tr>
-
-                                <th></th>
-
-                                <th data-sort="int">Pads x bobina</th>
-
-                                <th data-sort="float">Desperdicio</th>
-
-                                <th>Bobina</th>
-
-                                <th>Material</th>
-
-                                <th>Calibre</th>
-
-                                <th>Largo</th>
-
-                                <th>Alto</th>
-
-                                <th>$ Unitario</th>
-
-                                <th>Total</th>                                                                
-
-                            </tr>
-
-                        </thead>
-
-
-
-                        <tbody id="tablaelementos">
-
-                            <tr>
-
-                                                       
-
-                            </tr>
-
-                        </tbody>
-
-                        
-
-                    </table>
-
-
-
-                     <table id="tablaagregados" border="0" cellpadding="10" align="center" style="text-align:center;">
-
-                        <h1>Seleccionados</h1>
-
-                        <thead>
-
-                            <tr>
-
-                                <th></th>
-
-                                <th data-sort="int">Pads x bobina</th>
-
-                                <th data-sort="float">Desperdicio</th>
-
-                                <th>Bobina</th>
-
-                                <th>Material</th>
-
-                                <th>Calibre</th>
-
-                                <th>Largo</th>
-
-                                <th>Alto</th>
-
-                                <th>$ Unitario</th>
-
-                                <th>Total</th>                                                                
-
-                            </tr>
-
-                        </thead>
-
-
-
-                        <tbody>
-
-                            <tr>
-
-                                                       
-
-                            </tr>
-
-                        </tbody>
-
-                        
-
-                    </table>
-
-
-
-
-
-
-
-                    <input id="btncotizar" type="button" name="btncotizar" value="Cotizar" onclick="calcularDesperdicio()" />
-
-                    <input id="btnagregar" type="button" name="btnagregar" value="Agregar Cotizacion" onclick="anadiroptimos()" />
-
-                     <br><br>
-
-                    <input id="btnenviar" type="submit" name="btnenviar" value="Enviar Cotizacion"  />
-
-
-
-                <!-- Codigo de seleccion de Material con Calibre-->
-
-                    <script type="text/javascript">
-
-               //------------------------------------------------------------------------------     
-
-                //-----------------------------------------------------------------------------        
-
-                 //-----------------------------------------------------------------------------    
-
-
-
-                    arreglopads = new Array();
+                $("#subtotalescondidol").val(kgalgoritmofac2x);
+
+                $("#utilidad").val(totalnewx);
+
+                $("#utilidadescondido").val(totalnewx);
+
+                $("#utilidadl").val(totalnew2x);
+
+                $("#utilidadescondidol").val(totalnew2x);
+
+                $("#tipocalibreescondido").val(calibrex);
+
+
+            }
+
+            
+
+            function material_val()
+              {
+                var valor_option = document.getElementById('materialalmacen');
+               valormaterial = valor_option.options[valor_option.selectedIndex].value;
+                $("#valormaterial").val(valormaterial);
+
+              
+              }
+
+             function calibre_val()
+              {
+                var valor_option = document.getElementById('calibrealmacen');
+               valorcalibre = valor_option.options[valor_option.selectedIndex].value;
+                $("#valorcalibre").val(valorcalibre);
+              
+              }  
+
+              function bobina_val()
+              {
+                var valor_option = document.getElementById('bobinaalmacen');
+               valorbobina = valor_option.options[valor_option.selectedIndex].value;
+                $("#valorbobina").val(valorbobina);
+              
+              } 
+
+              function mostrarclientes_pads(str)
+            {
+            if (str=="")
+              {
+              document.getElementById("insertarcliente").innerHTML="";
+              return;
+              } 
+            if (window.XMLHttpRequest)
+              {// code for IE7+, Firefox, Chrome, Opera, Safari
+              xmlhttp=new XMLHttpRequest();
+              }
+            else
+              {// code for IE6, IE5
+              xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+              }
+            xmlhttp.onreadystatechange=function()
+              {
+              if (xmlhttp.readyState==4 && xmlhttp.status==200)
+                {
+                document.getElementById("insertarcliente").innerHTML=xmlhttp.responseText;
+                }
+              }
+            xmlhttp.open("GET","obtenercliente_pads.php?q="+str,true);
+            xmlhttp.send();            
+            }
+
+
+            function mostrararticulos(str)
+            {
+                
+            if (str=="")
+              {
+              document.getElementById("insertarmaterial").innerHTML="";
+              return;
+              } 
+            if (window.XMLHttpRequest)
+              {// code for IE7+, Firefox, Chrome, Opera, Safari
+              xmlhttp=new XMLHttpRequest();
+              }
+            else
+              {// code for IE6, IE5
+              xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+              }
+            xmlhttp.onreadystatechange=function()
+              {
+              if (xmlhttp.readyState==4 && xmlhttp.status==200)
+                {
+                document.getElementById("insertarmaterial").innerHTML=xmlhttp.responseText;
+                }
+              }
+
+
+
+            xmlhttp.open("GET","obteneralmacen_pads.php?q="+str,true);
+            xmlhttp.send();            
+            }
+
+
+            function mostrarcalibre(str2)
+            {
+              
+            if (str2=='')
+              {
+              document.getElementById('insertarcalibre').innerHTML='';
+              return;
+              } 
+            if (window.XMLHttpRequest)
+              {// code for IE7+, Firefox, Chrome, Opera, Safari
+              xmlhttp=new XMLHttpRequest();
+              }
+            else
+              {// code for IE6, IE5
+              xmlhttp=new ActiveXObject('Microsoft.XMLHTTP');
+              }
+            xmlhttp.onreadystatechange=function()
+              {
+              if (xmlhttp.readyState==4 && xmlhttp.status==200)
+                {
+                document.getElementById('insertarcalibre').innerHTML=xmlhttp.responseText;
+                }
+              }
+            xmlhttp.open('GET','agrega_calibre_pads.php?w='+str2+"&valormaterial="+valormaterial,true);
+            xmlhttp.send();            
+            }
+
+             function mostrarbobina(str3)
+            {
+               
+            if (str3=='')
+              {
+              document.getElementById('insertarbobina').innerHTML='';
+              return;
+              } 
+            if (window.XMLHttpRequest)
+              {// code for IE7+, Firefox, Chrome, Opera, Safari
+              xmlhttp=new XMLHttpRequest();
+              }
+            else
+              {// code for IE6, IE5
+              xmlhttp=new ActiveXObject('Microsoft.XMLHTTP');
+              }
+            xmlhttp.onreadystatechange=function()
+              {
+              if (xmlhttp.readyState==4 && xmlhttp.status==200)
+                {
+                document.getElementById('insertarbobina').innerHTML=xmlhttp.responseText;
+                }
+              }
+
+              
+            
+            xmlhttp.open("GET","mostrar_articulo_pads.php?&m="+str3+"&valormaterial="+valormaterial+"&valorcalibre="+valorcalibre+"&valorbobina="+valorbobina,true);
+            xmlhttp.send();            
+            }            
+
+
+        </script>
+
+        <script type="text/javascript">
+
+                  arreglopads = new Array();
 
                     x=0;
 
@@ -781,21 +343,9 @@
 
 
 
+                                $("#tablaelementos").find('tr').each(function(){                                
 
-
-
-
-                                $("#tablaelementos").find('tr').each(function(){
-
-
-
-                                    
-
-                                   
-
-
-
-                                   
+                                                                      
 
                                   // for(x=0; x<iteraciones; x++){
 
@@ -895,19 +445,13 @@
 
                         document.getElementById("btnenviar").style.display="block";
 
-                        document.getElementById("tabla").style.display="block";
-
-
-
-                         
-
-
+                        document.getElementById("tabla").style.display="block";                      
 
                         
 
 
 
-                         function optimolargo(cantidad,desperdicio,bobina,material,calibre,largo, alto, unitario, total)
+                         function optimolargo(cantidad,desperdicio,bobina,material,calibre,largo, alto, numeropads, unitario, total)
 
                             {
 
@@ -935,7 +479,7 @@
 
 
 
-                            function optimoalto(cantidad,desperdicio,bobina,material,calibre,largo, alto, unitario, total)
+                            function optimoalto(cantidad,desperdicio,bobina,material,calibre,largo, alto, numeropads, unitario, total)
 
                             {
 
@@ -989,7 +533,8 @@
 
                                 //Numero de elementos del option bobina 
 
-                                idSelect =material + "-" + tipocalibre;
+                               // idSelect =material + "-" + tipocalibre;
+                                idSelect = "bobinaalmacen";
 
                                  nobobina = document.getElementById(idSelect).length;
 
@@ -997,7 +542,7 @@
 
                                 //lista = new array();
 
-                                    if (nobobina == 0){
+                                    if (nobobina == 1){
 
                                         alert("No hay bobinas disponibles");
 
@@ -1005,9 +550,11 @@
 
                                      }else{
 
+                                      
 
 
-                                        if ( (numeropads == "") || (largo == "") || (alto == "") || (numeropads == 0) || (largo == 0) || (alto == 0) ){
+
+                                        if ( (nopadsx == "") || (largox == "") || (altox == "") || (nopadsx == 0) || (largox == 0) || (altox == 0) ){
 
 
 
@@ -1030,6 +577,7 @@
                                                     $("#"+ idSelect).find('option').each(function()
 
                                                         {
+                                                          
 
                                                             
 
@@ -1051,11 +599,11 @@
 
                                                             padalto = 1;
 
-                                                            areapad = alto * largo;
+                                                            areapad = altox * largox;
 
-                                                            areadesperdicio = vbobina * alto;
+                                                            areadesperdicio = vbobina * altox;
 
-                                                            areadesperdicioalto = vbobina * largo;
+                                                            areadesperdicioalto = vbobina * largox;
 
 
 
@@ -1091,9 +639,9 @@
 
 
 
-                                                            difalto = vbobina-alto;
+                                                            difalto = vbobina-altox;
 
-                                                            diflargo = vbobina-largo;
+                                                            diflargo = vbobina-largox;
 
 
 
@@ -1109,15 +657,15 @@
 
 
 
-                                                           algoritmo = parseFloat(vbobina) * parseFloat(alto) * parseFloat(gramos) * parseFloat(numeropads);
+                                                           algoritmo = parseFloat(vbobina) * parseFloat(altox) * parseFloat(gramosx) * parseFloat(nopadsx);
 
                                                            // alert("bobina--" + bobina + "alto--" + alto + "gramos--" + gramos + "pads--" + numeropads);
 
-                                                            kgalgoritmofac = algoritmo * pxkg;
+                                                            kgalgoritmofac = algoritmo * preciokgx;
 
-                                                            subtotalalgoritmo = kgalgoritmofac * factor;
+                                                            subtotalalgoritmo = kgalgoritmofac * factorx;
 
-                                                            entero = vbobina / largo;
+                                                            entero = vbobina / largox;
 
                                                             entero = Math.floor(entero);
 
@@ -1129,21 +677,21 @@
 
 
 
-                                                            unitario = totalnew / numeropads;
+                                                            unitario = totalnew / nopadsx;
 
                                                             unitario = unitario.toFixed(3);
 
 
 
-                                                            algoritmo2 = parseFloat(vbobina) * parseFloat(largo) * parseFloat(gramos) * parseFloat(numeropads);
+                                                            algoritmo2 = parseFloat(vbobina) * parseFloat(largox) * parseFloat(gramosx) * parseFloat(nopadsx);
 
                                                            // alert("bobina--" + bobina + "alto--" + alto + "gramos--" + gramos + "pads--" + numeropads);
 
-                                                            kgalgoritmofac2 = algoritmo2 * pxkg;
+                                                            kgalgoritmofac2 = algoritmo2 * preciokgx;
 
-                                                            subtotalalgoritmo2 = kgalgoritmofac2 * factor;
+                                                            subtotalalgoritmo2 = kgalgoritmofac2 * factorx;
 
-                                                            entero2 = vbobina / alto;
+                                                            entero2 = vbobina / altox;
 
                                                             entero2 = Math.floor(entero2);
 
@@ -1155,7 +703,7 @@
 
 
 
-                                                            unitario2 = totalnew2 / numeropads;
+                                                            unitario2 = totalnew2 / nopadsx;
 
                                                             unitario2 = unitario2.toFixed(3);
 
@@ -1217,17 +765,17 @@
 
 
 
-                                                                    largopartes = vbobina / largo;
+                                                                    largopartes = vbobina / largox;
 
                                                                     largopartes = parseInt(largopartes);
 
 
 
-                                                                    largodoble = largo * largopartes;
+                                                                    largodoble = largox * largopartes;
 
-                                                                    areapaddoble= alto * largodoble;
+                                                                    areapaddoble= altox * largodoble;
 
-                                                                    areadesperdiciodoble = vbobina * alto;
+                                                                    areadesperdiciodoble = vbobina * altox;
 
                                                                     desperdiciodoble = areadesperdiciodoble - areapaddoble;
 
@@ -1251,15 +799,15 @@
 
                                                                     
 
-                                                            algoritmo = parseFloat(vbobina) * parseFloat(alto) * parseFloat(gramos) * parseFloat(numeropads);
+                                                            algoritmo = parseFloat(vbobina) * parseFloat(altox) * parseFloat(gramosx) * parseFloat(nopadsx);
 
                                                            // alert("bobina--" + bobina + "alto--" + alto + "gramos--" + gramos + "pads--" + numeropads);
 
-                                                            kgalgoritmofac = algoritmo * pxkg;
+                                                            kgalgoritmofac = algoritmo * preciokgx;
 
-                                                            subtotalalgoritmo = kgalgoritmofac * factor;
+                                                            subtotalalgoritmo = kgalgoritmofac * factorx;
 
-                                                            entero = vbobina / largo;
+                                                            entero = vbobina / largox;
 
                                                             entero = Math.floor(entero);
 
@@ -1271,7 +819,7 @@
 
 
 
-                                                            unitario = totalnew / numeropads;
+                                                            unitario = totalnew / nopadsx;
 
                                                             unitario = unitario.toFixed(3);
 
@@ -1285,15 +833,15 @@
 
                                                                     objetol.bobina=vbobina;
 
-                                                                    objetol.material=material;
+                                                                    objetol.material=materialx;
 
-                                                                    objetol.calibre = tipocalibre;
+                                                                    objetol.calibre = calibrex;
 
-                                                                    objetol.largo = largo;
+                                                                    objetol.largo = largox;
 
-                                                                    objetol.alto = alto;
+                                                                    objetol.alto = altox;
 
-                                                                    objetol.numeropads = numeropads;
+                                                                    objetol.numeropads = nopadsx;
 
                                                                     objetol.unitario = unitario;
 
@@ -1325,15 +873,15 @@
 
                                                                     objetol.bobina= vbobina;
 
-                                                                    objetol.material=material;
+                                                                    objetol.material=materialx;
 
-                                                                    objetol.calibre = tipocalibre;
+                                                                    objetol.calibre = calibrex;
 
-                                                                    objetol.largo = largo;
+                                                                    objetol.largo = largox;
 
-                                                                    objetol.alto = alto;
+                                                                    objetol.alto = altox;
 
-                                                                    objetol.numeropads = numeropads;
+                                                                    objetol.numeropads = nopadsx;
 
                                                                     objetol.unitario = unitario;
 
@@ -1377,17 +925,17 @@
 
 
 
-                                                                    altopartes = vbobina / alto;
+                                                                    altopartes = vbobina / altox;
 
                                                                     altopartes = parseInt(altopartes);
 
-                                                                    altodoble = alto * altopartes;
+                                                                    altodoble = altox * altopartes;
 
-                                                                    areapaddb= altodoble * largo;
+                                                                    areapaddb= altodoble * largox;
 
                                                             
 
-                                                                    areadesperdicioaltodb = vbobina * largo;
+                                                                    areadesperdicioaltodb = vbobina * largox;
 
                                                                     padalto=altopartes;
 
@@ -1411,15 +959,15 @@
 
 
 
-                                                            algoritmo2 = parseFloat(vbobina) * parseFloat(largo) * parseFloat(gramos) * parseFloat(numeropads);
+                                                            algoritmo2 = parseFloat(vbobina) * parseFloat(largox) * parseFloat(gramosx) * parseFloat(nopadsx);
 
                                                            // alert("bobina--" + bobina + "alto--" + alto + "gramos--" + gramos + "pads--" + numeropads);
 
-                                                            kgalgoritmofac2 = algoritmo2 * pxkg;
+                                                            kgalgoritmofac2 = algoritmo2 * preciokgx;
 
-                                                            subtotalalgoritmo2 = kgalgoritmofac2 * factor;
+                                                            subtotalalgoritmo2 = kgalgoritmofac2 * factorx;
 
-                                                            entero2 = vbobina / alto;
+                                                            entero2 = vbobina / altox;
 
                                                             entero2 = Math.floor(entero2);
 
@@ -1431,7 +979,7 @@
 
 
 
-                                                            unitario2 = totalnew2 / numeropads;
+                                                            unitario2 = totalnew2 / nopadsx;
 
                                                             unitario2 = unitario2.toFixed(3);
 
@@ -1443,15 +991,15 @@
 
                                                                 objetoa.bobina=vbobina;
 
-                                                                objetoa.material=material;
+                                                                objetoa.material=materialx;
 
-                                                                objetoa.calibre = tipocalibre;
+                                                                objetoa.calibre = calibrex;
 
-                                                                objetoa.largo = largo;
+                                                                objetoa.largo = largox;
 
-                                                                objetoa.alto = alto;
+                                                                objetoa.alto = altox;
 
-                                                                objetoa.numeropads = numeropads;
+                                                                objetoa.numeropads = nopadsx;
 
                                                                 objetoa.unitario = unitario2;
 
@@ -1477,15 +1025,15 @@
 
                                                                 objetoa.bobina=vbobina;
 
-                                                                objetoa.material=material;
+                                                                objetoa.material=materialx;
 
-                                                                objetoa.calibre = tipocalibre;
+                                                                objetoa.calibre = calibrex;
 
-                                                                objetoa.largo = largo;
+                                                                objetoa.largo = largox;
 
-                                                                objetoa.alto = alto;
+                                                                objetoa.alto = altox;
 
-                                                                objetoa.numeropads = numeropads;
+                                                                objetoa.numeropads = nopadsx;
 
                                                                 objetoa.unitario = unitario2;
 
@@ -1672,598 +1220,534 @@
                                                   //}
 
                                         }
-
-
-
-
-
               
 
                                     }
 
 
-
-
-
-
-
-
-
                             }
 
 
 
                         }
 
-                //-----------------------------------------------------------------------------        
+        </script>
 
-                 //-----------------------------------------------------------------------------        
+            </head>
 
-                  //-----------------------------------------------------------------------------        
+            <body onLoad="setInterval('actualizar()',400)">
+
+                <!--[if lt IE 7]>
+
+                    <p class="chromeframe">Está utilizando un <strong> navegador obsoleto. </ strong> Por favor, <a href="http://browsehappy.com/"> actualice su navegador </ a> o <a href="http://www.google.com/chromeframe/?redirect=true"> active Google Chrome </ a> para mejorar su experiencia. </ p>
+
+                   <![endif]-->
+
+        		
+
+                <div class="navbar navbar-inverse navbar-fixed-top">
+
+                    <div class="navbar-inner">
+
+                        <div class="container">
+
+                            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+
+                                <span class="icon-bar"></span>
+
+                                <span class="icon-bar"></span>
+
+                                <span class="icon-bar"></span>
+
+                            </a>
+
+                            <a class="brand" href="#">Folding Cardboard & Boxes Inc.</a>
+
+                            <div class="nav-collapse collapse">
+
+                                <ul class="nav">
+
+                                    <li><a href="usuario.php">Menu</a></li>
+
+                                    <li class="active"><a href="pads.php">PADS</a></li>
+
+                                    <li><a href="particiones.php">Particiones</a></li>
+
+                                    <?php
+
+                    if( $_SESSION["nivel"] == "AD" ){
+
+                         ?>                                                                
+
+                                    <li class="dropdown">
+
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Administrador <b class="caret"></b></a>
+
+                                        <ul class="dropdown-menu">
+
+                                           <li><a href="#">Clientes</a></li>
+
+        		                            <li><a href="../cotizaciones/archivos.php">Cotizaciones</a></li>
+
+        		                            <li><a href="#">Almacen</a></li>		                            
+
+                                            <li class="divider"></li>
+
+                                            <li class="nav-header">Seguridad</li>
+
+                                            <li><a href="usuarios.php">Usuarios</a></li>
+
+                                        </ul>
+
+                                    </li>
+                        <?php
+
+                    }
+
+                         ?>                    
+
+                                </ul>                      
+
+                               
+
+
+
+                                <form id="Formulario" class="navbar-form pull-right" name ="FormLogin" action="logout.php" method="POST">
+
+        						<label id="usuariolog"> <?php echo $_SESSION["nombre"]." ".$_SESSION["apaterno"]." ".$_SESSION["amaterno"]; ?></label>                                                                                        
+
+                                <input class="btn" type="submit" value="Cerrar Sesion">
+
+                            </form>
+
+                                
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="container">
 
 
 
 
-
-                    // Mostramos la lista de calibres dependiendo el material
-
-                     function materialSeleccion() {
-
-                            $('.sub-opcion').hide();
-
-                            var materialSeleccionado = $('#material').val();
-
-                            if (materialSeleccionado) {
-
-                                $('#' + materialSeleccionado + '-seleccionado').show();
-
-                            } 
-
-                        }
+                                       <?php if (isset($_GET["incorrecto"]) AND $_GET["incorrecto"] == 1) { 
 
 
 
-                       // Mostramos la lista de bobinas dependiendo el calibre
-
-                        function calibreSeleccion() {
-
-                            $('.opcion-bobina').hide();
-
-                            var calibreSeleccionado = $('#'+ material + '-seleccionado').val();
-
-                           
-
-                            if (calibreSeleccionado) {                         
-
-                                $('#'+ material + '-' + tipocalibre ).show();
+                                echo "<h2 class=\"alert alert-error\">Usuario o Contraseña Incorrectos</h2>";
 
                             }
 
 
 
-                        }
+                            ?>
 
 
 
-                function actualizar(){
 
-                     $("#gr").val(gramos);
 
-                     $("#grescondido").val(gramos);
 
-                     $("#preciokg").val(pxkg);
 
-                     $("#preciokgescondido").val(pxkg);
 
 
+        			<?php
 
-                     // ------ Operaciones ------------
+        			if( ($_SESSION["nivel"] == "AD")  || ($_SESSION["nivel"] == "UN") ){
 
+        				 ?>
 
 
-                    numeropads = $('#nopads').val();
 
-                    alto = $('#alto').val();
+                         <?php 
 
-                    largo = $('#largo').val();
+                                    if (isset($_GET["exito"]) AND $_GET["exito"] == 1) { 
 
-                    kilos = parseFloat(numeropads) * 
+                                          echo "<h2 class=\"alert alert-success\">Cotizacion Enviada!</h2>";
 
-                    parseFloat(alto) * parseFloat(largo) *
+                                        } 
 
-                    parseFloat(gramos);
 
-                    subtotal = kilos * pxkg;
 
-                    factor =2;
+                                ?>
 
-                    total = subtotal * factor;
 
-                    total=total.toFixed(3);
 
+        			<br>
+                    <div class="icon" aria-hidden="true" data-icon="">    Cotizacion de PADS</div>                                                                   
+                    <br><br>
 
 
-                    
 
-                    algoritmo = parseFloat(bobina) * parseFloat(alto) * parseFloat(gramos) * parseFloat(numeropads);
+        			<?php echo" <form name='formulario' action='../procesos/crea_pads.php' method='POST' >"; ?>   
 
-                   // alert("bobina--" + bobina + "alto--" + alto + "gramos--" + gramos + "pads--" + numeropads);
 
-                    kgalgoritmofac = algoritmo * pxkg;
 
-                    subtotalalgoritmo = kgalgoritmofac * factor;
+                        <label>Fecha</label>            
 
-                    entero = bobina / largo;
+                                <input id="fecha" type="text" name="fecha" disabled /> 
 
-                    entero = Math.floor(entero);
+                                <input id="fechaescondido" type="hidden" name="fechaescondido" />
 
-                    totalnew =  subtotalalgoritmo / entero;
-
-                    totalnew = totalnew.toFixed(3);
-
-                   // alert(totalnew);
-
-
-
-                    unitario = totalnew / numeropads;
-
-                    unitario = unitario.toFixed(3);
-
-
-
-                     algoritmo2 = parseFloat(bobina) * parseFloat(largo) * parseFloat(gramos) * parseFloat(numeropads);
-
-                   // alert("bobina--" + bobina + "alto--" + alto + "gramos--" + gramos + "pads--" + numeropads);
-
-                    kgalgoritmofac2 = algoritmo2 * pxkg;
-
-                    subtotalalgoritmo2 = kgalgoritmofac2 * factor;
-
-                    entero2 = bobina / alto;
-
-                    entero2 = Math.floor(entero2);
-
-                    totalnew2 =  subtotalalgoritmo2 / entero2;
-
-                    totalnew2 = totalnew2.toFixed(3);
-
-                    //alert(totalnew2);
-
-
-
-                    unitario2 = totalnew2 / numeropads;
-
-                    unitario2 = unitario2.toFixed(3);
-
-
-
-                    
-
-
-
-                    $("#kg").val(kilos);
-
-                    $("#kgescondido").val(kilos);
-
-                    $("#factoru").val(factor);
-
-                    $("#subtotal").val(kgalgoritmofac);
-
-                    $("#subtotalescondido").val(kgalgoritmofac);
-
-                    $("#subtotall").val(kgalgoritmofac2);
-
-                    $("#subtotalescondidol").val(kgalgoritmofac2);
-
-                    $("#utilidad").val(totalnew);
-
-                    $("#utilidadescondido").val(totalnew);
-
-                    $("#utilidadl").val(totalnew2);
-
-                    $("#utilidadescondidol").val(totalnew2);
-
-                    $("#tipocalibreescondido").val(tipocalibre);
-
-
-
-
-
-                }
-
-
-
-
-
-
-
-                        $(document).ready(function() {
-
-
-
-                             
-
-
-
-
-
-                                document.getElementById("btnenviar").style.display="none";
-
-                                indicecheck = 0;
-
-
-
-                                                             
-
-                                $('#material').change(materialSeleccion );
-
-                                 materialSeleccion();
+                                
 
                                  
 
-                                $("#material").change(function () {
 
-                                               material = $('#material option:selected').val();
 
-                                               calibre = $("#" + material  + "-seleccionado option:selected").val() || material;
+                        <label style="margin-left:2%">Folio #</label>            
 
-                                              
+                                <input id="folio" type="text" name="folio" value="12345" required /><br/> 
 
-                                            $("#" + material +"-seleccionado").change(function(){
 
-                                              
 
-                                                    tipocalibre = $('#' + material + '-seleccionado option:selected').val();
 
-                                                    
 
+                        
 
+                        <div class="items_pad1">                    
 
-                                                    calibreSeleccion();
+                                
 
-                                                    if (material=="Kraft") {
+                                                                        
 
-                                                        operacion= parseFloat(tipocalibre) * 2;
+                                <label># de parte</label> <br/>            
 
-                                                        //$("#kg").text(operacion);
+                                <input id="noparte" type="text" name="noparte" value="1" required /> <br/>                                                                
 
-                                                    };
+                                                      
 
-                                                  
+                                <label>Cliente</label>  <br/>   
+                                <label for="empresaeditar">Empresa</label><br>
+                            <select id="cliente" name="cliente" onchange="mostrarclientes_pads(this.value)"><option  value=""  required> --Escoje una Empresa-- </option>
+                                <?php 
+                                    $query = sprintf("SELECT empresa FROM clientes where 1 ORDER BY empresa ASC ");
+                                    $result=mysql_query($query,$link) or die(mysql_error()); 
+                                    while($row=mysql_fetch_array($result,MYSQLI_NUM)){
+                                    echo "<OPTION VALUE='".$row[0]."'>".$row[0]."</OPTION>";
+                                        }
+                                ?>
+                            </select> 
 
-                                                 
+                              <div id="insertarcliente"></div>       
 
-                                                         $('#'+ material + '-' + tipocalibre ).change(function(){
+                                <input id="clienteagregar" type="hidden" name="clienteagregar"  /> <br/>                                                                                                                                      
 
-                                                              
 
 
+                                 <input id="grescondido" type="hidden" name="grescondido" />    
 
-                                                          gramos = $('option:selected', this).attr('gramos');
+                                 
 
-                                                          pxkg = $('option:selected', this).attr('pxkg');
 
-                                                          bobina = $('option:selected', this).attr('value');
 
-                                                          $("#bobinaescondido").val(bobina);
+                                <label>Sub-Total x Alto</label> <br/>
 
-                                                          actualizar();
+                                <input id="subtotal" type="text" name="subtotal" disabled /> <br/>
 
 
 
+                                <input id="subtotalescondido" type="hidden" name="subtotalescondido"  /> 
 
 
-                                                         // alert('eventini');
 
-                                                          
+                                <label>Sub-Total x Largo</label> <br/>
 
-         
+                                <input id="subtotall" type="text" name="subtotal" disabled /> <br/>
 
-                                                           }).change();                                           
 
-                                                           
 
+                                <input id="subtotalescondidol" type="hidden" name="subtotalescondido"  /> <br/>
 
+                                
 
-                                                             $("#gr").val(gramos);
+                                        
 
-                                                             $("#grescondido").val(gramos);
+                        </div>     
 
-                                                             $("#preciokg").val(pxkg);
 
-                                                             $("#preciokgescondido").val(pxkg);
 
+                        <div class="items_pad1">
 
 
-                                                             // ------ Operaciones ------------
 
+                            <label># de PADS</label> <br/>              
 
+            				    <input id="nopads" type="text" name="nopads" autocomplete="off" required /><br/>
 
-                                                            numeropads = $('#nopads').val();
 
-                                                            alto = $('#alto').val();
 
-                                                            largo = $('#largo').val();
+            				<label>Largo</label> <br/>
 
-                                                            kilos = parseFloat(numeropads) * 
+                                <input id="largo" type="text" name="largo" autocomplete="off" required /><br/>
 
-                                                            parseFloat(alto) * parseFloat(largo) *
 
-                                                            parseFloat(gramos);
 
-                                                            subtotal = kilos * pxkg;
+                            <label>Alto</label>	<br/>
 
-                                                            factor =2;
+            				    <input id="alto" type="text" name="alto" autocomplete="off" required /><br/>
 
-                                                            total = subtotal * factor;
 
-                                                            total=total.toFixed(3);
 
+                           
 
 
-                                                            
 
-                                                            algoritmo = parseFloat(bobina) * parseFloat(alto) * parseFloat(gramos) * parseFloat(numeropads);
-
-                                                           // alert("bobina--" + bobina + "alto--" + alto + "gramos--" + gramos + "pads--" + numeropads);
-
-                                                            kgalgoritmofac = algoritmo * pxkg;
-
-                                                            subtotalalgoritmo = kgalgoritmofac * factor;
-
-                                                            entero = bobina / largo;
-
-                                                            entero = Math.floor(entero);
-
-                                                            totalnew =  subtotalalgoritmo / entero;
-
-                                                            totalnew = totalnew.toFixed(3);
-
-                                                           // alert(totalnew);
-
-
-
-                                                            unitario = totalnew / numeropads;
-
-                                                            unitario = unitario.toFixed(3);
-
-
-
-
-
-                                                            algoritmo2 = parseFloat(bobina) * parseFloat(largo) * parseFloat(gramos) * parseFloat(numeropads);
-
-                                                           // alert("bobina--" + bobina + "alto--" + alto + "gramos--" + gramos + "pads--" + numeropads);
-
-                                                            kgalgoritmofac2 = algoritmo2 * pxkg;
-
-                                                            subtotalalgoritmo2 = kgalgoritmofac2 * factor;
-
-                                                            entero2 = bobina / alto;
-
-                                                            entero2 = Math.floor(entero2);
-
-                                                            totalnew2 =  subtotalalgoritmo2 / entero2;
-
-                                                            totalnew2 = totalnew2.toFixed(3);
-
-                                                           // alert(totalnew);
-
-
-
-                                                            unitario2 = totalnew2 / numeropads;
-
-                                                            unitario2 = unitario2.toFixed(3);
-
-
-
-
-
-                                                            
-
-
-
-                                                            $("#kg").val(kilos);
-
-                                                            $("#kgescondido").val(kilos);
-
-                                                            $("#factoru").val(factor);
-
-                                                            $("#subtotal").val(kgalgoritmofac);
-
-                                                            $("#subtotalescondido").val(kgalgoritmofac);
-
-                                                            $("#subtotall").val(kgalgoritmofac2);
-
-                                                            $("#subtotalescondidol").val(kgalgoritmofac2);
-
-                                                            $("#utilidad").val(totalnew);
-
-                                                            $("#utilidadescondido").val(totalnew);
-
-                                                            $("#utilidadl").val(totalnew2);
-
-                                                            $("#utilidadescondidol").val(totalnew2);
-
-                                                            $("#tipocalibreescondido").val(tipocalibre);
-
-
-
-
-
-
-
-
-
-                                                          //$("#test").text(bobina + "--" + tipocalibre + "--" + operacion + "--" + calibre + "--"  + kilos + " - " + numeropads + " - " + alto+ " - " +  largo+ " - "  + gramos );
-
-
-
-                                            }).change();
-
-                                            
-
-                                            
-
-
-
-                                    })
-
-                                    .change();
-
-
-
-
-
-            
-
-                            });
-
-
-
-
-
-                            $("input").keyup(function () {
-
-
-
-                                                            
-
-
-
-                                                             $("#gr").val(gramos);
-
-                                                             $("#grescondido").val(gramos);
-
-                                                             $("#preciokg").val(pxkg);
-
-                                                             $("#preciokgescondido").val(pxkg);
-
-                                                            numeropads = $('#nopads').val();
-
-                                                            alto = $('#alto').val();
-
-                                                            largo = $('#largo').val();
-
-                                                            kilos = parseFloat(numeropads) * 
-
-                                                            parseFloat(alto) * parseFloat(largo) *
-
-                                                            parseFloat(gramos);
-
-                                                            subtotal = kilos * pxkg;
-
-                                                            factor =2;
-
-                                                            total = subtotal * factor;
-
-                                                            total=total.toFixed(3);
-
-
-
-                                                            
-
-
-
-
-
-                                                            algoritmo = parseFloat(bobina) * parseFloat(alto) * parseFloat(gramos) * parseFloat(numeropads);
-
-                                                            //alert("bobina--" + bobina + "alto--" + alto + "gramos--" + gramos + "pads--" + numeropads);
-
-                                                            kgalgoritmofac = algoritmo * pxkg;
-
-                                                            subtotalalgoritmo = kgalgoritmofac * factor;
-
-                                                            entero = bobina / largo;
-
-                                                            entero = Math.floor(entero);
-
-                                                            totalnew =  subtotalalgoritmo / entero;
-
-                                                            totalnew = totalnew.toFixed(3);
-
-                                                            //alert(totalnew);
-
-
-
-                                                            unitario = totalnew / numeropads;
-
-                                                            unitario = unitario.toFixed(3);
-
-
-
-                                                            algoritmo2 = parseFloat(bobina) * parseFloat(largo) * parseFloat(gramos) * parseFloat(numeropads);
-
-                                                           // alert("bobina--" + bobina + "alto--" + alto + "gramos--" + gramos + "pads--" + numeropads);
-
-                                                            kgalgoritmofac2 = algoritmo2 * pxkg;
-
-                                                            subtotalalgoritmo2 = kgalgoritmofac2 * factor;
-
-                                                            entero2 = bobina / alto;
-
-                                                            entero2 = entero2.toFixed(0);
-
-                                                            totalnew2 =  subtotalalgoritmo2 / entero2;
-
-                                                            totalnew2 = totalnew2.toFixed(3);
-
-                                                           // alert(totalnew);
-
-
-
-                                                            unitario2 = totalnew2 / numeropads;
-
-                                                            unitario2 = unitario2.toFixed(3);
-
-
-
-                                                            //alert(totalnew2);
-
-
-
-                                                            $("#kg").val(kilos);
-
-                                                            $("#kgescondido").val(kilos);
-
-                                                            $("#factoru").val(factor);
-
-                                                            $("#subtotal").val(kgalgoritmofac);
-
-                                                            $("#subtotalescondido").val(kgalgoritmofac);
-
-                                                            $("#subtotall").val(kgalgoritmofac2);
-
-                                                            $("#subtotalescondidol").val(kgalgoritmofac2);
-
-                                                            $("#utilidad").val(totalnew);
-
-                                                            $("#utilidadescondido").val(totalnew);
-
-                                                            $("#utilidadl").val(totalnew2);
-
-                                                            $("#utilidadescondidol").val(totalnew2);
-
-                                                            $("#tipocalibreescondido").val(tipocalibre);
-
-
-
-                                                            //$("#test").text(bobina + "--" + tipocalibre + "--" + operacion + "--" + calibre + "--"  + kilos + " - " + numeropads + " - " + alto+ " - " +  largo+ " - "  + gramos );
-
-                             }).keyup();
-
-
-
-
-
-
-
-
+                                 <input id="preciokgescondido" type="hidden" name="preciokgescondido" />
 
 
 
                             
+
+                             <input id="factoru" type="hidden" name="factoru" value="2" /> 
+
+
+
+                              <label>Kilos</label><br/> 
+
+                             <input id="kg" type="text" name="kg" disabled /><br/>
+
+                             <input id="kgescondido" type="hidden" name="kgescondido" />
+
+                                
+
+                            <label>Total por Alto</label> <br/>
+
+                             <input id="utilidad" type="text" name="utilidad" disabled /><br/>
+
+
+
+                             <input id="utilidadescondido" type="hidden" name="utilidadescondido" />
+
+
+
+                             <label>Total por Largo</label> <br/>
+
+                             <input id="utilidadl" type="text" name="utilidadl" disabled /><br/>
+
+
+
+                             <input id="utilidadescondidol" type="hidden" name="utilidadescondidol" />
+
+            				
+
+                        </div>
+
+
+
+
+
+                        <div class="items_pad2">
+
+
+<!--  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////   -->
+<!--  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////   -->
+<!--  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////   -->
+<!--  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////   -->
+<!--  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////   -->
+<!--  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////   -->
+
+                            <input id="bobinaescondido" type="hidden"  name="bobinaescondido" />
+
+                           <!--  <form name="importararticulos" action="mostrar_articulo.php" method="GET"> -->
+                           
+                            <label for="almaceneditar">Material</label><br>
+                            <select id="materialalmacen" name="almacenmaterialedit" onclick ='material_val()' onchange="mostrararticulos(this.value)"><option value=""> --Escoge el Material-- </option>
+                                <?php 
+                                    $verificar = "SI";
+                                    $query = sprintf("SELECT material FROM almacen where existencia='%s' GROUP BY material", $verificar);
+                                    $result=mysql_query($query,$link) or die(mysql_error()); 
+                                    while($row=mysql_fetch_array($result,MYSQLI_NUM)){
+                                    echo "<OPTION VALUE='".$row[0]."'>".$row[0]."</OPTION>";
+                                        }
+                                ?>
+                            </select>   
+                             <input id="valormaterial" type="hidden" name="valormaterial" required/>  
+                         <!--     </form>     -->                                                       
+                            <div id="insertarmaterial"></div>
+
+                            <div id='insertarbobina'></div>
+
+<!--  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////   -->
+<!--  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////   -->
+<!--  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////   -->
+<!--  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////   -->
+<!--  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////   -->
+<!--  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////   -->
+
+
+
+                        </div>
+
+
+
+                        <div class="clearitem"></div>
+
+
+
+                    <!--    <div id="test">asd</div> -->
+
+                        
+
+
+
+        			
+                    <br><br>
+                    <input id="btncotizar" type="button" name="btncotizar" value="Cotizar" onclick="calcularDesperdicio()" />
+
+                   <!--  <div id="tablapad"></div> -->
+
+                    <table id="tabla" border="0" cellpadding="10" align="center" style="text-align:center;">
+
+                        <h1>Opciones</h1>
+
+                        <thead>
+
+                            <tr>
+
+                                <th></th>
+
+                                <th data-sort="int">Pads x bobina</th>
+
+                                <th data-sort="float">Desperdicio</th>
+
+                                <th>Bobina</th>
+
+                                <th>Material</th>
+
+                                <th>Calibre</th>
+
+                                <th>Largo</th>
+
+                                <th>Alto</th>
+
+                                <th>$ Unitario</th>
+
+                                <th>Total</th>                                                                
+
+                            </tr>
+
+                        </thead>
+
+
+
+                        <tbody id="tablaelementos">
+
+                            <tr>
+
+                                                       
+
+                            </tr>
+
+                        </tbody>
+
+                        
+
+                    </table>
+                    <br>
+                    
+                   
+
+                     <table id="tablaagregados" border="0" cellpadding="10" align="center" style="text-align:center;">
+
+                        <h1>Seleccionados</h1>
+
+                        <thead>
+
+                            <tr>
+
+                                <th></th>
+
+                                <th data-sort="int">Pads x bobina</th>
+
+                                <th data-sort="float">Desperdicio</th>
+
+                                <th>Bobina</th>
+
+                                <th>Material</th>
+
+                                <th>Calibre</th>
+
+                                <th>Largo</th>
+
+                                <th>Alto</th>
+
+                                <th>$ Unitario</th>
+
+                                <th>Total</th>                                                                
+
+                            </tr>
+
+                        </thead>
+
+
+
+                        <tbody>
+
+                            <tr>
+
+                                                       
+
+                            </tr>
+
+                        </tbody>
+
+                        
+
+                    </table>
+
+
+
+
+
+
+
+                    
+                      <br>
+                    <input id="btnagregar" type="button" name="btnagregar" value="Agregar Cotizacion" onclick="anadiroptimos()" />
+
+                     <br>
+
+                    <input id="btnenviar" type="submit" name="btnenviar" value="Enviar Cotizacion"  />
+
+                    
+
+
+
+                <!-- Codigo de seleccion de Material con Calibre-->
+
+                    <script type="text/javascript">
+
+              
+
+                        $(document).ready(function() {                        
+                          
+                          document.getElementById("btnenviar").style.display="none";
+
+                          indicecheck = 0;   
+
+                        });
+
+                        function actualizar(){
+
+                                valores();
+                                calcular();
+                        }
+
+
+                          //  $("input").focus(function () {
+
+                                
+
+
+
+                             // }).focus();
 
                     </script>
 
@@ -2277,7 +1761,7 @@
 
 
 
-               </form>    
+             <?php echo"</form>"; ?>    
 
 
 

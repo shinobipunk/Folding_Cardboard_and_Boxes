@@ -83,7 +83,9 @@
 
                                     ?>
 
-            			<h1>Cotizacion de Particiones</h1>
+            		<br>
+                    <div class="icon" aria-hidden="true" data-icon="">    Cotizacion de Particiones</div>                                                                   
+                    <br><br>
 
             			<form name="user_form" action="../procesos/crea_pads.php" method="POST" >
 

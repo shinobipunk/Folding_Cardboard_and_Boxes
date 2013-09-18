@@ -12,10 +12,11 @@ $cpedit=$_POST['cpedit'];
 $telefonoedit= $_POST['telefonoedit'];
 $ciudadedit = $_POST['ciudadedit'];
 $paisedit = $_POST['paisedit'];	
+$modificado = $_POST['modificado'];
 
 	
-$query = sprintf("UPDATE clientes SET clientes.empresa= '%s', clientes.email= '%s', clientes.direccion = '%s', clientes.cp = '%s', clientes.telefono = '%s', clientes.ciudad = '%s', clientes.pais= '%s' WHERE clientes.id_cliente = '%s'" ,
-$empresaedit, $emailedit, $direccionedit, $cpedit, $telefonoedit, $ciudadedit, $paisedit, $idedit);
+$query = sprintf("UPDATE clientes SET clientes.empresa= '%s', clientes.email= '%s', clientes.direccion = '%s', clientes.cp = '%s', clientes.telefono = '%s', clientes.ciudad = '%s', clientes.pais= '%s', clientes.modificado= '%s' WHERE clientes.id_cliente = '%s'" ,
+$empresaedit, $emailedit, $direccionedit, $cpedit, $telefonoedit, $ciudadedit, $paisedit, $modificado, $idedit);
 $result=mysql_query($query,$link) or die(mysql_error());
 
 

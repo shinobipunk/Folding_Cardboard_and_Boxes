@@ -15,7 +15,7 @@ while($row=mysql_fetch_array($result,MYSQLI_NUM))
   {
                             echo "<form name='editarusuario' action='../procesos/edita_usuarios.php' method='POST'>";
                             echo "<input type='hidden' name='idedit' size='30' maxlength='100' value='". $row[0] . "' />";
-                            echo "Nombre de Usuario(nick):<br />";
+                            echo "Usuario(nick):<br />";
                             echo "<input type='text' name='loginedit' size='30' maxlength='100' value='". $row[4] . "'  required />";
                             echo "<br /> Nombre:";
                             echo "<br />  ";                            
@@ -38,6 +38,12 @@ while($row=mysql_fetch_array($result,MYSQLI_NUM))
                             echo "<option value='UN'>Usuario Normal</option>";
                             echo "<option value='ES'>Usuario Especial</option>";
                             echo "</select>";
+                             echo "<br />Creado por:";
+                            echo "<br />";
+                            echo "<input type='text' name='creado' size='30' maxlength='100' value='". $row[8] ."' disabled required />";
+                            echo "<br />Modificado por:";
+                            echo "<br />";
+                            echo "<input type='text' name='modificadoedit' size='30' maxlength='100' value='". $row[9] ."' disabled required />";
                             echo "<input type='hidden' name='modificado' size='30' maxlength='100' value='". $sesionlog ."' required />";
                             echo "<br />";
                             echo "<br />";

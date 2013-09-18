@@ -460,7 +460,9 @@ session_start();
 
                         ?>
 
-                        <h1> Cotizaciones</h1>
+                    <br>
+                    <div class="icon" aria-hidden="true" data-icon="">    Cotizaciones</div>                                                                   
+                    <br>
 
 <div id="listingcontainer"> 
 
