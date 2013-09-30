@@ -8,10 +8,11 @@
                 padding-bottom: 40px;
             }
         </style>
-        <link rel="stylesheet" href="<?php echo RUTA; ?>/css/bootstrap-responsive.css">
-        <link rel="stylesheet" href="<?php echo RUTA; ?>/css/main.css">
         <link rel="stylesheet" href="<?php echo RUTA; ?>/css/icon.css" />
 
+        <link rel="stylesheet" href="<?php echo RUTA; ?>/css/bootstrap-responsive.css">
+        <link rel="stylesheet" href="<?php echo RUTA; ?>/css/main.css">
+        
         <script src="<?php echo RUTA; ?>/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
         <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>                 
         <script type="text/javascript" src="<?php echo RUTA; ?>/js/moment.min.js"></script>              

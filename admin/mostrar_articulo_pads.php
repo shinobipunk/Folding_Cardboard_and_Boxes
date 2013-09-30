@@ -25,7 +25,7 @@ while($row=mysql_fetch_array($result,MYSQLI_NUM))
                             
                              //echo "<form name='editaralmacen' action='../procesos/edita_almacen.php' method='POST'>";
                            
-                            echo "<br />Gramos:";
+                            echo "Gramos:";
                             echo "<br />";
                             echo "<input id='gramosalmacen' type='text'name='gramosalmacen' value='". $row[3] . "' disabled />";
                             

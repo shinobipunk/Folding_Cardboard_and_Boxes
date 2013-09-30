@@ -1013,7 +1013,7 @@ input[type="checkbox"],input[type="radio"] {
  
 }
 tr:nth-last-child(2n+2) {
-	background: gray;
+	background: crimson;
 	color: white;
 }
 

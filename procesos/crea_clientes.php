@@ -5,6 +5,7 @@ include dirname(dirname(__FILE__))."/config.php";
 $link=Conectarse();
 
 $empresa = $_POST['empresa'];
+$encargado = $_POST['encargado'];
 $email = $_POST['email'];
 $direccion= $_POST['direccion'];
 $cp=$_POST['cp'];
@@ -27,9 +28,9 @@ if(mysql_num_rows($result)){
 
 		
 
-		$query = sprintf("INSERT INTO clientes (empresa, email, direccion, cp, telefono, ciudad, pais, creado)
+		$query = sprintf("INSERT INTO clientes (empresa, encargado, email, direccion, cp, telefono, ciudad, pais, creado)
 
-VALUES ('%s', '%s', '%s', '%s', '%s', '%s','%s','%s')",$empresa, $email, $direccion, $cp, $telefono, $ciudad, $pais, $creado);
+VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s','%s','%s')",$empresa, $encargado,  $email, $direccion, $cp, $telefono, $ciudad, $pais, $creado);
 
 		$result=mysql_query($query,$link) or die(mysql_error()); 
 

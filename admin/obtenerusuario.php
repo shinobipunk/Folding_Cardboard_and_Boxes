@@ -10,7 +10,7 @@ $link=Conectarse();
      $result=mysql_query($query,$link) or die(mysql_error()); 
 
 
-$sesionlog = $_SESSION["login"];
+$sesionlog = $_SESSION["nombre"].' '.$_SESSION["apaterno"];
 while($row=mysql_fetch_array($result,MYSQLI_NUM))
   {
                             echo "<form name='editarusuario' action='../procesos/edita_usuarios.php' method='POST'>";

@@ -19,7 +19,7 @@ $sesionlog = $_SESSION["login"];
                              //echo "<form name='importararticulos' action='../procesos/agrega_calibre.php' method='POST'>"; 
                            
                             echo "<label for='agregabobina'>Bobina</label><br>";
-                            echo "<select id='bobinaalmacen' onclick ='bobina_val()' name='almacenbobinaedit' onchange='mostrarbobina(this.value)'><option value=''> --Escoge la Bobina-- </option>";
+                            echo "<select id='bobinaalmacen' onclick ='bobina_val()' name='almacenbobinaedit' onchange='mostrarbobina(this.value)'><option value='0'> --Escoge la Bobina-- </option>";
                                 
                                     $query = sprintf("SELECT bobina FROM almacen WHERE calibre = '%s' AND  material='%s' AND existencia='%s' GROUP BY bobina", $w, $material, $verificar);
                                     $result=mysql_query($query,$link) or die(mysql_error()); 

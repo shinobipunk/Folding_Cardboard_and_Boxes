@@ -22,7 +22,7 @@ $link=Conectarse();
 
                 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-                <title>Sistema de Cotizaciones | PADS</title>
+                <title>PADS</title>
 
                 <meta name="description" content="">
 
@@ -45,6 +45,7 @@ $link=Conectarse();
                 nopadsx = $('#nopads').val();
                 largox = $('#largo').val();
                 altox = $('#alto').val();
+
 
               // alert(materialx + '-' + calibrex +'-' + bobinax +'-' +gramosx +'-' + preciokgx+'-' + factorx +'-' + nopadsx+'-' + largox+'-' + altox);
 
@@ -202,9 +203,35 @@ $link=Conectarse();
             }
 
 
-            function mostrararticulos(str)
+            function mostrarfolio()
             {
                 
+            
+            if (window.XMLHttpRequest)
+              {// code for IE7+, Firefox, Chrome, Opera, Safari
+              xmlhttp=new XMLHttpRequest();
+              }
+            else
+              {// code for IE6, IE5
+              xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+              }
+            xmlhttp.onreadystatechange=function()
+              {
+              if (xmlhttp.readyState==4 && xmlhttp.status==200)
+                {
+                document.getElementById("insertarfolio").innerHTML=xmlhttp.responseText;
+                }
+              }
+
+            xmlhttp.open("GET","obtenerfolio_pads.php",true);
+            xmlhttp.send();            
+            } 
+            mostrarfolio();
+
+
+            function mostrararticulos(str)
+            {
+                eliminargramos();
             if (str=="")
               {
               document.getElementById("insertarmaterial").innerHTML="";
@@ -235,7 +262,7 @@ $link=Conectarse();
 
             function mostrarcalibre(str2)
             {
-              
+              eliminargramos();
             if (str2=='')
               {
               document.getElementById('insertarcalibre').innerHTML='';
@@ -361,7 +388,9 @@ $link=Conectarse();
 
                                             
 
-                                           $('#tablaagregados > tbody:last').append('<tr><td><input class="seleccionados"  type="checkbox" name="listado[]" value="' + casilla.value +' " checked></td><td>'+ objetoseleccionado.cantidad +'</td><td>'+ objetoseleccionado.desperdicio + '%' + '</td><td>'+ objetoseleccionado.bobina +'</td><td>'+ objetoseleccionado.material +'</td><td>'+ objetoseleccionado.calibre +'</td><td>'+ objetoseleccionado.largo +'</td><td>'+ objetoseleccionado.alto +'</td><td class="resaltado">'+ objetoseleccionado.unitario +'</td><td class="resaltado">'+ objetoseleccionado.total +'</td><td>');                                                                                                                       
+                                           $('#tablaagregados > tbody:last').append('<tr><td><input class="seleccionados"  type="checkbox" name="listado[]" value="' + casilla.value +' " checked></td><td>'+ objetoseleccionado.cantidad +'</td><td>'+ objetoseleccionado.desperdicio + '%' + '</td><td>'+ objetoseleccionado.bobina +'</td><td>'+ objetoseleccionado.material +'</td><td>'+ objetoseleccionado.calibre +'</td><td>'+ objetoseleccionado.largo +'</td><td>'+ objetoseleccionado.alto +'</td><td class="resaltado">'+ objetoseleccionado.unitario +'</td><td class="resaltado">'+ objetoseleccionado.total +'</td><td>'); 
+                                            //datos = casilla.value.split("-   -");
+                                          // alert(datos);
 
                                         seleccionado[x].checked = false;
 
@@ -417,7 +446,19 @@ $link=Conectarse();
 
                     }
 
+                    function eliminargramos(){
 
+                        var Parent = document.getElementById("insertarbobina");
+
+                    while(Parent.hasChildNodes())
+
+                    {
+
+                       Parent.removeChild(Parent.firstChild);
+
+                    }
+
+                    }  
 
                     function eliminarelementos(){
 
@@ -1113,7 +1154,7 @@ $link=Conectarse();
 
                                                             indicecheck= indicecheck + 1;
 
-                                                            $('#tabla > tbody:last').append('<tr><td><input class="campo" type="checkbox" name="listado[]" value="'+ objetoa.numeropads + '-   -' +  objetoa.largo + '-   -' + objetoa.alto + '-   -' + objetoa.material + '-   -' + objetoa.calibre + '-   -'  + objetoa.unitario + '-   -' + objetoa.total +'"></td><td>'+ objetoa.cantidad +'</td><td>'+ objetoa.desperdicio + '%' + '</td><td>'+ objetoa.bobina +'</td><td>'+ objetoa.material +'</td><td>'+ objetoa.calibre +'</td><td>'+ objetoa.largo +'</td><td>'+ objetoa.alto +'</td><td class="resaltado">'+ objetoa.unitario +'</td><td class="resaltado">'+ objetoa.total +'</td><td>');                                                                                                                      
+                                                            $('#tabla > tbody:last').append('<tr><td><input class="campo" type="checkbox" name="listado[]" value="'+ objetoa.numeropads + '-   -' + objetoa.cantidad + '-   -' + objetoa.desperdicio + '-   -' + objetoa.largo + '-   -' + objetoa.alto + '-   -' + objetoa.material + '-   -' + objetoa.calibre + '-   -'  + objetoa.bobina + '-   -'  +  objetoa.unitario + '-   -' + objetoa.total +'"></td><td>'+ objetoa.cantidad +'</td><td>'+ objetoa.desperdicio + '%' + '</td><td>'+ objetoa.bobina +'</td><td>'+ objetoa.material +'</td><td>'+ objetoa.calibre +'</td><td>'+ objetoa.largo +'</td><td>'+ objetoa.alto +'</td><td class="resaltado">'+ objetoa.unitario +'</td><td class="resaltado">'+ objetoa.total +'</td><td>');                                                                                                                      
 
                                                           //  alert("a");
 
@@ -1131,7 +1172,7 @@ $link=Conectarse();
 
                                                             indicecheck= indicecheck + 1;
 
-                                                            $('#tabla > tbody:last').append('<tr><td><input class="campo"  type="checkbox" name="listado[]" value="'+ objetol.numeropads + '-   -' +  objetol.largo + '-   -' + objetol.alto + '-   -' + objetol.material + '-   -' + objetol.calibre + '-   -'  + objetol.unitario + '-   -' + objetol.total  +'"></td><td>'+ objetol.cantidad +'</td><td>'+ objetol.desperdicio + '%' + '</td><td>'+ objetol.bobina +'</td><td>'+ objetol.material +'</td><td>'+ objetol.calibre +'</td><td>'+ objetol.largo +'</td><td>'+ objetol.alto +'</td><td class="resaltado">'+ objetol.unitario +'</td><td class="resaltado">'+ objetol.total +'</td><td>');                                                                                                                      
+                                                            $('#tabla > tbody:last').append('<tr><td><input class="campo"  type="checkbox" name="listado[]" value="'+ objetol.numeropads + '-   -' + objetol.cantidad + '-   -' + objetol.desperdicio + '-   -' + objetol.largo + '-   -' + objetol.alto + '-   -' + objetol.material + '-   -' + objetol.calibre + '-   -'  + objetol.bobina + '-   -'  + objetol.unitario + '-   -' + objetol.total  +'"></td><td>'+ objetol.cantidad +'</td><td>'+ objetol.desperdicio + '%' + '</td><td>'+ objetol.bobina +'</td><td>'+ objetol.material +'</td><td>'+ objetol.calibre +'</td><td>'+ objetol.largo +'</td><td>'+ objetol.alto +'</td><td class="resaltado">'+ objetol.unitario +'</td><td class="resaltado">'+ objetol.total +'</td><td>');                                                                                                                      
 
                                                            // alert("l");
 
@@ -1149,7 +1190,7 @@ $link=Conectarse();
 
                                                                     arreglopads[indicecheck] = objetol;
 
-                                                                    $('#tabla > tbody:last').append('<tr><td><input class="campo"  type="checkbox" name="listado[]" value="'+ objetol.numeropads + '-   -' +  objetol.largo + '-   -' + objetol.alto + '-   -' + objetol.material + '-   -' + objetol.calibre + '-   -'  + objetol.unitario + '-   -' + objetol.total  +'"></td><td>'+ objetol.cantidad +'</td><td>'+ objetol.desperdicio + '%' + '</td><td>'+ objetol.bobina +'</td><td>'+ objetol.material +'</td><td>'+ objetol.calibre +'</td><td>'+ objetol.largo +'</td><td>'+ objetol.alto +'</td><td class="resaltado">'+ objetol.unitario +'</td><td class="resaltado">'+ objetol.total +'</td><td>');                                                                                                                      
+                                                                    $('#tabla > tbody:last').append('<tr><td><input class="campo"  type="checkbox" name="listado[]" value="'+ objetol.numeropads + '-   -' + objetol.cantidad + '-   -' + objetol.desperdicio + '-   -' + objetol.largo + '-   -' + objetol.alto + '-   -' + objetol.material + '-   -' + objetol.calibre + '-   -'  + objetol.bobina + '-   -'  + objetol.unitario + '-   -' + objetol.total  +'"></td><td>'+ objetol.cantidad +'</td><td>'+ objetol.desperdicio + '%' + '</td><td>'+ objetol.bobina +'</td><td>'+ objetol.material +'</td><td>'+ objetol.calibre +'</td><td>'+ objetol.largo +'</td><td>'+ objetol.alto +'</td><td class="resaltado">'+ objetol.unitario +'</td><td class="resaltado">'+ objetol.total +'</td><td>');                                                                                                                      
 
                                                                     indicecheck= indicecheck + 1;
 
@@ -1163,7 +1204,7 @@ $link=Conectarse();
 
                                                                     arreglopads[indicecheck] = objetoa;
 
-                                                                    $('#tabla > tbody:last').append('<tr><td><input class="campo"  type="checkbox" name="listado[]" value="'+ objetoa.numeropads + '-   -' +  objetoa.largo + '-   -' + objetoa.alto + '-   -' + objetoa.material + '-   -' + objetoa.calibre + '-   -'  + objetoa.unitario + '-   -' + objetoa.total +'"></td><td>'+ objetoa.cantidad +'</td><td>'+ objetoa.desperdicio + '%' + '</td><td>'+ objetoa.bobina +'</td><td>'+ objetoa.material +'</td><td>'+ objetoa.calibre +'</td><td>'+ objetoa.largo +'</td><td>'+ objetoa.alto +'</td><td class="resaltado">'+ objetoa.unitario +'</td><td class="resaltado">'+ objetoa.total +'</td><td>');                                                                                                                      
+                                                                    $('#tabla > tbody:last').append('<tr><td><input class="campo"  type="checkbox" name="listado[]" value="'+ objetoa.numeropads + '-   -' + objetoa.cantidad + '-   -' + objetoa.desperdicio + '-   -' + objetoa.largo + '-   -' + objetoa.alto + '-   -' + objetoa.material + '-   -' + objetoa.calibre + '-   -'  + objetoa.bobina + '-   -'  + objetoa.unitario + '-   -' + objetoa.total +'"></td><td>'+ objetoa.cantidad +'</td><td>'+ objetoa.desperdicio + '%' + '</td><td>'+ objetoa.bobina +'</td><td>'+ objetoa.material +'</td><td>'+ objetoa.calibre +'</td><td>'+ objetoa.largo +'</td><td>'+ objetoa.alto +'</td><td class="resaltado">'+ objetoa.unitario +'</td><td class="resaltado">'+ objetoa.total +'</td><td>');                                                                                                                      
 
                                                                     indicecheck= indicecheck + 1;
 
@@ -1177,7 +1218,7 @@ $link=Conectarse();
 
                                                                     arreglopads[indicecheck] = objetol;
 
-                                                                    $('#tabla > tbody:last').append('<tr><td><input class="campo"  type="checkbox" name="listado[]" value="'+ objetol.numeropads + '-   -' +  objetol.largo + '-   -' + objetol.alto + '-   -' + objetol.material + '-   -' + objetol.calibre + '-   -'  + objetol.unitario + '-   -' + objetol.total  +'"></td><td>'+ objetol.cantidad +'</td><td>'+ objetol.desperdicio + '%' + '</td><td>'+ objetol.bobina +'</td><td>'+ objetol.material +'</td><td>'+ objetol.calibre +'</td><td>'+ objetol.largo +'</td><td>'+ objetol.alto +'</td><td class="resaltado">'+ objetol.unitario +'</td><td class="resaltado">'+ objetol.total +'</td><td>');                                                                                                                      
+                                                                    $('#tabla > tbody:last').append('<tr><td><input class="campo"  type="checkbox" name="listado[]" value="'+ objetol.numeropads + '-   -' + objetol.cantidad + '-   -' + objetol.desperdicio + '-   -' + objetol.largo + '-   -' + objetol.alto + '-   -' + objetol.material + '-   -' + objetol.calibre + '-   -'  + objetol.bobina + '-   -'  + objetol.unitario + '-   -' + objetol.total  +'"></td><td>'+ objetol.cantidad +'</td><td>'+ objetol.desperdicio + '%' + '</td><td>'+ objetol.bobina +'</td><td>'+ objetol.material +'</td><td>'+ objetol.calibre +'</td><td>'+ objetol.largo +'</td><td>'+ objetol.alto +'</td><td class="resaltado">'+ objetol.unitario +'</td><td class="resaltado">'+ objetol.total +'</td><td>');                                                                                                                      
 
                                                                     indicecheck= indicecheck + 1;
 
@@ -1235,7 +1276,7 @@ $link=Conectarse();
 
             </head>
 
-            <body onLoad="setInterval('actualizar()',400)">
+            <body onLoad="setInterval('actualizar()',1000)">
 
                 <!--[if lt IE 7]>
 
@@ -1261,7 +1302,7 @@ $link=Conectarse();
 
                             </a>
 
-                            <a class="brand" href="#">Folding Cardboard & Boxes Inc.</a>
+                            <a class="brand" href="usuario.php">Folding Cardboard & Boxes Inc.</a>
 
                             <div class="nav-collapse collapse">
 
@@ -1273,23 +1314,32 @@ $link=Conectarse();
 
                                     <li><a href="particiones.php">Particiones</a></li>
 
+                                    <li><a href="clientes.php">Clientes</a></li>
+
                                     <?php
 
                     if( $_SESSION["nivel"] == "AD" ){
 
-                         ?>                                                                
+                         ?>             
+
+                           <?php 
+                              if (isset($_GET["existe"]) AND $_GET["existe"] == 1) { 
+                                          echo "<h2 class=\"alert alert-error\">El Numero de Folio ya existe en la Base de Datos</h2>";
+                                        } 
+
+                            ?>                                                   
 
                                     <li class="dropdown">
 
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Administrador <b class="caret"></b></a>
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin<b class="caret"></b></a>
 
                                         <ul class="dropdown-menu">
 
-                                           <li><a href="#">Clientes</a></li>
+                                           
 
         		                            <li><a href="../cotizaciones/archivos.php">Cotizaciones</a></li>
 
-        		                            <li><a href="#">Almacen</a></li>		                            
+        		                            <li><a href="almacen.php">Almacen</a></li>		                            
 
                                             <li class="divider"></li>
 
@@ -1314,7 +1364,7 @@ $link=Conectarse();
 
                                 <form id="Formulario" class="navbar-form pull-right" name ="FormLogin" action="logout.php" method="POST">
 
-        						<label id="usuariolog"> <?php echo $_SESSION["nombre"]." ".$_SESSION["apaterno"]." ".$_SESSION["amaterno"]; ?></label>                                                                                        
+        						<label id="usuariolog"> <?php echo $_SESSION["nombre"]." ".$_SESSION["apaterno"]; ?></label>                                                                                        
 
                                 <input class="btn" type="submit" value="Cerrar Sesion">
 
@@ -1359,7 +1409,7 @@ $link=Conectarse();
 
         			<?php
 
-        			if( ($_SESSION["nivel"] == "AD")  || ($_SESSION["nivel"] == "UN") ){
+        			if( ($_SESSION["nivel"] == "AD")  || ($_SESSION["nivel"] == "UN") || ($_SESSION["nivel"] == "ES") ){
 
         				 ?>
 
@@ -1391,6 +1441,7 @@ $link=Conectarse();
 
                         <label>Fecha</label>            
 
+                                <input type="hidden" name="creado" size="30" maxlength="100" value="<?php echo $_SESSION["nombre"].' '.$_SESSION["apaterno"]; ?>" required />
                                 <input id="fecha" type="text" name="fecha" disabled /> 
 
                                 <input id="fechaescondido" type="hidden" name="fechaescondido" />
@@ -1403,7 +1454,8 @@ $link=Conectarse();
 
                         <label style="margin-left:2%">Folio #</label>            
 
-                                <input id="folio" type="text" name="folio" value="12345" required /><br/> 
+                                <!-- <input id="folio" type="text" name="folio" required /><br/> -->
+                                <div id="insertarfolio"></div>
 
 
 
@@ -1419,7 +1471,7 @@ $link=Conectarse();
 
                                 <label># de parte</label> <br/>            
 
-                                <input id="noparte" type="text" name="noparte" value="1" required /> <br/>                                                                
+                                <input id="noparte" type="text" name="noparte" required /> <br/>                                                                
 
                                                       
 
@@ -1445,7 +1497,11 @@ $link=Conectarse();
 
                                  
 
+                                  <?php
 
+                                if(( $_SESSION["nivel"] == "AD") || ($_SESSION["nivel"] == "ES") ) {
+
+                                   ?>
 
                                 <label>Sub-Total x Alto</label> <br/>
 
@@ -1466,7 +1522,11 @@ $link=Conectarse();
                                 <input id="subtotalescondidol" type="hidden" name="subtotalescondido"  /> <br/>
 
                                 
+                                <?php
 
+                                }
+
+                                   ?>
                                         
 
                         </div>     
@@ -1503,10 +1563,13 @@ $link=Conectarse();
 
 
 
-                            
+                            <?php 
+                            if ($_SESSION["nivel"] == "ES") { 
+                              echo  '<label>Factor</label>  <br/><input id="factoru" type="text" name="factoru" value="2" /><br>'; 
+                            }else{ 
 
-                             <input id="factoru" type="hidden" name="factoru" value="2" /> 
-
+                             echo '<input id="factoru" type="hidden" name="factoru" value="2" />';
+                              }?>
 
 
                               <label>Kilos</label><br/> 
@@ -1516,7 +1579,11 @@ $link=Conectarse();
                              <input id="kgescondido" type="hidden" name="kgescondido" />
 
                                 
+                             <?php
 
+                                if( $_SESSION["nivel"] == "AD") {
+
+                              ?>
                             <label>Total por Alto</label> <br/>
 
                              <input id="utilidad" type="text" name="utilidad" disabled /><br/>
@@ -1535,7 +1602,11 @@ $link=Conectarse();
 
                              <input id="utilidadescondidol" type="hidden" name="utilidadescondidol" />
 
-            				
+                    				<?php
+
+                                }
+
+                            ?>
 
                         </div>
 
@@ -1713,7 +1784,7 @@ $link=Conectarse();
                     <input id="btnagregar" type="button" name="btnagregar" value="Agregar Cotizacion" onclick="anadiroptimos()" />
 
                      <br>
-
+                     <input id="btnprev" type="submit" name="btnprev" value="Vista Previa"/>
                     <input id="btnenviar" type="submit" name="btnenviar" value="Enviar Cotizacion"  />
 
                     
@@ -1738,6 +1809,7 @@ $link=Conectarse();
 
                                 valores();
                                 calcular();
+                                //mostrarfolio();
                         }
 
 
@@ -1769,7 +1841,7 @@ $link=Conectarse();
 
 
 
-        	<?php } 
+        	<?php }  
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             else {
 

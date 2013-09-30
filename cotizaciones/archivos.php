@@ -355,6 +355,8 @@ $dirs = @array_values($dirs); $files = @array_values($files);
 
 <?php
 session_start();
+include dirname(dirname(__FILE__))."/config.php";
+$link=Conectarse();
 ?>
 
 <!DOCTYPE html>
@@ -365,11 +367,26 @@ session_start();
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>Sistema de Cotizaciones | Cotizaciones</title>
+        <title>Cotizaciones</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
 
         <?php include '../encabezado.php'; ?>
+
+        <script type="text/javascript">
+
+        $('tr').click( function() {
+                window.location = $(this).find('a').attr('href');
+            }).hover( function() {
+                $(this).toggleClass('hover');
+            });
+        </script>
+        <style type="text/css">
+            tr.hover {
+               cursor: pointer;
+               /* whatever other hover styles you want */
+            }
+        </style>
                 
     </head>
     <body>
@@ -385,17 +402,17 @@ session_start();
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </a>
-                    <a class="brand" href="#">Folding Cardboard & Boxes Inc.</a>
+                    <a class="brand" href="../admin/usuario.php">Folding Cardboard & Boxes Inc.</a>
                     <div class="nav-collapse collapse">
                         <ul class="nav">
                             <li><a href="../admin/usuario.php">Menu</a></li>
                             <li><a href="../admin/pads.php">PADS</a></li>
                             <li><a href="../admin/particiones.php">Particiones</a></li>
+                            <li><a href="../admin/clientes.php">Clientes</a></li>
                                                         
                             <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Administrador <b class="caret"></b></a>
-                                <ul class="dropdown-menu">
-                                   <li><a href="#">Clientes</a></li>
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin<b class="caret"></b></a>
+                                <ul class="dropdown-menu">                                   
                                     <li class="active"><a href="archivos.php">Cotizaciones</a></li>
                                     <li><a href="../admin/almacen.php">Almacen</a></li>                                    
                                     <li class="divider"></li>
@@ -407,7 +424,7 @@ session_start();
                        
 
                         <form id="Formulario" class="navbar-form pull-right" name ="FormLogin" action="../admin/logout.php" method="POST">
-                        <label id="usuariolog"> <?php echo $_SESSION["nombre"]." ".$_SESSION["apaterno"]." ".$_SESSION["amaterno"]; ?></label>                                                                                        
+                        <label id="usuariolog"> <?php echo $_SESSION["nombre"]." ".$_SESSION["apaterno"]; ?></label>                                                                                        
                         <input class="btn" type="submit" value="Cerrar Sesion">
                     </form>
                         
@@ -429,7 +446,7 @@ session_start();
 
 
             <?php
-            if($_SESSION["nivel"] == "AD"){
+            if(($_SESSION["nivel"] == "AD") || ($_SESSION["nivel"] == "ES") ){
                  ?>
 
                          <?php 
@@ -463,104 +480,183 @@ session_start();
                     <br>
                     <div class="icon" aria-hidden="true" data-icon="">    Cotizaciones</div>                                                                   
                     <br>
+                    <form id="cotizaciones" name="cotizaciones" class="navbar-form pull-right" action="<?php echo $_SERVER['PHP_SELF']; ?>" style="width=100%;" method="POST">
+                        <label>Buscar:</label><input id="dato" type="text" name="dato" required /> <input type="hidden" name="opcion" style="width:3%;" value="todas" > <input type="hidden" name="opcion" style="width:3%;" value="noparte"> <input type="hidden" name="opcion" style="width:3%;" value="empresa"> <input type="hidden" name="opcion" style="width:3%;" value="tipo"> <input type="hidden" name="opcion" style="width:3%;" value="creado"> 
+                        <input type="submit" name="buscar" value="Buscar"><br><br>
+                    </form>   
+                    
+<div id="contenedor_cotizaciones">
+    <?php
+echo "<table id='tablacotizaciones'>";
+    echo "<tr>";   
+    echo "<th>Folio</th>";
+    echo "<th>No. de parte</th>";
+    echo "<th>Empresa</th>";
+    echo "<th>Fecha</th>";
+    echo "<th>Tipo</th>";
+    echo "<th>Creado</th>";
+     echo "<th>Archivo</th>";
+    echo "</tr>";
 
-<div id="listingcontainer"> 
+if(isset($_POST['opcion']) == 'noparte')
+ 
+{
+ 
+$dato = $_POST['dato'];
+ 
+ $query = sprintf("SELECT * FROM cotizaciones WHERE no_parte= '%s' GROUP BY fecha DESC", $dato);
+     $result=mysql_query($query,$link) or die(mysql_error()); 
 
-    <div id="listingheader">  
+    
 
-    <div id="headerfile">Nombre</div> 
+while($row=mysql_fetch_array($result,MYSQLI_NUM))
+  {
 
-    <div id="headersize">Tamaño</div> 
+   
+    echo "<tr>";    
+    echo "<td>".$row[0]."</td>";
+    echo "<td>".$row[1]."</td>";
+    echo "<td>".$row[3]."</td>";
+    echo "<td>".$row[2]."</td>";
+    echo "<td>".$row[4]."</td>";
+    echo "<td>".$row[5]."</td>";
+    echo "<td><a href=".$row[0]."_".$row[1]."_".$row[3]."_.pdf target='_blank'><img src='http://www.000webhost.com/images/index/pdf.gif' alt='53_Nanolabs.pdf'></a></td>";
+    echo "</tr>";
+   
+    
+  
+  }
 
-    <div id="headermodified">Ultima Modificación.</div> 
+  
 
-    </div> 
+ 
+} if(isset($_POST['opcion']) == 'empresa')
+ 
+{
+ 
+$dato = $_POST['dato'];
+ 
+ $query = sprintf("SELECT * FROM cotizaciones WHERE empresa='%s' GROUP BY fecha DESC", $dato);
+     $result=mysql_query($query,$link) or die(mysql_error()); 
 
-    <div id="listing"> 
+    
 
-    <? 
+while($row=mysql_fetch_array($result,MYSQLI_NUM))
+  {
 
-    $class = 'b'; 
+   
+    echo "<tr>";    
+    echo "<td>".$row[0]."</td>";
+    echo "<td>".$row[1]."</td>";
+    echo "<td>".$row[3]."</td>";
+    echo "<td>".$row[2]."</td>";
+    echo "<td>".$row[4]."</td>";
+    echo "<td>".$row[5]."</td>";
+    echo "<td><a href=".$row[0]."_".$row[1]."_".$row[3]."_.pdf target='_blank'><img src='http://www.000webhost.com/images/index/pdf.gif' alt='53_Nanolabs.pdf'></a></td>";
+    echo "</tr>";
+   
+    
+  
+  }
+  
+  
 
-    if($dirok) { 
+ 
+}if(isset($_POST['opcion']) == 'tipo')
+ 
+{
+ 
+$dato = $_POST['dato'];
+ 
+ $query = sprintf("SELECT * FROM cotizaciones WHERE tipo='%s' GROUP BY fecha DESC", $dato);
+     $result=mysql_query($query,$link) or die(mysql_error()); 
 
-    ?> 
+    
 
-    <div><a href="<?=$dotdotdir;?>" class="<?=$class;?>"><img src="http://www.000webhost.com/images/index/dirup.png" alt="Folder" /><strong>..</strong> <em>-</em> <?=date ("M d Y h:i:s A", filemtime($dotdotdir));?></a></div> 
+while($row=mysql_fetch_array($result,MYSQLI_NUM))
+  {
 
-    <? 
+   
+    echo "<tr>";    
+    echo "<td>".$row[0]."</td>";
+    echo "<td>".$row[1]."</td>";
+    echo "<td>".$row[3]."</td>";
+    echo "<td>".$row[2]."</td>";
+    echo "<td>".$row[4]."</td>";
+    echo "<td>".$row[5]."</td>";
+    echo "<td><a href=".$row[0]."_".$row[1]."_".$row[3]."_.pdf target='_blank'><img src='http://www.000webhost.com/images/index/pdf.gif' alt='53_Nanolabs.pdf'></a></td>";
+    echo "</tr>";
+   
+    
+  
+  }
+  
 
-        if($class=='b') $class='w'; 
+}if(isset($_POST['opcion']) == 'creado')
+ 
+{
+ 
+$dato = $_POST['dato'];
+ 
+ $query = sprintf("SELECT * FROM cotizaciones WHERE creado='%s' GROUP BY fecha DESC", $dato);
+     $result=mysql_query($query,$link) or die(mysql_error()); 
 
-        else $class = 'b'; 
+    
 
-    } 
+while($row=mysql_fetch_array($result,MYSQLI_NUM))
+  {
 
-    $arsize = sizeof($dirs); 
+   
+    echo "<tr>";    
+    echo "<td>".$row[0]."</td>";
+    echo "<td>".$row[1]."</td>";
+    echo "<td>".$row[3]."</td>";
+    echo "<td>".$row[2]."</td>";
+    echo "<td>".$row[4]."</td>";
+    echo "<td>".$row[5]."</td>";
+    echo "<td><a href=".$row[0]."_".$row[1]."_".$row[3]."_.pdf target='_blank'><img src='http://www.000webhost.com/images/index/pdf.gif' alt='53_Nanolabs.pdf'></a></td>";
+    echo "</tr>";
+   
+    
+  
+  }
+  
+}else
+ 
+{
+ 
+$dato = $_POST['dato'];
+ 
+ $query = sprintf("SELECT * FROM cotizaciones  GROUP BY fecha DESC", $dato);
+     $result=mysql_query($query,$link) or die(mysql_error()); 
 
-    for($i=0;$i<$arsize;$i++) { 
+    
 
-    ?> 
+while($row=mysql_fetch_array($result,MYSQLI_NUM))
+  {
 
-    <div><a href="<?=$leadon.$dirs[$i];?>" class="<?=$class;?>"><img src="http://www.000webhost.com/images/index/folder.png" alt="<?=$dirs[$i];?>" /><strong><?=$dirs[$i];?></strong> <em>-</em> <?=date ("M d Y h:i:s A", filemtime($leadon.$dirs[$i]));?></a></div> 
+   
+    echo "<tr>";    
+    echo "<td>".$row[0]."</td>";
+    echo "<td>".$row[1]."</td>";
+    echo "<td>".$row[3]."</td>";
+    echo "<td>".$row[2]."</td>";
+    echo "<td>".$row[4]."</td>";
+    echo "<td>".$row[5]."</td>";
+    echo "<td><a href=".$row[0]."_".$row[1]."_".$row[3]."_.pdf target='_blank'><img src='http://www.000webhost.com/images/index/pdf.gif' alt='53_Nanolabs.pdf'></a></td>";
+    echo "</tr>";
+   
+    
+  
+  }
+  
+}
 
-    <? 
+  echo "</table>"; ?>
 
-        if($class=='b') $class='w'; 
+</div>
 
-        else $class = 'b';     
 
-    } 
-
-     
-
-    $arsize = sizeof($files); 
-
-    for($i=0;$i<$arsize;$i++) { 
-
-        $icon = 'unknown.png'; 
-
-        $ext = strtolower(substr($files[$i], strrpos($files[$i], '.')+1)); 
-
-        $supportedimages = array('gif', 'png', 'jpeg', 'jpg'); 
-
-        $thumb = ''; 
-
-                 
-
-        if($filetypes[$ext]) { 
-
-            $icon = $filetypes[$ext]; 
-
-        } 
-
-         
-
-        $filename = $files[$i]; 
-
-        if(strlen($filename)>43) { 
-
-            $filename = substr($files[$i], 0, 40) . '...'; 
-
-        } 
-
-         
-
-        $fileurl = $leadon . $files[$i]; 
-
-    ?> 
-
-    <div><a href="<?=$fileurl;?>" class="<?=$class;?>"<?=$thumb2;?>><img src="http://www.000webhost.com/images/index/<?=$icon;?>" alt="<?=$files[$i];?>" /><strong><?=$filename;?></strong> <em><?=round(filesize($leadon.$files[$i])/1024);?>KB</em> <?=date ("M d Y h:i:s A", filemtime($leadon.$files[$i]));?><?=$thumb;?></a></div> 
-
-    <? 
-
-        if($class=='b') $class='w'; 
-
-        else $class = 'b';     
-
-    }     
-
-    ?></div> 
 
   </div> 
 

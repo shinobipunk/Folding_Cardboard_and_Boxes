@@ -1,0 +1,43 @@
+
+p{
+	line-height:3px;
+}
+
+.centrar{
+	text-align: center;
+}
+
+.campo{
+	font-weight: 100;
+}
+
+.negrita{
+	font-weight: 800;
+}
+
+.derecha{
+	text-align: right;
+
+}
+
+.izquierda{
+	float: left;
+}
+
+#pads_tabla{
+	text-align: center;
+	background-color: lightgray;
+	padding: 11px 11px;
+}
+
+#header{
+	width: 100%;
+}
+
+#header td{
+	width: 50%;
+}
+
+table{
+	width: 100%;
+}

@@ -27,6 +27,7 @@
 article,aside,details,figcaption,figure,footer,header,hgroup,nav,section {
 	display: block;
 	clear: both;
+	text-align: center;
 }
 audio,canvas,video {
 	display: inline-block;
@@ -765,7 +766,7 @@ pre code {
 	overflow-y: scroll
 }
 form {
-	margin: 0 0 0
+	margin: 0 0 50px 0
 }
 fieldset {
 	padding: 0;
@@ -847,7 +848,11 @@ input[type="radio"],input[type="checkbox"] {
 	line-height: normal
 }
 input[type="file"],input[type="image"],input[type="submit"],input[type="reset"],input[type="button"],input[type="radio"],input[type="checkbox"] {
-	width: auto
+	width: auto;
+	background-color: crimson;
+	color: white;
+	padding: 6px 6px;
+
 }
 select,input[type="file"] {
 	height: 30px;
@@ -2494,7 +2499,8 @@ input[type="submit"].btn-block,input[type="reset"].btn-block,input[type="button"
 }
 button.btn,input[type="submit"].btn {
 	*padding-top: 3px;
-	*padding-bottom: 3px
+	*padding-bottom: 3px;
+	color:black;
 }
 button.btn: : -moz-focus-inner,input[type="submit"].btn: : -moz-focus-inner {
 	padding: 0;
@@ -2771,9 +2777,9 @@ button.btn.btn-mini,input[type="submit"].btn.btn-mini {
 	color: #b94a48
 }
 .alert-info {
-	color: #3a87ad;
-	background-color: #d9edf7;
-	border-color: #bce8f1
+	color: white;
+	background-color: crimson;
+	border-color: crimson;
 }
 .alert-info h4 {
 	color: #3a87ad
@@ -4574,10 +4580,8 @@ option:focus {
     background: crimson;
 	color: white;
 }
-#btncotizar, #btnagregar, #btnenviar{
-	padding: 11px 11px;
-	width:30%;
-	font-size: 2em;
+#btncotizar, #btnagregar, #btnenviar, #btnprev{	
+	width:auto;
 	background-color: crimson;
 	color: white;
 	margin: 0 auto;
@@ -4606,3 +4610,24 @@ option:focus {
 	float: left;
 }
 
+#insertarfolio{
+	display:inline;
+}
+
+#folio{
+	text-align: center;
+}
+
+#tablacotizaciones{
+	width: 100%;	
+	text-align: center;
+	
+}
+
+#contenedor_cotizaciones{
+	overflow: scroll;
+	height: 300px;
+	margin: 30px 0 50px 0;
+	width: 100%;
+
+}

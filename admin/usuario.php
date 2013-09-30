@@ -3,7 +3,7 @@ session_start();
 ?>
 
 <?php
-if($_SESSION["nivel"] == "AD"){
+if(($_SESSION["nivel"] == "AD") || ($_SESSION["nivel"] == "ES") ){
      ?>
 
             <!DOCTYPE html>
@@ -20,6 +20,7 @@ if($_SESSION["nivel"] == "AD"){
 
                     <?php include '../encabezado.php'; ?>
                     
+
                 </head>
                 <body>
                     <!--[if lt IE 7]>
@@ -40,11 +41,11 @@ if($_SESSION["nivel"] == "AD"){
                                         <li class="active"><a href="usuario.php">Menu</a></li>
                                         <li><a href="pads.php">PADS</a></li>
                                         <li><a href="particiones.php">Particiones</a></li>
+                                        <li><a href="clientes.php">Clientes</a></li>
                                                                     
                                         <li class="dropdown">
-                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Administrador <b class="caret"></b></a>
-                                            <ul class="dropdown-menu">
-                                               <li><a href="clientes.php">Clientes</a></li>
+                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin<b class="caret"></b></a>
+                                            <ul class="dropdown-menu">                                               
             		                            <li><a href="../cotizaciones/archivos.php">Cotizaciones</a></li>
             		                            <li><a href="almacen.php">Almacen</a></li>		                            
                                                 <li class="divider"></li>
@@ -55,7 +56,7 @@ if($_SESSION["nivel"] == "AD"){
                                     </ul>
                                     
                                     <form id="Formulario" class="navbar-form pull-right" name ="FormLogin" action="logout.php" method="POST">
-            						<label id="usuariolog"> <?php echo $_SESSION["nombre"]." ".$_SESSION["apaterno"]." ".$_SESSION["amaterno"]; ?></label>                                                                                        
+            						<label id="usuariolog"> <?php echo $_SESSION["nombre"]." ".$_SESSION["apaterno"]; ?></label>                                                                                        
                                     <input class="btn" type="submit" value="Cerrar Sesion">
                                 </form>
                                     
@@ -140,7 +141,7 @@ if($_SESSION["nivel"] == "AD"){
 
 
 <?php } else { ?>
-            	<!DOCTYPE html>
+            	 <!DOCTYPE html>
             <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
             <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
             <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
@@ -148,23 +149,12 @@ if($_SESSION["nivel"] == "AD"){
                 <head>
                     <meta charset="utf-8">
                     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-                    <title>Sistema Grafica Digital | Opciones</title>
+                    <title>Sistema de Cotizaciones | Menu</title>
                     <meta name="description" content="">
                     <meta name="viewport" content="width=device-width">
 
-                   
-                    <link rel="stylesheet" href="../css/bootstrap.min.css">
-                    <style>
-                        body {
-                            padding-top: 60px;
-                            padding-bottom: 40px;
-                        }
-                    </style>
-                    <link rel="stylesheet" href="../css/bootstrap-responsive.min.css">
-                    <link rel="stylesheet" href="../css/main.css">
-                    <link rel="stylesheet" href="../css/icon.css" />
-
-                    <script src="../js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+                    <?php include '../encabezado.php'; ?>
+                    
                 </head>
                 <body>
                     <!--[if lt IE 7]>
@@ -179,16 +169,17 @@ if($_SESSION["nivel"] == "AD"){
                                     <span class="icon-bar"></span>
                                     <span class="icon-bar"></span>
                                 </a>
-                                <a class="brand" href="#">Grafica Digital</a>
+                                <a class="brand" href="#">Folding Cardboard & Boxes Inc.</a>
                                 <div class="nav-collapse collapse">
                                     <ul class="nav">
                                         <li class="active"><a href="usuario.php">Menu</a></li>
                                         <li><a href="pads.php">PADS</a></li>
-                                        <li><a href="#">Particiones</a></li>                                                                                    
+                                        <li><a href="particiones.php">Particiones</a></li>                                                                                                        
+                                        <li><a href="clientes.php">Clientes</a></li>                                        
                                     </ul>
                                     
                                     <form id="Formulario" class="navbar-form pull-right" name ="FormLogin" action="logout.php" method="POST">
-                                    <label > <?php echo $_SESSION["nombre"]." ".$_SESSION["apaterno"]." ".$_SESSION["amaterno"]; ?></label>                                                                                        
+                                    <label id="usuariolog"> <?php echo $_SESSION["nombre"]." ".$_SESSION["apaterno"]." ".$_SESSION["amaterno"]; ?></label>                                                                                        
                                     <input class="btn" type="submit" value="Cerrar Sesion">
                                 </form>
                                     
@@ -215,12 +206,17 @@ if($_SESSION["nivel"] == "AD"){
                                 <h2>PADS</h2>                                        
                             </div></a>
                             
-                            <a href="#"><div class="span4">
+                            <a href="particiones.php"><div class="span4">
                                 <div class="icon" aria-hidden="true" data-icon="&#xe000;"></div>
                                 <h2>Particiones</h2>                                        
-                           </div></a>
+                            </div></a>
                             
-                           
+                            <a href="clientes.php"><div class="span4">
+                                <div class="icon" aria-hidden="true" data-icon="&#xe004;"></div>
+                                <h2>Clientes</h2>                                        
+                            </div></a>
+                            
+                            
                         </div>
 
                         <hr>

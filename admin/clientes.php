@@ -15,7 +15,7 @@ $link=Conectarse();
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>Sistema de Cotizaciones | Clientes</title>
+        <title>Clientes</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
 
@@ -64,29 +64,58 @@ $link=Conectarse();
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </a>
-                    <a class="brand" href="#">Folding Cardboard & Boxes Inc.</a>
+                    <a class="brand" href="usuario.php">Folding Cardboard & Boxes Inc.</a>
                     <div class="nav-collapse collapse">
                         <ul class="nav">
                             <li><a href="usuario.php">Menu</a></li>
                             <li><a href="pads.php">PADS</a></li>
-                            <li><a href="#">Particiones</a></li>
-                                                        
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Administrador <b class="caret"></b></a>
-                                <ul class="dropdown-menu">
-                                   <li class="active"><a href="clientes.php">Clientes</a></li>
-		                            <li><a href="../cotizaciones/archivos.php">Cotizaciones</a></li>
-		                            <li><a href="#">Almacen</a></li>		                            
-                                    <li class="divider"></li>
-                                    <li class="nav-header">Seguridad</li>
-                                    <li><a href="usuarios.php">Usuarios</a></li>
-                                </ul>
-                            </li>
+                            <li><a href="particiones.php">Particiones</a></li>
+                             <li><a href="clientes.php">Clientes</a></li>
+                           <?php
+
+                    if(($_SESSION["nivel"] == "AD") || ($_SESSION["nivel"] == "ES") ){
+
+                         ?>             
+
+                           <?php 
+                              if (isset($_GET["existe"]) AND $_GET["existe"] == 1) { 
+                                          echo "<h2 class=\"alert alert-error\">El Numero de Folio ya existe en la Base de Datos</h2>";
+                                        } 
+
+                            ?>                                                   
+
+                                    <li class="dropdown">
+
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin<b class="caret"></b></a>
+
+                                        <ul class="dropdown-menu">
+
+                                           
+
+                                            <li><a href="../cotizaciones/archivos.php">Cotizaciones</a></li>
+
+                                            <li><a href="almacen.php">Almacen</a></li>                                  
+
+                                            <li class="divider"></li>
+
+                                            <li class="nav-header">Seguridad</li>
+
+                                            <li><a href="usuarios.php">Usuarios</a></li>
+
+                                        </ul>
+
+                                    </li>
+                        <?php
+
+                    }
+
+                         ?>          
+
                         </ul>                      
                        
 
                         <form id="Formulario" class="navbar-form pull-right" name ="FormLogin" action="logout.php" method="POST">
-						<label id="usuariolog"> <?php echo $_SESSION["nombre"]." ".$_SESSION["apaterno"]." ".$_SESSION["amaterno"]; ?></label>                                                                                        
+						<label id="usuariolog"> <?php echo $_SESSION["nombre"]." ".$_SESSION["apaterno"]; ?></label>                                                                                        
                         <input class="btn" type="submit" value="Cerrar Sesion">
                     </form>
                         
@@ -112,7 +141,8 @@ $link=Conectarse();
 
 
 			<?php
-			if($_SESSION["nivel"] == "AD"){
+			if( ($_SESSION["nivel"] == "AD")  || ($_SESSION["nivel"] == "UN") || ($_SESSION["nivel"] == "ES") ){
+
 				 ?>
 
 						 <?php 
@@ -164,6 +194,9 @@ $link=Conectarse();
                 <h1>Alta</h1>
         			<form name="agregarcliente" action="../procesos/crea_clientes.php" method="POST">Nombre de la empresa:<br />
         				<input type="text" name="empresa" size="30" maxlength="100" required />
+                        <br />Encargado:
+                            <br />
+                        <input id="encargado" type="text" name="encargado" required  />
                             <br />E-mail:
                             <br />
                         <input type="email" name="email" size="30" maxlength="100" required />
@@ -184,7 +217,7 @@ $link=Conectarse();
         				<input type="text" name="pais" size="30" maxlength="100" required />				
         					<br />
         			        <br />
-                        <input type="hidden" name="creado" size="30" maxlength="100" value="<?php echo $_SESSION["login"]?>" required />
+                        <input type="hidden" name="creado" size="30" maxlength="100" value="<?php echo $_SESSION["nombre"].' '.$_SESSION["apaterno"]; ?>" required />
         				<input type="submit" name="crear" value="Agregar Cliente" />
                                       
         			</form>
@@ -238,6 +271,7 @@ $link=Conectarse();
 	?>         
            
             <hr>
+            <br><br>
 
             <footer>
                 <p class="alert alert-info">&copy; Nanolabs 2013</p>

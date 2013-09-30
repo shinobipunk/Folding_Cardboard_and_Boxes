@@ -1,112 +1,509 @@
-<?php
-
-
-$folio = $_POST['folio'];
-$listado = $_POST['listado'];
-$lista = join("x", $_POST['listado']);
-$fecha = $_POST['fechaescondido'];
-$noparte = $_POST['noparte'];
-$cliente = $_POST['cliente'];
-$email = $_POST['email'];
-$nopads = $_POST['nopads'];
-$largo = $_POST['largo'];
-$alto = $_POST['alto'];
-$material = $_POST['material'];
-$calibre = $_POST['tipocalibreescondido'];
-$bobina = $_POST['bobinaescondido'];
-$gramos = $_POST['grescondido'];
-$preciokg = $_POST['preciokgescondido'];
-$kg = $_POST['kgescondido'];
-$subtotal = $_POST['subtotalescondido'];
-$total = $_POST['utilidadescondido'];
-
-
-
-$subject = "Cotizacion Folding Cardboard & Boxes Inc" . '-' . $cliente;
-$message = "x" . $folio . "Listado\n" . $lista ."\nFecha:" . $fecha . "\n# de parte: ". $noparte . "\n# de Pads: " . $nopads . "\nLargo: " . $largo . "\nAlto: " . $alto . "\nMaterial: " . $material . "\nCalibre: " . $calibre . "\nBobina: " . $bobina .  "\nGramos: " . $gramos. "\nKg: " . $kg . "\nPrecio x Kg: " . $preciokg .  "\nSubtotal: " . $subtotal ."\nTotal: " . $total ;
-
-
-
-//mail($email,$subject,$message); 
-
-////////////////////////////////////// PDF //////////////////////////////////////////////////////////////
-
-require('pdf/fpdf.php');
-
-
-$pdf=new PDF_HTML();
-$pdf->AddPage();
-$pdf->SetFont('Arial','B',12);
-$pdf->Image('http://nanolabs.com.mx/Elias/graficasistema/img/logo%20blanco.jpg',10,10,-300);
-$pdf->WriteHTML('<br><br><br><p align="left">10950 Pelicano Dr. Glug B1</p><br>');
-$pdf->WriteHTML('<p align="left">El Paso TX 79935</p><br>');
-$pdf->WriteHTML('<p align="left">Ph. 915 543 1459</p><br>');
-$pdf->WriteHTML('<p align="left">www.cardboardandboxes.com</p><br><hr>');
-$pdf->WriteHTML('<p align="center">Date: '. $fecha .'</p><br>');
-$pdf->Cell(40,10,"PADS ");
-$pdf->Ln(10);
-$pdf->Cell(40,10,"# de parte: ". $noparte );
-$pdf->Ln(10);
-$pdf->Cell(40,10,"Folio \f\f # de Pads:\f\f Largo:\f\f Alto:\f\f Material:\f\f Calibre:\f\f Precio Unitario:\f\f Total: ");
-$pdf->Ln(10);
-$pdf->SetFont('Arial','B',8);
-$pdf->Cell(40,10,"Cotizaciones");
-$pdf->Ln(10);
-
-foreach ($listado as $listados) {
-//$arreglo[] = explode(" ",$listados);
-//$tam = sizeof($arreglo);
-//$pdf->Cell(40,10,$listados);
-$pdf->WriteHTML($listados);	
-//for ($w=0; $w<$tam; $w++){
-//$pdf->WriteHTML($arreglo[w] );
-	
-//}
-$pdf->Ln(10);
-}
-
-$pdf->Output('../cotizaciones/' . $folio . '_' . $cliente. '.pdf', 'F');
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//////////////////////////////// adjunto //////////////////////////////////////////////////////////////////////
-
-require 'pdf/class.phpmailer.php';
-
-//Create a new PHPMailer instance
-$mail = new PHPMailer();
-//Set who the message is to be sent from
-$mail->SetFrom($email, 'Folding Cardboard & Boxes Inc.');
-//Set an alternative reply-to address
-$mail->AddReplyTo('replyto@example.com','First Last');
-//Set who the message is to be sent to
-$mail->AddAddress($email, $cliente);
-//Set the subject line
-$mail->Subject = 'Cotizacion'. '_' . $folio . '_' . $fecha;
-//Read an HTML message body from an external file, convert referenced images to embedded, convert HTML into a basic plain-text alternative body
-$mail->MsgHTML(file_get_contents('pdf/cuerpomail.html'), dirname(__FILE__));
-//Replace the plain text body with one created manually
-$mail->AltBody = 'This is a plain-text message body';
-//Attach an image file
-$mail->AddAttachment('../cotizaciones/'. $folio .'_' . $cliente . '.pdf');
-
-//Send the message, check for errors
-if(!$mail->Send()) {
-  echo "Error al enviar cotizacion: " . $mail->ErrorInfo;
-} else {
-  
-header("Location: ../admin/pads.php?exito=1");
-}
-
-
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-		
-
+<?php
+
+
+
+
+
+if(isset($_POST['btnenviar'])) 
+{ 
+  
+/////////////////////////////// Base de Datos ///////////////////////////////////////////////////////////
+		
+include dirname(dirname(__FILE__))."/config.php";
+
+$link=Conectarse();
+
+$tipo = "PAD";
+
+$listado = $_POST['listado'];
+
+$email = $_POST['email'];
+
+$lista = join("><", $_POST['listado']);
+
+$noparte = $_POST['noparte'];
+
+$fecha = $_POST['fechaescondido'];
+
+$cliente = $_POST['cliente'];
+
+$desperdicio = $_POST['desperdicio'];
+
+$encargado = $_POST['encargado'];
+
+$creado = $_POST['creado'];
+
+$iteracioness = count($lista);
+
+
+
+		$query = sprintf("INSERT INTO cotizaciones (no_parte, fecha, empresa, tipo, creado)
+
+		VALUES ('%s', '%s', '%s', '%s', '%s')", $noparte, $fecha, $cliente, $tipo, $creado );
+
+		$result=mysql_query($query,$link) or die(mysql_error()); 
+
+		if(mysql_affected_rows()){
+
+			$xpads = 0;
+			$xlargo = 3;
+			$xalto= 4;
+			$xmaterial = 5;
+			$xcalibre = 6;
+			$xbobina = 7;
+			$xdesperdicio = 2;
+			$xunitario = 8;
+			$xtotal = 9;
+
+
+
+			$datos = explode("><",$lista);
+
+
+
+			
+			//$datosx = explode("-   -",$datos);
+			foreach ($datos as $datosxs) {	
+					
+				$ar = implode("-   -",$datos);
+
+				$x = explode("-   -",$ar);
+				/*echo "no pads: ".$x[$xpads]. "<br>";
+				echo "largo: ".$x[$xlargo]. "<br>";
+				echo "alto: ".$x[$xalto]. "<br>";
+				echo "material: ".$x[$xmaterial]. "<br>";
+				echo "calibre: ".$x[$xcalibre]. "<br>";
+				echo "bobina: ".$x[$xbobina]. "<br>";
+				echo "desperdicio: ".$x[$xdesperdicio]. "<br>";
+				echo "precio_unitario: ".$x[$xunitario]. "<br>";
+				echo "total: ".$x[$xtotal]. "<br>";
+*/
+				
+
+					$query = sprintf("INSERT INTO articulos ( no_parte, no_pads, largo, alto, material, calibre, bobina, desperdicio, precio_unitario, total, tipo)
+
+					VALUES ('%s','%s', '%s', '%s', '%s', '%s','%s','%s','%s','%s','%s')", $noparte, $x[$xpads], $x[$xlargo], $x[$xalto], $x[$xmaterial], $x[$xcalibre], $x[$xbobina], $x[$xdesperdicio], $x[$xunitario], $x[$xtotal], $tipo );
+
+					$result=mysql_query($query,$link) or die(mysql_error()); 
+
+					if(mysql_affected_rows()){
+						
+					} else {
+						header("Location: ../admin/pads.php?error=1");
+						
+					}
+				
+				$xpads +=  10;
+				$xlargo  += 10;
+				$xalto += 10;
+				$xmaterial += 10;
+				$xcalibre += 10;
+				$xbobina += 10;
+				$xdesperdicio += 10;
+				$xunitario += 10;
+				$xtotal += 10;
+
+			} 
+
+
+$query = sprintf("SELECT folio FROM cotizaciones WHERE cotizaciones.no_parte = '%s'",$noparte);
+     $result=mysql_query($query,$link) or die(mysql_error()); 
+   
+
+while($row=mysql_fetch_array($result,MYSQLI_NUM))
+  {
+  	
+  	$nofolio = $row[0];
+  	
+  }
+		
+
+
+///////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////             PDF                        //////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////
+
+	$xpads = 0;
+	$xlargo = 3;
+	$xalto= 4;
+	$xmaterial = 5;
+	$xcalibre = 6;
+	$xbobina = 7;
+	$xdesperdicio = 2;
+	$xunitario = 8;
+	$xtotal = 9;		
+
+
+require_once("dompdf/dompdf_config.inc.php");
+
+// Especificamos los datos dinamicos en variables para un mejor manejo más adelante.
+// En este caso el nombre recibido de un formulario
+$nombre = $_POST['nombre'];
+
+// Escribimos en una variable el codigo html que deseamos, en este caso texto HTML y PHP.
+$html = '<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Titulo del documento.</title>
+<link type="text/css" href="pdf.css" rel="stylesheet"   media="screen"/>
+</head>
+
+<body>
+<div class="derecha">'; $html.=$fecha; $html.='</div>
+<table id="header" border="0">	
+	<tr>
+		<td>
+			<img src="logo.jpg" width=305  heigth=99 />	
+			<p class="negrita">10950 Pelicano Dr. Glug B1</p>
+			<p class="negrita">El Paso TX 79935</p>
+			<p class="negrita">Ph. 915 543 1459</p>
+			<p>www.cardboardandboxes.com</p>
+		</td>
+	<td></td>
+	</tr>
+</table>
+
+<table id="tabla_empresa" border="0">
+	<tr>
+		<td>
+			<p class="negrita">Company:<span class="campo">'; $html.=$cliente;  $html.='</span> </p>
+			<p class="negrita">Contact:<span class="campo">'; $html.=$encargado;  $html.='</span></p>
+		</td>
+		
+	<td></td>
+	</tr>
+	<tr>
+		
+	<td></td>
+	</tr>
+</table>
+
+<h1 class="centrar">Description PADS</h1>
+<p class="negrita">Part Number:<span class="campo"> '; $html.=$noparte; $html.='</span> </p>
+<table id="pads_tabla" border="0">	
+	<tr>
+		
+		<th># of Pads</th>
+		<th>Width</th>
+		<th>Height</th>
+		<th>Material</th>
+		<th>Caliber</th>
+		<th>Unit Price</th>
+		<th>Total Pads</th>		
+	</tr>';  foreach ($datos as $datosxs) {	$html.=' 
+
+				
+	<tr>
+		
+		<td>'; $html.=$x[$xpads]; $html.=' </td>
+		<td>'; $html.=$x[$xlargo]; $html.=' </td>
+		<td>'; $html.=$x[$xalto]; $html.=' </td>
+		<td>'; $html.=$x[$xmaterial]; $html.=' </td>
+		<td>'; $html.=$x[$xcalibre]; $html.=' </td>
+		<td>'; $html.=$x[$xunitario]; $html.=' </td>
+		<td>'; $html.=$x[$xtotal]; $html.=' </td>
+	</tr>
+	';
+				$sumatotal = $sumatotal + $x[$xtotal];
+
+				$xpads +=  10;
+				$xlargo  += 10;
+				$xalto += 10;
+				$xmaterial += 10;
+				$xcalibre += 10;
+				$xbobina += 10;
+				$xdesperdicio += 10;
+				$xunitario += 10;
+				$xtotal += 10;	
+} $html.=' 
+</table>
+
+<br>
+<h1 class="derecha">Total: <span class="campo"> $ '; $html.=$sumatotal; $html.=' </span></h1>
+<p class="derecha">Made by: <span class="campo"> '; $html.=$creado; $html.=' </span></p>
+
+</body>
+</html>'; // Cerramos la variable para agregarla código PHP
+
+
+//$html.= $nombre; // Agregamos a la variable $html nuestro dato dinamico.
+
+//$html.=', estas visualizando un PDF creado sobre HTML y PHP.</p>
+
+
+
+// Creamos una instancia a la clase
+$dompdf = new DOMPDF();
+
+// Especificamos la variable donde hemos recogido el html.
+$dompdf->load_html($html);
+$dompdf->render();
+
+// Nos muestra el PDF con el titulo
+//$dompdf->stream("ejemplo-DomPDF.pdf");
+$output = $dompdf->output();
+    file_put_contents('../cotizaciones/'.$nofolio.'_'.$noparte.'_'.$cliente.'_.pdf', $output);
+
+///////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+$subject = "Cotizacion Folding Cardboard & Boxes Inc" . '-' . $cliente;
+
+$message = "x" . $nofolio . "Listado\n" . $lista ."\nFecha:" . $fecha . "\n# de parte: ". $noparte . "\n# de Pads: " . $nopads . "\nLargo: " . $largo . "\nAlto: " . $alto . "\nMaterial: " . $material . "\nCalibre: " . $calibre . "\nBobina: " . $bobina .  "\nGramos: " . $gramos. "\nKg: " . $kg . "\nPrecio x Kg: " . $preciokg .  "\nSubtotal: " . $subtotal ."\nTotal: " . $total ;
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////             MAIL                      //////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////
+
+require 'pdf/class.phpmailer.php';
+
+
+
+//Create a new PHPMailer instance
+
+$mail = new PHPMailer();
+
+//Set who the message is to be sent from
+
+$mail->SetFrom($email, 'Folding Cardboard & Boxes Inc.');
+
+//Set an alternative reply-to address
+
+$mail->AddReplyTo('replyto@example.com','First Last');
+
+//Set who the message is to be sent to
+
+$mail->AddAddress($email, $cliente);
+
+//Set the subject line
+
+$mail->Subject = 'Cotizacion'. '_'. $noparte.'_' . $nofolio . '_' . $fecha;
+
+//Read an HTML message body from an external file, convert referenced images to embedded, convert HTML into a basic plain-text alternative body
+
+$mail->MsgHTML(file_get_contents('pdf/cuerpomail.html'), dirname(__FILE__));
+
+//Replace the plain text body with one created manually
+
+$mail->AltBody = 'This is a plain-text message body';
+
+//Attach an image file
+
+$mail->AddAttachment('../cotizaciones/' . $nofolio . '_' . $noparte . '_' . $cliente.'_' . '.pdf');
+
+
+
+//Send the message, check for errors
+
+if(!$mail->Send()) {
+
+  echo "Error al enviar cotizacion: " . $mail->ErrorInfo;
+
+} else {
+
+  
+
+header("Location: ../admin/pads.php?exito=1");
+
+}
+
+
+
+			
+		} else {
+			header("Location: ../admin/pads.php?error=1");
+			
+		} 
+} 
+else if(isset($_POST['btnprev']))  
+	
+ 	{
+					
+		include dirname(dirname(__FILE__))."/config.php";
+
+$link=Conectarse();
+
+$tipo = "PAD";
+
+$listado = $_POST['listado'];
+
+$email = $_POST['email'];
+
+$lista = join("><", $_POST['listado']);
+
+$noparte = $_POST['noparte'];
+
+$fecha = $_POST['fechaescondido'];
+
+$cliente = $_POST['cliente'];
+
+$desperdicio = $_POST['desperdicio'];
+
+$encargado = $_POST['encargado'];
+
+$creado = $_POST['creado'];
+
+$iteracioness = count($lista);					
+
+
+			///////////////////////////////////////////////////////////////////////////////////////////
+			///////////////////////////////////////////////////////////////////////////////////////////
+			/////////////////////////             PDF                        //////////////////////////
+			///////////////////////////////////////////////////////////////////////////////////////////
+			///////////////////////////////////////////////////////////////////////////////////////////
+
+				$xpads = 0;
+				$xlargo = 3;
+				$xalto= 4;
+				$xmaterial = 5;
+				$xcalibre = 6;
+				$xbobina = 7;
+				$xdesperdicio = 2;
+				$xunitario = 8;
+				$xtotal = 9;		
+			$datos = explode("><",$lista);
+
+
+
+			
+			//$datosx = explode("-   -",$datos);
+			foreach ($datos as $datosxs) {	
+					
+				$ar = implode("-   -",$datos);
+
+				$x = explode("-   -",$ar);
+			}
+
+			require_once("dompdf/dompdf_config.inc.php");
+
+			// Especificamos los datos dinamicos en variables para un mejor manejo más adelante.
+			// En este caso el nombre recibido de un formulario
+			
+
+			// Escribimos en una variable el codigo html que deseamos, en este caso texto HTML y PHP.
+			$html = '<html xmlns="http://www.w3.org/1999/xhtml">
+
+			<head>
+			<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+			<title>Titulo del documento.</title>
+			<link type="text/css" href="pdf.css" rel="stylesheet"   media="screen"/>
+			</head>
+
+			<body>
+			<div class="derecha">'; $html.=$fecha; $html.='</div>
+			<table id="header" border="0">	
+				<tr>
+					<td>
+						<img src="logo.jpg" width=305  heigth=99 />	
+						<p class="negrita">10950 Pelicano Dr. Glug B1</p>
+						<p class="negrita">El Paso TX 79935</p>
+						<p class="negrita">Ph. 915 543 1459</p>
+						<p>www.cardboardandboxes.com</p>
+					</td>
+				<td></td>
+				</tr>
+			</table>
+
+			<table id="tabla_empresa" border="0">
+				<tr>
+					<td>
+						<p class="negrita">Company:<span class="campo">'; $html.=$cliente;  $html.='</span> </p>
+						<p class="negrita">Contact:<span class="campo">'; $html.=$encargado;  $html.='</span></p>
+					</td>
+					
+				<td></td>
+				</tr>
+				<tr>
+					
+				<td></td>
+				</tr>
+			</table>
+
+			<h1 class="centrar">Description PADS</h1>
+			<p class="negrita">Part Number:<span class="campo"> '; $html.=$noparte; $html.='</span> </p>
+			<table id="pads_tabla" border="0">	
+				<tr>
+					
+					<th># of Pads</th>
+					<th>Width</th>
+					<th>Height</th>
+					<th>Material</th>
+					<th>Caliber</th>
+					<th>Unit Price</th>
+					<th>Total Pads</th>		
+				</tr>'; foreach ($datos as $datosxs) {					 							
+				$html.='<tr>
+					
+					<td>'; $html.=$x[$xpads]; $html.=' </td>
+					<td>'; $html.=$x[$xlargo]; $html.=' </td>
+					<td>'; $html.=$x[$xalto]; $html.=' </td>
+					<td>'; $html.=$x[$xmaterial]; $html.=' </td>
+					<td>'; $html.=$x[$xcalibre]; $html.=' </td>
+					<td>'; $html.=$x[$xunitario]; $html.=' </td>
+					<td>'; $html.=$x[$xtotal]; $html.=' </td>
+				</tr>
+				';
+							$sumatotal = $sumatotal + $x[$xtotal];
+
+							$xpads +=  10;
+							$xlargo  += 10;
+							$xalto += 10;
+							$xmaterial += 10;
+							$xcalibre += 10;
+							$xbobina += 10;
+							$xdesperdicio += 10;
+							$xunitario += 10;
+							$xtotal += 10;	
+			} 
+							$html.=' 
+			</table>
+
+			<br>
+			<h1 class="derecha">Total: <span class="campo"> $ '; $html.=$sumatotal; $html.=' </span></h1>
+			<p class="derecha">Made by: <span class="campo"> '; $html.=$creado; $html.=' </span></p>
+
+			</body>
+			</html>'; // Cerramos la variable para agregarla código PHP
+
+
+			//$html.= $nombre; // Agregamos a la variable $html nuestro dato dinamico.
+
+			//$html.=', estas visualizando un PDF creado sobre HTML y PHP.</p>
+
+
+
+			// Creamos una instancia a la clase
+			$dompdf = new DOMPDF();
+
+			// Especificamos la variable donde hemos recogido el html.
+			$dompdf->load_html($html);
+			$dompdf->render();
+			$dompdf->stream('vista_previa_'.$noparte.'_'.$cliente.'_.pdf');
+
+			// Nos muestra el PDF con el titulo
+			//$dompdf->stream("ejemplo-DomPDF.pdf");
+			
+
+			///////////////////////////////////////////////////////////////////////////////////////////
+			///////////////////////////////////////////////////////////////////////////////////////////
+			///////////////////////////////////////////////////////////////////////////////////////////
+			///////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+}
+
 ?>

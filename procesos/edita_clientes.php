@@ -6,6 +6,7 @@ $link=Conectarse();
 
 $idedit = $_POST['idedit'];
 $empresaedit = $_POST['empresaedit'];
+$encargadoedit = $_POST['encargadoedit'];
 $emailedit = $_POST['emailedit'];
 $direccionedit= $_POST['direccionedit'];
 $cpedit=$_POST['cpedit'];
@@ -15,8 +16,8 @@ $paisedit = $_POST['paisedit'];
 $modificado = $_POST['modificado'];
 
 	
-$query = sprintf("UPDATE clientes SET clientes.empresa= '%s', clientes.email= '%s', clientes.direccion = '%s', clientes.cp = '%s', clientes.telefono = '%s', clientes.ciudad = '%s', clientes.pais= '%s', clientes.modificado= '%s' WHERE clientes.id_cliente = '%s'" ,
-$empresaedit, $emailedit, $direccionedit, $cpedit, $telefonoedit, $ciudadedit, $paisedit, $modificado, $idedit);
+$query = sprintf("UPDATE clientes SET clientes.empresa= '%s', clientes.encargado= '%s', clientes.email= '%s', clientes.direccion = '%s', clientes.cp = '%s', clientes.telefono = '%s', clientes.ciudad = '%s', clientes.pais= '%s', clientes.modificado= '%s' WHERE clientes.id_cliente = '%s'" ,
+$empresaedit, $encargadoedit, $emailedit, $direccionedit, $cpedit, $telefonoedit, $ciudadedit, $paisedit, $modificado, $idedit);
 $result=mysql_query($query,$link) or die(mysql_error());
 
 

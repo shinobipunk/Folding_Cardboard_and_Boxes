@@ -151,17 +151,17 @@ $link=Conectarse();
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </a>
-                    <a class="brand" href="#">Folding Cardboard & Boxes Inc.</a>
+                    <a class="brand" href="usuario.php">Folding Cardboard & Boxes Inc.</a>
                     <div class="nav-collapse collapse">
                         <ul class="nav">
                             <li><a href="usuario.php">Menu</a></li>
                             <li><a href="pads.php">PADS</a></li>
                             <li><a href="particiones.php">Particiones</a></li>
+                            <li><a href="clientes.php">Clientes</a></li>
                                                         
                             <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Administrador <b class="caret"></b></a>
-                                <ul class="dropdown-menu">
-                                   <li><a href="clientes.php">Clientes</a></li>
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin<b class="caret"></b></a>
+                                <ul class="dropdown-menu">                                   
 		                            <li><a href="../cotizaciones/archivos.php">Cotizaciones</a></li>
 		                            <li class="active"><a href="almacen.php">Almacen</a></li>		                            
                                     <li class="divider"></li>
@@ -173,7 +173,7 @@ $link=Conectarse();
                        
 
                         <form id="Formulario" class="navbar-form pull-right" name ="FormLogin" action="logout.php" method="POST">
-						<label id="usuariolog"> <?php echo $_SESSION["nombre"]." ".$_SESSION["apaterno"]." ".$_SESSION["amaterno"]; ?></label>                                                                                        
+						<label id="usuariolog"> <?php echo $_SESSION["nombre"]." ".$_SESSION["apaterno"]; ?></label>                                                                                        
                         <input class="btn" type="submit" value="Cerrar Sesion">
                     </form>
                         
@@ -200,7 +200,7 @@ $link=Conectarse();
 
 
 			<?php
-			if($_SESSION["nivel"] == "AD"){
+			if(($_SESSION["nivel"] == "AD") || ($_SESSION["nivel"] == "ES") ){
 				 ?>
 
 						 <?php 
@@ -275,7 +275,7 @@ $link=Conectarse();
 					<br />
 				<input type="radio" name="existencia" value="SI" checked>SI<br>
                 <input type="radio" name="existencia" value="NO">NO<br>
-                <input type="hidden" name="creado" size="30" maxlength="100" value="<?php echo $_SESSION["login"]?>" required />
+                <input type="hidden" name="creado" size="30" maxlength="100" value="<?php echo $_SESSION["nombre"].' '.$_SESSION["apaterno"]; ?>" required />
 					<br />
 				<input type="submit" name="creararticulo" value="Crear Articulo" />
 			</form>

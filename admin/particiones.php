@@ -1,5 +1,8 @@
 <?php
       session_start();
+      include dirname(dirname(__FILE__))."/config.php";
+
+$link=Conectarse();
     ?>
             <!DOCTYPE html>
             <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
@@ -9,14 +12,433 @@
                 <head>
                     <meta charset="utf-8">
                     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-                    <title>Sistema de Cotizaciones | Particiones</title>
+                    <title>Particiones</title>
                     <meta name="description" content="">
                     <meta name="viewport" content="width=device-width">
 
                  <?php include '../encabezado.php'; ?>
 
+                 <script type="text/javascript">              
+
+                    $(document).ready(function() {
+
+    document.getElementById("btnenviar").style.display = "none";
+
+    indicecheck = 0;
+
+});
+
+function actualizar() {
+
+    valores();
+    calcular();
+
+}
+ </script>
+
+
+        <script type="text/javascript">
+
+
+                  arregloparticiones = new Array();
+
+                    x=0;
+
+                    y=0; //contador para checar los seleccionados
+
+                    p=0; // contador para  los elementos del array
+
+                    verchecks = 0;
+
+
+                    
+
+
+
+
+                    function anadiroptimos(){
+
+
+
+
+
+                        document.getElementById("tablaagregados").style.display="block";
+
+                        seleccionado = document.getElementsByClassName("campo");
+
+                           iteraciones = seleccionado.length;
+
+
+
+                        $("#tablaelementos").find('tr').each(function(){
+
+
+
+                            if (seleccionado[y].checked){
+
+                                verchecks = verchecks + 1;
+
+                            }
+
+                            y=y+1;
+
+
+
+                        });
+
+
+
+                        if (verchecks > 0){
+
+
+
+                                $("#tablaelementos").find('tr').each(function(){                                
+
+                                                                      
+
+                                  // for(x=0; x<iteraciones; x++){
+
+                                   // alert(p);
+
+                                    
+
+                                        if (seleccionado[x].checked){
+
+                                            objetoseleccionado = arregloparticiones[p];
+
+                                            casilla = seleccionado[x];
+
+                                            
+
+                                           $('#tablaagregados > tbody:last').append('<tr><td><input class="seleccionados"  type="checkbox" name="listado[]" value="' + casilla.value +' " checked></td><td>'+ objetoseleccionado.bobina +'</td><td>'+ objetoseleccionado.material +'</td><td>'+ objetoseleccionado.calibre +'</td><td>'+ optimoobjeto.segmentosa +'</td><td>'+ optimoobjeto.largoa +'</td><td>'+ optimoobjeto.altoa +'</td><td>'+ optimoobjeto.segmentosb +'</td><td>'+ optimoobjeto.largob +'</td><td>'+ optimoobjeto.altob +'</td><td class="resaltado">'+ objetoseleccionado.unitario +'</td><td class="resaltado">'+ objetoseleccionado.total +'</td><td>'); 
+                                            //datos = casilla.value.split("-   -");
+                                          // alert(datos);
+
+                                        seleccionado[x].checked = false;
+
+                                        }else{
+
+                                        //    alert('no seleccionado');
+
+                                            
+
+                                        }
+
+
+
+
+
+                                  // }
+
+
+
+                                   x=x+1;
+
+                                   p=p+1;
+
+                                 });
+
+                        }else{
+
+                            alert("Tiene que seleccionar al menos una cotizacion");
+
+                        }
+
+                        //vaciar arregloparticiones
+
+                       /* tamarregloparticiones = arregloparticiones.length;
+
+                        for(var i = 0; i < tamarregloparticiones; i++) {
+
+                            arregloparticiones.pop();   
+
+                        }*/
+
+                        
+
+                        x=0;
+
+                        y=0;
+
+                        verchecks = 0;
+
+
+
+
+
+                    }
+
+
+                     function eliminargramos(){
+
+                        var Parent = document.getElementById("insertarbobina");
+
+                    while(Parent.hasChildNodes())
+
+                    {
+
+                       Parent.removeChild(Parent.firstChild);
+
+                    }
+
+                    }   
+
+                    function eliminarelementos(){
+
+                        var Parent = document.getElementById("tablaelementos");
+
+                    while(Parent.hasChildNodes())
+
+                    {
+
+                       Parent.removeChild(Parent.firstChild);
+
+                    }
+
+                    }
+
+                   function calcularDesperdicio() {     
+
+                    eliminarelementos();
+
+
+                       
+                        document.getElementById("btnenviar").style.display="block"; 
+                        document.getElementById("tabla").style.display="block"; 
+
+
+
+
+                              function optimo(bobina,material,calibre,segmentosa, largoa, altoa,segmentosb, largob, altob, numerosets, unitario, total)
+
+                              {                               
+
+                                
+                               
+
+                                this.bobina=bobina;
+
+                                this.material=material;
+
+                                this.calibre = calibre;
+
+                                this.segmentosa = segmentosa;
+
+                                this.largoa = largoa;
+
+                                this.altoa = altoa;
+
+                                this.segmentosb = segmentosb;
+
+                                this.largob = largob;
+
+                                this.altob = altob;
+
+                                this.numerosets = numerosets;
+
+                                this.unitario = unitario;
+
+                                this.total = total;
+
+                              }
+
+
+
+
+                               // idSelect =material +" -" + tipocalibre;
+                               idSelect ="bobinaalmacen";
+
+                               nobobina = document.getElementById(idSelect).length;
+
+
+
+                                //lista = new array();
+
+                                if (nobobina == 1){
+
+                                  alert("No hay bobinas disponibles");
+
+
+
+                                }else{
+
+
+
+                                      $("#bobinaalmacen").find('option').each(function()
+
+                                      { 
+                                                                             
+
+
+
+
+                                       
+                                         optimoobjeto = new optimo();
+
+
+                                        vbobina = $(this).val(); 
+
+                                        particion = 1;
+
+
+                                        areapada = altoax * largoax;
+                                        areapadb = altobx * largobx;
+
+                                        areadesperdicioa = vbobina * altoax;
+                                        areadesperdiciob = vbobina * altobx;
+
+                                        areadesperdicio = areadesperdicioa + areadesperdiciob;
+
+
+
+                                        desperdicioa = areadesperdicioa - areapada;
+
+                                        desperdiciob = areadesperdiciob - areapadb;
+
+                                        desperdicio = desperdicioa + desperdiciob;
+
+
+
+
+                                        porcdespa = (desperdicioa * 100) / areadesperdicioa;
+
+                                        porcdespreda = porcdespa.toFixed(3);
+
+                                        porcdespb = (desperdiciob * 100) / areadesperdiciob;
+
+                                        porcdespredb = porcdespb.toFixed(3);
+
+
+                                        difaltoa = vbobina-altoax;
+                                        difaltob = vbobina-altobx;
+
+                                        diflargoa = vbobina-largoax;
+                                        diflargob = vbobina-largobx;
+
+
+
+                                        areadesperdicio = areadesperdicio.toFixed(3);
+
+                                        desperdicio = desperdicio.toFixed(3);
+
+
+
+                                        ////////////////////////////////////////
+
+
+                                       
+                                        if (  (diflargoa < 0) || (diflargob < 0)   ){
+
+
+
+                                        } else{                                       
+
+
+
+
+
+
+
+
+
+
+                                            nosetsx = parseFloat(nosetsx);
+                                            kilosax = parseFloat(vbobina) * parseFloat(altoax) * parseFloat(gramosx) *  parseFloat(nosegmentosax);
+                                            kilosbx = parseFloat(vbobina) * parseFloat(altobx) * parseFloat(gramosx) *  parseFloat(nosegmentosbx);
+
+
+
+
+                                            subtotalax = kilosax * preciokgx;
+                                            subtotalbx = kilosbx * preciokgx;
+
+                                            ranurado = 0.0026;
+
+                                            precioranuradox = ((parseFloat(nosegmentosax) + parseFloat(nosegmentosbx)) * ranurado)/nosetsx;
+                                            subtotalax = parseFloat(subtotalax);
+                                            subtotalbx = parseFloat(subtotalbx);
+
+                                            sumasubtotal = subtotalax + subtotalbx;
+                                            preciosetalgoritmox = ( (parseFloat(sumasubtotal) / nosetsx ) + parseFloat(precioranuradox) ) * factorx;
+                                            preciosetalgoritmox = preciosetalgoritmox.toFixed(3);
+
+
+
+                                            totalx = preciosetalgoritmox * nosetsx;
+                                            totalx=totalx.toFixed(3);
+
+
+
+
+                                            
+
+                                           optimoobjeto.bobina=vbobina;
+
+                                            optimoobjeto.material=materialx;
+
+                                            optimoobjeto.calibre = calibrex;
+
+                                            optimoobjeto.segmentosa = nosegmentosax;
+
+                                            optimoobjeto.largoa = largoax;
+
+                                            optimoobjeto.altoa = altoax;
+
+                                            optimoobjeto.segmentosb = nosegmentosbx;
+
+                                            optimoobjeto.largob = largobx;
+
+                                            optimoobjeto.altob = altobx;
+
+                                            optimoobjeto.numerosets = nosetsx;
+
+                                            optimoobjeto.unitario =  preciosetalgoritmox;
+
+                                            optimoobjeto.total = totalx;
+                                             
+                                               
+
+
+                                                        
+                                            
+
+
+                                            }
+
+
+                                              cl = parseFloat(optimoobjeto.desperdicio);
+                                              
+                                              if ((optimoobjeto.bobina > 0) ){
+                                                arregloparticiones[indicecheck] = optimoobjeto;
+
+                                                indicecheck= indicecheck + 1;
+
+                                                $('#tabla > tbody:last').append('<tr><td><input class="campo" type="checkbox" name="listado[]" value="'+ optimoobjeto.numerosets + '-   -' + optimoobjeto.segmentosa + '-   -'+ optimoobjeto.largoa + '-   -' + optimoobjeto.altoa + '-   -'+ optimoobjeto.segmentosb + '-   -'+ optimoobjeto.largob + '-   -' + optimoobjeto.altob + '-   -' + optimoobjeto.material + '-   -' + optimoobjeto.calibre + '-   -'  + optimoobjeto.bobina + '-   -'  +  optimoobjeto.unitario + '-   -' + optimoobjeto.total +'"></td><td>'+ optimoobjeto.bobina +'</td><td>'+ optimoobjeto.material +'</td><td>'+ optimoobjeto.calibre +'</td><td>'+ optimoobjeto.segmentosa +'</td><td>'+ optimoobjeto.largoa +'</td><td>'+ optimoobjeto.altoa +'</td><td>'+ optimoobjeto.segmentosb +'</td><td>'+ optimoobjeto.largob +'</td><td>'+ optimoobjeto.altob +'</td><td class="resaltado">'+ optimoobjeto.unitario +'</td><td class="resaltado">'+ optimoobjeto.total +'</td><td>');                                                                                                                      
+
+                                                          }
+
+
+                                        });
+                                      } 
+
+
+
+
+
+
+
+
+
+
+
+                    }//funcion
+
+                 </script>
+
+                 
+
                 </head>
-                <body>
+                <body onLoad="setInterval('actualizar()',1000)">
                     <!--[if lt IE 7]>
                         <p class="chromeframe">Está utilizando un <strong> navegador obsoleto. </ strong> Por favor, <a href="http://browsehappy.com/"> actualice su navegador </ a> o <a href="http://www.google.com/chromeframe/?redirect=true"> active Google Chrome </ a> para mejorar su experiencia. </ p>
                        <![endif]-->
@@ -29,29 +451,60 @@
                                     <span class="icon-bar"></span>
                                     <span class="icon-bar"></span>
                                 </a>
-                                <a class="brand" href="#">Folding Cardboard & Boxes Inc.</a>
+                                <a class="brand" href="usuario.php">Folding Cardboard & Boxes Inc.</a>
                                 <div class="nav-collapse collapse">
                                     <ul class="nav">
                                         <li><a href="usuario.php">Menu</a></li>
                                         <li><a href="pads.php">PADS</a></li>
                                         <li class="active"><a href="particiones.php">Particiones</a></li>
                                                                     
-                                        <li class="dropdown">
-                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Administrador <b class="caret"></b></a>
-                                            <ul class="dropdown-menu">
-                                               <li><a href="clientes.php">Clientes</a></li>
-            		                            <li><a href="../cotizaciones/archivos.php">Cotizaciones</a></li>
-            		                            <li><a href="almacen.php">Almacen</a></li>		                            
-                                                <li class="divider"></li>
-                                                <li class="nav-header">Seguridad</li>
-                                                <li><a href="usuarios.php">Usuarios</a></li>
-                                            </ul>
-                                        </li>
+                                        
+                                    <li><a href="clientes.php">Clientes</a></li>
+
+                                    <?php
+
+                    if( ($_SESSION["nivel"] == "AD") || ($_SESSION["nivel"] == "ES")){
+
+                         ?>             
+
+                           <?php 
+                              if (isset($_GET["existe"]) AND $_GET["existe"] == 1) { 
+                                          echo "<h2 class=\"alert alert-error\">El Numero de Folio ya existe en la Base de Datos</h2>";
+                                        } 
+
+                            ?>                                                   
+
+                                    <li class="dropdown">
+
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin<b class="caret"></b></a>
+
+                                        <ul class="dropdown-menu">
+
+                                           
+
+                                            <li><a href="../cotizaciones/archivos.php">Cotizaciones</a></li>
+
+                                            <li><a href="almacen.php">Almacen</a></li>                                  
+
+                                            <li class="divider"></li>
+
+                                            <li class="nav-header">Seguridad</li>
+
+                                            <li><a href="usuarios.php">Usuarios</a></li>
+
+                                        </ul>
+
+                                    </li>
+                        <?php
+
+                    }
+
+                         ?>         
                                     </ul>                      
                                    
 
                                     <form id="Formulario" class="navbar-form pull-right" name ="FormLogin" action="logout.php" method="POST">
-            						<label id="usuariolog"> <?php echo $_SESSION["nombre"]." ".$_SESSION["apaterno"]." ".$_SESSION["amaterno"]; ?></label>                                                                                        
+            						<label id="usuariolog"> <?php echo $_SESSION["nombre"]." ".$_SESSION["apaterno"]; ?></label>                                                                                        
                                     <input class="btn" type="submit" value="Cerrar Sesion">
                                 </form>
                                     
@@ -73,7 +526,7 @@
 
 
             			<?php
-            			if($_SESSION["nivel"] == "AD"){
+            			if(($_SESSION["nivel"] == "AD") || ($_SESSION["nivel"] == "ES") || ($_SESSION["nivel"] == "UN")){
             				 ?>
 
                              <?php 
@@ -87,16 +540,17 @@
                     <div class="icon" aria-hidden="true" data-icon="">    Cotizacion de Particiones</div>                                                                   
                     <br><br>
 
-            			<form name="user_form" action="../procesos/crea_pads.php" method="POST" >
+            			<form name="user_form" action="../procesos/crea_particiones.php" method="POST" >
 
-                            <label>Fecha</label>            
+                            <label>Fecha</label>   
+                                    <input type="hidden" name="creado" size="30" maxlength="100" value="<?php echo $_SESSION["nombre"].' '.$_SESSION["apaterno"];  ?>" required />         
                                     <input id="fecha" type="text" name="fecha" disabled /> 
                                     <input id="fechaescondido" type="hidden" name="fechaescondido" />
                                     
                                      
 
                             <label style="margin-left:2%">Folio #</label>            
-                                    <input id="folio" type="text" name="folio" value="12345" required /><br/>
+                                    <div id="insertarfolio"></div>
 
 
                             
@@ -105,18 +559,18 @@
                                     
                                                                             
                                     <label># de parte</label><br/>             
-                                    <input id="noparte" type="text" name="noparte" value="1" required /> <br/>                                                                
+                                    <input id="noparte" type="text" name="noparte"  required /> <br/>                                                                
                                                           
                                     <h2>Parte A</h2>
 
                                 <label># de Segmentos</label> <br/>              
-                                    <input id="nosegmentosa" type="text" name="nosegmentosa" autocomplete="off" required /><br/>
+                                    <input id="nosegmentosa" type="text" name="nosegmentosa" autocomplete="off"  required /><br/>
 
                                 <label>Largo</label> <br/>
-                                    <input id="largoa" type="text" name="largoa" autocomplete="off" required /><br/>
+                                    <input id="largoa" type="text" name="largoa" autocomplete="off"  required /><br/>
 
                                 <label>Alto</label> <br/>
-                                    <input id="altoa" type="text" name="altoa" autocomplete="off" required /><br/>
+                                    <input id="altoa" type="text" name="altoa" autocomplete="off"  required /><br/>
 
                                     <label>Kilos A</label><br/> 
                                  <input id="kga" type="text" name="kga" disabled /><br/>
@@ -130,8 +584,14 @@
 
                                     <input id="subtotalescondidoa" type="hidden" name="subtotalescondidoa"  /> 
 
-                                    <label>Factor U.</label> <br/>
-                                 <input id="factoru" type="text" name="factoru" disabled /><br/> 
+                                    <?php 
+
+                                    if ($_SESSION["nivel"] == "ES") { 
+                              echo  '<label>Factor</label>  <br/><input id="factoru" type="text" name="factoru" value="2" /><br>'; 
+                            }else{ 
+
+                             echo '<input id="factoru" type="hidden" name="factoru" value="2" />';
+                              }?>
                                     
                                             
                             </div>     
@@ -143,19 +603,30 @@
 
                             <div class="items_pad1">
 
-                                <label>Cliente</label>  <br/>           
-                                    <input id="cliente" type="text" name="cliente" value="Nanolabs" required /> <br/>
+                                        
+                                   <label for="empresaeditar">Empresa</label><br>
+                            <select id="cliente" name="cliente" onchange="mostrarclientes_pads(this.value)"><option  value=""  required> --Escoje una Empresa-- </option>
+                                <?php 
+                                    $query = sprintf("SELECT empresa FROM clientes where 1 ORDER BY empresa ASC ");
+                                    $result=mysql_query($query,$link) or die(mysql_error()); 
+                                    while($row=mysql_fetch_array($result,MYSQLI_NUM)){
+                                    echo "<OPTION VALUE='".$row[0]."'>".$row[0]."</OPTION>";
+                                        }
+                                ?>
+                            </select> 
+
+                              
 
                                <h2>Parte B</h2>
 
                                 <label># de Segmentos</label> <br/>              
-                                    <input id="nosegmentosb" type="text" name="nosegmentosb" autocomplete="off" required /><br/>
+                                    <input id="nosegmentosb" type="text" name="nosegmentosb" autocomplete="off"  required /><br/>
 
                                 <label>Largo</label> <br/>
-                                    <input id="largob" type="text" name="largob" autocomplete="off" required /><br/>
+                                    <input id="largob" type="text" name="largob" autocomplete="off"  required /><br/>
 
                                 <label>Alto</label> <br/>
-                                    <input id="altob" type="text" name="altob" autocomplete="off" required /><br/>
+                                    <input id="altob" type="text" name="altob" autocomplete="off"  required /><br/>
 
                                      <label>Kilos B</label><br/> 
                                  <input id="kgb" type="text" name="kgb" disabled /><br/>
@@ -182,137 +653,31 @@
 
                             <div class="items_pad2">
 
-                                 <label>Email</label> <br/>            
-                                    <input id="email" type="email" name="email" value="eliasstaticx@hotmail.com" required /> <br/>
+                                <div id="insertarcliente"></div> 
 
                                   <label># de Sets</label> <br/>              
                                     <input id="nosets" type="text" name="nosets" autocomplete="off" required /><br/>   
 
                                 
-                                <label>Material</label> <br/>     	
-                				<select id="material" name="material">
-                			        <option value="Kraft">Kraft</option>
-                			    	<option value="Wax">Wax</option>
-                                    <option value="PolyWhite">Poly White</option>
-                                    <option value="PolyKraft">Poly Kraft</option>
-                			    </select><br/>
+                               <label for="almaceneditar">Material</label><br>
+                            <select id="materialalmacen" name="almacenmaterialedit" onclick ='material_val()' onchange="mostrararticulos(this.value)"><option value=""> --Escoge el Material-- </option>
+                                <?php 
+                                    $verificar = "SI";
+                                    $query = sprintf("SELECT material FROM almacen where existencia='%s' GROUP BY material", $verificar);
+                                    $result=mysql_query($query,$link) or die(mysql_error()); 
+                                    while($row=mysql_fetch_array($result,MYSQLI_NUM)){
+                                    echo "<OPTION VALUE='".$row[0]."'>".$row[0]."</OPTION>";
+                                        }
+                                ?>
+                            </select>   
+                             <input id="valormaterial" type="hidden" name="valormaterial" required/>  
+                         <!--     </form>     -->                                                       
+                            <div id="insertarmaterial"></div>
 
-                                
-
-                                <label>Calibre</label><br/>
-            <!-- ///////////////////////// Kraft Calibre /////////////////////////////////////////////////-->
-                                        <select id="Kraft-seleccionado" class="sub-opcion hide">
-                                            <option value="20">20</option>
-                                            <option value="24">24</option>
-                                            <option value="26">26</option>
-                                            <option value="30">30</option>
-                                            <option value="40">40</option>
-                                            <option value="47">47</option>
-                                            <option value="55">55</option>
-                                        </select>
-            <!-- /////////////////////////////// Wax Calibre //////////////////////////////////////////////////-->
-                                         <select id="Wax-seleccionado" class="sub-opcion hide">
-                                            <option value="40">40</option>
-                                            <option value="47">47</option>                        
-                                        </select>
-            <!-- //////////////////////////// PolyWhite Calibre ////////////////////////////////////////////-->
-                                        <select id="PolyWhite-seleccionado" class="sub-opcion hide">                        
-                                            <option value="24">24</option>
-                                            <option value="26">26</option>                        
-                                        </select>
-            <!-- //////////////////////////// PolyWKraft Calibre ///////////////////////////////////////////-->
-                                        <select id="PolyKraft-seleccionado" class="sub-opcion hide">                        
-                                            <option value="30">30</option>
-                                            <option value="40">40</option>                        
-                                        </select>
-                                   
-                                <input id="tipocalibreescondido" type="hidden"  name="tipocalibreescondido" />
-
-                                <br/>
-                                <label>Bobina</label><br/>
-            <!-- \\\\\\\\\\\\\\\\\\\\\\\\\\\ Kraft-20 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ -->                    
-                                <select id="Kraft-20" class="opcion-bobina hide">                        
-                                    <option value="26" gramos="0.000230" pxkg="0.75">26</option>                        
-                                </select>
-
-            <!-- \\\\\\\\\\\\\\\\\\\\\\\\\\\ Kraft-24 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ -->                    
-                                <select id="Kraft-24" class="opcion-bobina hide">
-                                    <option value="21" gramos="0.000259" pxkg="0.75">21</option>
-                                    <option value="30" gramos="0.000259" pxkg="0.75">30</option>                        
-                                </select>
-            <!-- \\\\\\\\\\\\\\\\\\\\\\\\\\\ Kraft-26 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ -->                    
-                                <select id="Kraft-26" class="opcion-bobina hide">
-                                    <option value="24" gramos="0.000270" pxkg="0.75">24</option>
-                                    <option value="30" gramos="0.000270" pxkg="0.75">30</option>                        
-                                </select>
-            <!-- \\\\\\\\\\\\\\\\\\\\\\\\\\\ Kraft-30 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ -->                    
-                                <select id="Kraft-30" class="opcion-bobina hide">
-                                    <option value="24" gramos="0.000355" pxkg="0.75">24</option>
-                                    <option value="30" gramos="0.000355" pxkg="0.75">30</option>                        
-                                </select>
-            <!-- \\\\\\\\\\\\\\\\\\\\\\\\\\\ Kraft-40 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ -->                    
-                                <select id="Kraft-40" class="opcion-bobina hide">
-                                    <option value="24" gramos="0.000432" pxkg="0.75">24</option>
-                                    <option value="30" gramos="0.000432" pxkg="0.75">30</option>                        
-                                </select>                    
-            <!-- \\\\\\\\\\\\\\\\\\\\\\\\\\\ Kraft-47 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ -->                    
-                                <select id="Kraft-47" class="opcion-bobina hide">
-                                    <option value="24" gramos="0.000503" pxkg="0.75">24</option>
-                                    <option value="30" gramos="0.000503" pxkg="0.75">30</option>                        
-                                </select> 
-            <!-- \\\\\\\\\\\\\\\\\\\\\\\\\\\ Kraft-55 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ -->                    
-                                <select id="Kraft-55" class="opcion-bobina hide">
-                                    <option value="24" gramos="0.000594" pxkg="0.75">24</option>
-                                    <option value="30" gramos="0.000594" pxkg="0.75">30</option>                        
-                                </select> 
-
-            <!-- \\\\\\\\\\\\\\\\\\\\\\\\\\\ Wax-40 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ -->                    
-                                <select id="Wax-40" class="opcion-bobina hide">                        
-                                    <option value="23" gramos="0.000432" pxkg="0.90">23</option>   
-                                    <option value="30" gramos="0.000432" pxkg="0.90">30</option>                     
-                                </select>
-
-            <!-- \\\\\\\\\\\\\\\\\\\\\\\\\\\ Wax-47 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ -->                    
-                                <select id="Wax-47" class="opcion-bobina hide">
-                                    <option value="30" gramos="0.000503" pxkg="0.90">30</option>                        
-                                </select>
-            <!-- \\\\\\\\\\\\\\\\\\\\\\\\\\\ PolyWhite-24 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ -->                    
-                                <select id="PolyWhite-24" class="opcion-bobina hide">
-                                    <option value="25.8125" gramos="0.000259" pxkg="1.85">25.8125</option>
-                                    <option value="26.6875" gramos="0.000259" pxkg="1.85">26.6875</option>                        
-                                    <option value="27.5" gramos="0.000259" pxkg="1.85">27.5</option>
-                                </select>
-            <!-- \\\\\\\\\\\\\\\\\\\\\\\\\\\ PolyWhite-26 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ -->                    
-                                <select id="PolyWhite-26" class="opcion-bobina hide">
-                                    <option value="25" gramos="0.000270" pxkg="1.85">25</option>                        
-                                </select>
-            <!-- \\\\\\\\\\\\\\\\\\\\\\\\\\\ PolyKraft-30 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ -->                    
-                                <select id="PolyKraft-30" class="opcion-bobina hide">
-                                    <option value="18" gramos="0.000355" pxkg="1.2">18</option>
-                                    <option value="24" gramos="0.000355" pxkg="1.2">24</option>                        
-                                    <option value="30" gramos="0.000355" pxkg="1.2">30</option>
-                                </select>
-            <!-- \\\\\\\\\\\\\\\\\\\\\\\\\\\ PolyKraft-40 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ -->                    
-                                <select id="PolyKraft-40" class="opcion-bobina hide">
-                                    <option value="18" gramos="0.000432" pxkg="1.2">18</option>
-                                    <option value="24" gramos="0.000432" pxkg="1.2">24</option>                        
-                                    <option value="30" gramos="0.000432" pxkg="1.2">30</option>                       
-                                </select><br/>
+                            <div id='insertarbobina'></div>
 
                                 <input id="bobinaescondido" type="hidden"  name="bobinaescondido" />
-
-                                <label>Gramos</label><br/> 
-                                     <input id="gr" type="text" name="gr" disabled /> <br/>
-
-                                     <input id="grescondido" type="hidden" name="grescondido" />   
-
-
-
-                                <label>Precio x Kg</label> <br/>
-                                    <input id="preciokg" type="text" name="preciokg" disabled /><br/>
-
-                                     <input id="preciokgescondido" type="hidden" name="preciokgescondido" />
-                                
+                                                            
                                     
                                 <label>Total</label> <br/>
                                  <input id="utilidad" type="text" name="utilidad" disabled /><br/>
@@ -331,544 +696,88 @@
                         <!--    <div id="test">asd</div> -->
                             
 
-            			
+            			<br><br>
+                        <input id="btncotizar" type="button" name="cotizarparticion" value="Cotizar Particion" onclick="calcularDesperdicio()"  />                            
+                          <br><br>
                         
                        <!--  <div id="tablapad"></div> -->
                         <table id="tabla" border="0" cellpadding="10" align="center" style="text-align:center;">
+                           <h1>Opciones</h1>
+
                             <thead>
                                 <tr>
-                                    <th></th>
-                                    <th data-sort="int">Pads x bobina</th>
-                                    <th data-sort="float">Desperdicio</th>
+                                    <th></th>                                    
                                     <th>Bobina</th>
                                     <th>Material</th>
                                     <th>Calibre</th>
-                                    <th>Largo</th>
-                                    <th>Alto</th>
+                                    <th>Segmentos A</th>
+                                    <th>Largo A</th>
+                                    <th>Alto A</th>
+                                    <th>Segmentos B</th>
+                                    <th>Largo B</th>
+                                    <th>Alto B</th>
                                     <th>$ Unitario</th>
                                     <th>Total</th>
                                     
-                                    <th>Area PAD</th>
-                                    <th>Area Total</th>
+                                   
                                     
                                 </tr>
                             </thead>
 
-                            <tbody>
-                                <tr>
-                                                           
-                                </tr>
-                            </tbody>
+                            <tbody id="tablaelementos">
+
+                            <tr>
+
+                                                       
+
+                            </tr>
+
+                        </tbody>
                             
                         </table>
+                          
 
-                        <table id="tablab" border="0" cellpadding="10" align="center" style="text-align:center;">
+                        <table id="tablaagregados" border="0" cellpadding="10" align="center" style="text-align:center;">
+                             <h1>Seleccionados</h1>
                             <thead>
                                 <tr>
                                     <th></th>
-                                    <th data-sort="int">Pads x bobina</th>
-                                    <th data-sort="float">Desperdicio</th>
+                                    
                                     <th>Bobina</th>
                                     <th>Material</th>
                                     <th>Calibre</th>
-                                    <th>Largo</th>
-                                    <th>Alto</th>
+                                    <th>Segmentos A</th>
+                                    <th>Largo A</th>
+                                    <th>Alto A</th>
+                                    <th>Segmentos B</th>
+                                    <th>Largo B</th>
+                                    <th>Alto B</th>                                    
                                     <th>$ Unitario</th>
                                     <th>Total</th>
                                     
-                                    <th>Area PAD</th>
-                                    <th>Area Total</th>
-                                    
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                                <tr>
-                                                           
-                                </tr>
-                            </tbody>
-                            
-                        </table>
-
-
-
-                        <input id="btndesperdicio" type="button" name="desperdiciobtn" value="Desperdicio" onclick="calcularDesperdicio()" />
-                         <br><br>
-                        <input id="btncotizar" type="submit" name="cotizarpad" value="Cotizar PAD"  />
-
-                    <!-- Codigo de seleccion de Material con Calibre-->
-                        <script type="text/javascript">
-                   //------------------------------------------------------------------------------     
-                    //-----------------------------------------------------------------------------        
-                     //-----------------------------------------------------------------------------    
-
-                        
-
-
-
-                         function calcularDesperdicio() {
-                            document.getElementById("btncotizar").style.display="block";
-                            document.getElementById("tabla").style.display="block";
-                            document.getElementById("tablab").style.display="block";
-
-
-                                if (1==0){
-                                    
-                                    alert("El largo y ancho es demasiado para la bobina");
-
-                                } else {
-                                    
-
-
-
-                                    //Numero de elementos del option bobina 
-                                    idSelect =material + "-" + tipocalibre;
-                                     nobobina = document.getElementById(idSelect).length;
-                                    
-                                    //lista = new array();
-                                        if (nobobina == 0){
-                                            alert("No hay bobinas disponibles");
-
-                                         }else{
-
-                                            if ( (nosegmentosa == "") || (largoa == "") || (altoa == "") || (nosegmentosb == "") || (largob == "") || (altob == "") || (nosegmentosa == 0) || (nosegmentosb == 0) || (largoa == 0) || (altoa == 0) || (largob == 0) || (altob == 0) ){
-
-                                                
-                                                alert("No pueden estar vacios o con ceros los campos");
-
-                                            }else{
-
-
-                                                //Recorremos el option 2 veces por todos los elementos
-                                                    //for (var i = 0; i < nobobina; i++) {
-                                                        
-                                                        $("#"+ idSelect).find('option').each(function()
-                                                            {
-                                                               
-                                                               vbobina = $(this).val(); 
-
-
-
-                                                                ppa = 1;
-                                                                ppb = 1;
-                                                                areappa = altoa * largoa;
-                                                                areappb = altob * largob;
-
-                                                                areadesperdicioa = vbobina * altoa;
-                                                                areadesperdiciob = vbobina * altob;
-
-                                                                desperdicioa = areadesperdicioa - areappa;
-                                                                desperdiciob = areadesperdiciob - areappb;
-
-                                                                
-
-                                                                porcdesppa = (desperdicioa * 100) / areadesperdicioa;
-                                                                porcdespreda = porcdesppa.toFixed(3);
-
-                                                                porcdesppb = (desperdiciob * 100) / areadesperdiciob;
-                                                                porcdespredb = porcdesppb.toFixed(3);
-                                                               
-
-                                                                
-                                                                diflargoa = vbobina - largoa;
-                                                                
-                                                                diflargob = vbobina - largob;
-
-
-
-                                                               areappa = areappa.toFixed(3);
-                                                               areappb = areappb.toFixed(3);
-
-
-                                                               areadesperdicioa = areadesperdicioa.toFixed(3);
-                                                               areadesperdiciob = areadesperdiciob.toFixed(3);
-                                                               desperdicioa = desperdicioa.toFixed(3);
-                                                               desperdiciob = desperdiciob.toFixed(3);
-                                                               alert(porcdesppa);
-
-
-
-                                                                if (  diflargoa < 0 ){
-
-                                                                } else{
-
-                                                                    if (porcdesppa >= 50){
-
-                                                                        largopartes = vbobina / largoa;
-                                                                        largopartes = parseInt(largopartes);
-
-                                                                        largodoble = largoa * largopartes;
-                                                                        areappadoble= altoa * largodoble;
-                                                                        areadesperdicioadoble = vbobina * altoa;
-                                                                        desperdicioadoble = areadesperdicioadoble - areappadoble;
-                                                                        areadesperdicioadoble = areadesperdicioadoble.toFixed(3);
-                                                                        ppa=largopartes;
-
-                                                                        porcdespadoble = (desperdicioadoble * 100) / areadesperdicioadoble;
-                                                                        porcdespreaddoble = porcdespadoble.toFixed(3);
-
-                                                                        areappadoble = areappadoble.toFixed(3);                                                                   
-                                                                        desperdicioadoble = desperdicioadoble.toFixed(3);
-
-                                                                        
-                                                                        
-                                                                        indicecheck= indicecheck + 1;
-                                                                        
-
-
-                                                                        // $('#tabla > tbody:last').append('<tr><td><input type="checkbox" name="listado[]"  value="'+  indicecheck + '-   -' + ppa + '-   -' + porcdespreaddoble + '%' + '-   -' + vbobina + '-   -' + material + '-   -' + tipocalibre + '-   -' + largoa + '-   -' + altoa + '-   -' + setunitario + '-   -' + utilidad + '-   -'  + areappadoble + '-   -' + areadesperdicioadoble + '-   -' + desperdicioadoble  +'"></td><td>'+ ppa +'</td><td>'+ porcdespreaddoble + '%' + '</td><td>'+ vbobina +'</td><td>'+ material +'</td><td>'+ tipocalibre +'</td><td>'+ largoa +'</td><td>'+ altoa +'</td><td>'+ setunitario +'</td><td>'+ utilidad +'</td><td>' + areappadoble +'</td><td>'+ areadesperdicioadoble +'</td><td>'+ desperdicioadoble +'</td></tr>');
-                                                                        $('#tabla > tbody:last').append('<tr><td><input type="checkbox" name="listado[]"  value=""></td><td>'+ ppa +'</td><td>'+ porcdespreaddoble + '%' + '</td><td>'+ vbobina +'</td><td>'+ material +'</td><td>'+ tipocalibre +'</td><td>'+ largoa +'</td><td>'+ altoa +'</td><td>'+ setunitario +'</td><td>'+ utilidad +'</td><td>' + areappadoble +'</td><td>'+ areadesperdicioadoble +'</td><td>'+ desperdicioadoble +'</td></tr>');
-                                                                         }else{
-
-                                                                        // $('#tabla > tbody:last').append('<tr><td><input type="checkbox" name="listado[]"  value="'+  indicecheck + '-   -' + ppa + '-   -' + porcdespreaddoble + '%' + '-   -' + vbobina + '-   -' + material + '-   -' + tipocalibre + '-   -' + largoa + '-   -' + altoa + '-   -' + setunitario + '-   -' + utilidad + '-   -'  + areappadoble + '-   -' + areadesperdicioadoble + '-   -' + desperdicioadoble  +'"></td><td>'+ ppa +'</td><td>'+ porcdespreaddoble + '%' + '</td><td>'+ vbobina +'</td><td>'+ material +'</td><td>'+ tipocalibre +'</td><td>'+ largoa +'</td><td>'+ altoa +'</td><td>'+ setunitario +'</td><td>'+ utilidad +'</td><td>' + areappadoble +'</td><td>'+ areadesperdicioadoble +'</td><td>'+ desperdicioadoble +'</td></tr>');
-                                                                                 $('#tabla > tbody:last').append('<tr><td><input type="checkbox" name="listado[]"  value=""></td><td>'+ ppa +'</td><td>'+ porcdespreaddoble + '%' + '</td><td>'+ vbobina +'</td><td>'+ material +'</td><td>'+ tipocalibre +'</td><td>'+ largoa +'</td><td>'+ altoa +'</td><td>'+ setunitario +'</td><td>'+ utilidad +'</td><td>' + areappadoble +'</td><td>'+ areadesperdicioadoble +'</td><td>'+ desperdicioadoble +'</td></tr>');
-
-
-                                                                    }
-
-                                                                    
-                                                                   
-                                                                }
-
-                                                                
-
-                                                                if ( diflargob < 0 ){
-
-                                                                } else{
-                                                                    
-                                                                    
-
-
-                                                                    if (porcdesppb >= 50){
-
-                                                                        altopartes = vbobina / altob;
-                                                                        altopartes = parseInt(altopartes);
-                                                                        altodoble = altob * altopartes;
-                                                                        areapaddb= altodoble * largob;
-                                                                
-                                                                        areadesperdicioaltodb = vbobina * largob;
-                                                                        padalto=altopartes;
-
-                                                                        desperdicioaltodb = areadesperdicioaltodb - areapaddb;                                                         
-
-                                                                        porcdesp2db = (desperdicioaltodb * 100) / areadesperdicioaltodb;
-                                                                        porcdespred2db = porcdesp2db.toFixed(3);
-
-                                                                        areapaddb = areapaddb.toFixed(3);
-                                                                        areadesperdicioaltodb = areadesperdicioaltodb.toFixed(3);
-                                                                        desperdicioaltodb = desperdicioaltodb.toFixed(3);
-
-                                                                        indicecheck= indicecheck + 1;
-
-                                                                   
-                                                                         $('#tablab > tbody:last').append('<tr><td><input type="checkbox" name="listado[]" value="'+  indicecheck + '-   -' + padalto + '-   -' + porcdespred2db + '%' + '-   -' +  vbobina + '-   -' + material + '-   -' + tipocalibre + '-   -' + largo + '-   -' + alto + '-   -' + unitario + '-   -' + total + '-   -' +'Alto' + '-   -' + areapaddb + '-   -' + areadesperdicioaltodb + '-   -' + desperdicioaltodb + '-   -' +'"></td><td>'+ padalto +'</td><td>'+ porcdespred2db + '%' + '</td><td>'+ vbobina +'</td><td>'+ material +'</td><td>'+ tipocalibre +'</td><td>'+ largo +'</td><td>'+ alto +'</td><td>'+ unitario +'</td><td>'+ total +'</td><td>Alto</td><td>'+ areapaddb +'</td><td>'+ areadesperdicioaltodb +'</td><td>'+ desperdicioaltodb +'</td></tr>');
-                                                                        
-                                                                        // $('#tablab > tbody:last').append('<tr><td><input type="checkbox" name="listado[]" value="'+  indicecheck + '-   -' + padalto + '-   -' + porcdespred2db + '%' + '-   -' +  vbobina + '-   -' + material + '-   -' + tipocalibre + '-   -' + largo + '-   -' + alto + '-   -' + unitario + '-   -' + total + '-   -' +'Alto' + '-   -' + areapaddb + '-   -' + areadesperdicioaltodb + '-   -' + desperdicioaltodb + '-   -' +'"></td><td>'+ padalto +'</td><td>'+ porcdespred2db + '%' + '</td><td>'+ vbobina +'</td><td>'+ material +'</td><td>'+ tipocalibre +'</td><td>'+ largo +'</td><td>'+ alto +'</td><td>'+ unitario +'</td><td>'+ total +'</td><td>Alto</td><td>'+ areapaddb +'</td><td>'+ areadesperdicioaltodb +'</td><td>'+ desperdicioaltodb +'</td></tr>');   
-                                                                        }else {
-                                                                            $('#tablab > tbody:last').append('<tr><td><input type="checkbox" name="listado[]" value="'+  indicecheck + '-   -' + padalto + '-   -' + porcdespred2db + '%' + '-   -' +  vbobina + '-   -' + material + '-   -' + tipocalibre + '-   -' + largo + '-   -' + alto + '-   -' + unitario + '-   -' + total + '-   -' +'Alto' + '-   -' + areapaddb + '-   -' + areadesperdicioaltodb + '-   -' + desperdicioaltodb + '-   -' +'"></td><td>'+ padalto +'</td><td>'+ porcdespred2db + '%' + '</td><td>'+ vbobina +'</td><td>'+ material +'</td><td>'+ tipocalibre +'</td><td>'+ largo +'</td><td>'+ alto +'</td><td>'+ unitario +'</td><td>'+ total +'</td><td>Alto</td><td>'+ areapaddb +'</td><td>'+ areadesperdicioaltodb +'</td><td>'+ desperdicioaltodb +'</td></tr>');
-
-                                                                    }
-                                                                    
-                                                                   
-                                                                }
-                                                               
-
-                                                                
-                                                               
-                                                              // var tablapad = document.getElementById("tabla");                                                                                                                                                                                                               
-                                                              // var parrafo = document.createElement("p");
-                                                              // parrafo.innerHTML = "--- " + $(this).val() + "------ " + "----  " + material + "------- " + "-----  " + tipocalibre  + "--------  " + largo + "--------  " + alto + "--------  " + total + "BOBINA :" + bobina;
-                                                              // tablapad.appendChild(parrafo);
-                                                               
-                                                            });
-                                                      //}
-                                            }
-
-
-                  
-                                        }
-
-
-
-
-                                }
-
-                            }
-                    //-----------------------------------------------------------------------------        
-                     //-----------------------------------------------------------------------------        
-                      //-----------------------------------------------------------------------------        
-
-
-                        // Mostramos la lista de calibres dependiendo el material
-                         function materialSeleccion() {
-                                $('.sub-opcion').hide();
-                                var materialSeleccionado = $('#material').val();
-                                if (materialSeleccionado) {
-                                    $('#' + materialSeleccionado + '-seleccionado').show();
-                                } 
-                            }
-
-                           // Mostramos la lista de bobinas dependiendo el calibre
-                            function calibreSeleccion() {
-                                $('.opcion-bobina').hide();
-                                var calibreSeleccionado = $('#'+ material + '-seleccionado').val();
-                               
-                                if (calibreSeleccionado) {                         
-                                    $('#'+ material + '-' + tipocalibre ).show();
-                                }
-
-                            }
-
-
-
-                            $(document).ready(function() {
-
-
-                                    document.getElementById("btncotizar").style.display="none";
-                                    indicecheck = 0;
-
-                                                                 
-                                    $('#material').change(materialSeleccion );
-                                     materialSeleccion();
-                                     
-                                    $("#material").change(function () {
-                                                   material = $('#material option:selected').val();
-                                                   calibre = $("#" + material  + "-seleccionado option:selected").val() || material;
-                                                  
-                                                $("#" + material +"-seleccionado").change(function(){
-                                                  
-                                                        tipocalibre = $('#' + material + '-seleccionado option:selected').val();
-                                                        
-
-                                                        calibreSeleccion();
-                                                        if (material=="Kraft") {
-                                                            operacion= parseFloat(tipocalibre) * 2;
-                                                            //$("#kg").text(operacion);
-                                                        };
-                                                      
-                                                     
-                                                             $('#'+ material + '-' + tipocalibre ).change(function(){
-                                                                  
-
-                                                              gramos = $('option:selected', this).attr('gramos');
-                                                              pxkg = $('option:selected', this).attr('pxkg');
-                                                              bobina = $('option:selected', this).attr('value');
-                                                              $("#bobinaescondido").val(bobina);
-                                                              
-             
-                                                               }).change();                                           
-                                                               
-
-                                                                 $("#gr").val(gramos);
-                                                                 $("#grescondido").val(gramos);
-                                                                 $("#preciokg").val(pxkg);
-                                                                 $("#preciokgescondido").val(pxkg);
-
-                                                                 // ------ Operaciones ------------
-
-                                                                nosets = $('#nosets').val();
-                                                                nosegmentosa = $('#nosegmentosa').val();
-                                                                nosegmentosb = $('#nosegmentosb').val();
-                                                                altoa = $('#altoa').val();
-                                                                largoa = $('#largoa').val();
-                                                                altob = $('#altob').val();
-                                                                largob = $('#largob').val();
-
-
-                                                                kga = kilosa;
-                                                                kgb = kilosb;
-
-                                                                nosegmentosax = nosegmentosa *nosets;
-                                                                nosegmentosbx = nosegmentosb *nosets;
-
-                                                                kilosa = parseFloat(nosegmentosa) * 
-                                                                parseFloat(altoa) * parseFloat(largoa) *
-                                                                parseFloat(gramos);
-                                                                kilosb = parseFloat(nosegmentosb) * 
-                                                                parseFloat(altob) * parseFloat(largob) *
-                                                                parseFloat(gramos);
-
-                                                                 kilosax = parseFloat(nosegmentosax) * 
-                                                                parseFloat(altoa) * parseFloat(largoa) *
-                                                                parseFloat(gramos);
-                                                                kilosbx = parseFloat(nosegmentosbx) * 
-                                                                parseFloat(altob) * parseFloat(largob) *
-                                                                parseFloat(gramos);
-
-
-
-                                                               
-                                                                subtotala = kilosa * pxkg;
-                                                                subtotalb = kilosb * pxkg;
-
-                                                                subtotalax = kilosax * pxkg;
-                                                                subtotalbx = kilosbx * pxkg;
-
-
-                                                                subtotal = subtotala + subtotalb;
-
-                                                                factor =2;
-                                                                totala = subtotala * factor;
-                                                                totalb = subtotalb * factor;
-                                                                totala=totala.toFixed(3);
-                                                                totalb=totalb.toFixed(3);
-
-                                                                unitarioa = totala / nosegmentosa;
-                                                                unitarioa = unitarioa.toFixed(3);
-                                                                unitariob = totalb / nosegmentosa;
-                                                                unitariob = unitariob.toFixed(3);
-                                                                //setunitario = parseFloat(nosets) * parseFloat(subtotal);
-                                                                
-
-                                                                ranuradoarmado = 0.0026;
-                                                                segmentos = parseFloat(nosegmentosa) + parseFloat(nosegmentosb);
-                                                                factorra = parseFloat(segmentos) * parseFloat(ranuradoarmado);
-                                                                x = parseFloat(subtotal);
-                                                                setunitario = (parseFloat(x) + parseFloat(factorra)) * 2;
-                                                               setunitario = setunitario.toFixed(3);
-
-
-                                                               utilidad = setunitario * nosets;                                                           
-
-
-
-                                                                $("#kga").val(kilosax);
-                                                                $("#kgescondidoa").val(kilosax);
-                                                                $("#kgb").val(kilosbx);
-                                                                $("#kgescondidob").val(kilosbx);
-
-                                                                $("#factoru").val(factor);
-                                                                
-                                                                $("#subtotala").val(subtotalax);
-                                                                $("#subtotalescondidoa").val(subtotalax);
-                                                                $("#subtotalb").val(subtotalbx);
-                                                                $("#subtotalescondidob").val(subtotalbx);
-
-                                                                $("#utilidad").val(utilidad);
-                                                                $("#utilidadescondido").val(utilidad);
-                                                                $("#tipocalibreescondido").val(tipocalibre);
-                                                                $("#precioxset").val(setunitario);
-
-
-
-
-
-                                                              //$("#test").text(bobina + "--" + tipocalibre + "--" + operacion + "--" + calibre + "--"  + kilos + " - " + numeropads + " - " + alto+ " - " +  largo+ " - "  + gramos );
-
-                                                }).change();
-                                                
-                                                
-
-                                        })
-                                        .change();
-
-
-                
-                                });
-
-
-                                $("input").keyup(function () {
-
-                                                                
-
-                                                                 $("#gr").val(gramos);
-                                                                 $("#grescondido").val(gramos);
-                                                                 $("#preciokg").val(pxkg);
-                                                                 $("#preciokgescondido").val(pxkg);
-
-                                                                nosets = $('#nosets').val(); 
-                                                                nosegmentosa = $('#nosegmentosa').val();
-                                                                nosegmentosb = $('#nosegmentosb').val();
-                                                                altoa = $('#altoa').val();
-                                                                largoa = $('#largoa').val();
-                                                                altob = $('#altob').val();
-                                                                largob = $('#largob').val();
-
-                                                                nosegmentosax = nosegmentosa *nosets;
-                                                                nosegmentosbx = nosegmentosb *nosets;
-
-                                                                 kilosa = parseFloat(nosegmentosa) * 
-                                                                parseFloat(altoa) * parseFloat(largoa) *
-                                                                parseFloat(gramos);
-                                                                kilosb = parseFloat(nosegmentosb) * 
-                                                                parseFloat(altob) * parseFloat(largob) *
-                                                                parseFloat(gramos);
-
-                                                                 kilosax = parseFloat(nosegmentosax) * 
-                                                                parseFloat(altoa) * parseFloat(largoa) *
-                                                                parseFloat(gramos);
-                                                                kilosbx = parseFloat(nosegmentosbx) * 
-                                                                parseFloat(altob) * parseFloat(largob) *
-                                                                parseFloat(gramos);
-
-                                                                
-
-
-                                                                subtotala = kilosa * pxkg;
-                                                                subtotalb = kilosb * pxkg;
-
-                                                                subtotalax = kilosax * pxkg;
-                                                                subtotalbx = kilosbx * pxkg;
-
-                                                                subtotal = subtotala + subtotalb;
-
-
-
-                                                                factor =2;
-                                                                totala = subtotala * factor;
-                                                                totalb = subtotalb * factor;
-                                                                totala=totala.toFixed(3);
-                                                                totalb=totalb.toFixed(3);
-
-                                                                unitarioa = totala / nosegmentosa;
-                                                                unitarioa = unitarioa.toFixed(3);
-                                                                unitariob = totalb / nosegmentosa;
-                                                                unitariob = unitariob.toFixed(3);
-                                                                //setunitario = parseFloat(nosets) * parseFloat(subtotal);
-                                                                
-
-                                                                ranuradoarmado = 0.0026;
-                                                                segmentos = parseFloat(nosegmentosa) + parseFloat(nosegmentosb);
-                                                                factorra = parseFloat(segmentos) * parseFloat(ranuradoarmado);
-                                                                x = parseFloat(subtotal);
-                                                                setunitario = (parseFloat(x) + parseFloat(factorra)) * 2;
-                                                               setunitario = setunitario.toFixed(3);
-
-
-                                                               utilidad = setunitario * nosets;                                                           
-
-
-
-                                                                $("#kga").val(kilosax);
-                                                                $("#kgescondidoa").val(kilosax);
-                                                                $("#kgb").val(kilosbx);
-                                                                $("#kgescondidob").val(kilosbx);
-
-                                                                $("#factoru").val(factor);
-                                                                
-                                                                $("#subtotala").val(subtotalax);
-                                                                $("#subtotalescondidoa").val(subtotalax);
-                                                                $("#subtotalb").val(subtotalbx);
-                                                                $("#subtotalescondidob").val(subtotalbx);
-
-                                                                $("#utilidad").val(utilidad);
-                                                                $("#utilidadescondido").val(utilidad);
-                                                                $("#tipocalibreescondido").val(tipocalibre);
-                                                                $("#precioxset").val(setunitario);
-
-                                                                //$("#test").text(bobina + "--" + tipocalibre + "--" + operacion + "--" + calibre + "--"  + kilos + " - " + numeropads + " - " + alto+ " - " +  largo+ " - "  + gramos );
-                                 }).keyup();
-
-
-
-                                                                
-
                                 
-                        </script>
+                                    
+                                </tr>
+                            </thead>
 
+                            <tbody>
+                                <tr>
+                                                           
+                                </tr>
+                            </tbody>
+                            
+                        </table>
 
-                
+ <br>
+                    <input id="btnagregar" type="button" name="btnagregar" value="Agregar Cotizacion" onclick="anadiroptimos()" />
 
+                     <br>
+
+                    <input id="btnprev" type="submit" name="btnprev" value="Vista Previa"/>
+                    <input id="btnenviar" type="submit" name="btnenviar" value="Enviar Cotizacion"  />
+
+                       
+                       
 
                    </form>    
 
@@ -887,6 +796,8 @@
                         </footer>
 
                     </div> 
+
+                    
 
                     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
                     <script>window.jQuery || document.write('<script src="../js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
@@ -930,5 +841,364 @@
                     }
                 }, false);
             </script>
+
+
+            <script type="text/javascript">
+
+            function valores(){
+
+                materialx = $('#materialalmacen').val();
+                calibrex = $('#calibrealmacen').val();
+                bobinax = $('#bobinaalmacen').val();
+                gramosx = $('#gramosalmacen').val();
+                preciokgx = $('#preciokgalmacen').val();
+                factorx = $('#factoru').val();
+                nosetsx = $('#nosets').val();
+                largoax = $('#largoa').val();
+                altoax = $('#altoa').val();
+                largobx = $('#largob').val();
+                altobx = $('#altob').val();
+                nosegmentosax = $('#nosegmentosa').val();
+                nosegmentosbx = $('#nosegmentosb').val();
+
+
+
+              // alert(materialx + '-' + calibrex +'-' + bobinax +'-' +gramosx +'-' + preciokgx+'-' + factorx +'-' + nopadsx+'-' + largox+'-' + altox);
+
+            }
+
+            function calcular(){
+
+              // ------ Operaciones ------------              
+
+              /*
+                //Kilos A
+                kilosax = parseFloat(altoax) * parseFloat(largoax) *  parseFloat(gramosx) * parseFloat(nosegmentosax);
+              //  kilosax =kilosax.toFixed(3);
+
+                subtotalax = kilosax * preciokgx;
+              //  subtotalax = subtotalax.toFixed(3);                
+
+
+
+                //Kilos B
+                kilosbx = parseFloat(altobx) * parseFloat(largobx) *  parseFloat(gramosx) * parseFloat(nosegmentosbx);
+               // kilosbx =kilosbx.toFixed(3);
+
+                subtotalbx = kilosbx * preciokgx;
+             //   subtotalbx = subtotalbx.toFixed(3);                
+
+
+
+                //Precio x Sets
+                ranuradox = (parseFloat(nosegmentosax) + parseFloat(nosegmentosbx)) * 0.0026;
+                subtotalax = parseFloat(subtotalax);
+                subtotalbx = parseFloat(subtotalbx);
+                sumasubtotal = subtotalax + subtotalbx;
+                preciosetx = ( parseFloat(sumasubtotal) + parseFloat(ranuradox) ) * factorx;
+                preciosetx = preciosetx.toFixed(3);
+
+                totalxsetx = preciosetx * nosetsx;
+
+                totalxsetx=totalxsetx.toFixed(3);
+                */
+
+                 /* 
+                 //////// BUENO//////////
+
+                kilosax = parseFloat(bobinax) * parseFloat(altoax) * parseFloat(gramosx) * parseFloat(nosegmentosax);
+                kilosbx = parseFloat(bobinax) * parseFloat(altobx) * parseFloat(gramosx) * parseFloat(nosegmentosbx);
+
+
+                subtotalax = kilosax * preciokgx;
+                subtotalbx = kilosbx * preciokgx;
+
+                ranuradox = (parseFloat(nosegmentosax) + parseFloat(nosegmentosbx)) * 0.0026;
+                subtotalax = parseFloat(subtotalax);
+                subtotalbx = parseFloat(subtotalbx);
+
+                sumasubtotal = subtotalax + subtotalbx;
+                preciosetalgoritmox = ( parseFloat(sumasubtotal) + parseFloat(ranuradox) ) * factorx;
+                preciosetalgoritmox = preciosetalgoritmox.toFixed(3);
+
+
+
+                totalx = preciosetalgoritmox * nosetsx;
+                totalx=totalx.toFixed(3);
+
+
+                 */
+
+
+                nosetsx = parseFloat(nosetsx);
+                kilosax = parseFloat(bobinax) * parseFloat(altoax) * parseFloat(gramosx) *  parseFloat(nosegmentosax);
+                kilosbx = parseFloat(bobinax) * parseFloat(altobx) * parseFloat(gramosx) *  parseFloat(nosegmentosbx);
+
+
+
+
+                subtotalax = kilosax * preciokgx;
+                subtotalbx = kilosbx * preciokgx;
+
+                ranurado = 0.0026;
+
+                precioranuradox = precioranuradox = ((parseFloat(nosegmentosax) + parseFloat(nosegmentosbx)) * ranurado)/nosetsx;
+                subtotalax = parseFloat(subtotalax);
+                subtotalbx = parseFloat(subtotalbx);
+
+                sumasubtotal = subtotalax + subtotalbx;
+                preciosetalgoritmox = ( (parseFloat(sumasubtotal) / nosetsx ) + parseFloat(precioranuradox) ) * factorx;
+                preciosetalgoritmox = preciosetalgoritmox.toFixed(3);
+
+
+
+                totalx = preciosetalgoritmox * nosetsx;
+                totalx=totalx.toFixed(3);
+
+
+
+
+
+
+ /*  
+
+
+                algoritmo2x = parseFloat(bobinax) * parseFloat(largox) * parseFloat(gramosx) * parseFloat(nopadsx);
+
+               // alert("bobina--" + bobina + "alto--" + alto + "gramos--" + gramos + "pads--" + numeropads);
+
+                kgalgoritmofac2x = algoritmo2x * preciokgx;
+
+                subtotalalgoritmo2x = kgalgoritmofac2x * factorx;
+
+                entero2x = bobinax / altox;
+
+                entero2x = Math.floor(entero2x);
+
+                totalnew2x =  subtotalalgoritmo2x / entero2x;
+
+                totalnew2x = totalnew2x.toFixed(3);
+
+               // alert(totalnew);
+
+
+
+                unitario2x = totalnew2x / nopadsx;
+
+                unitario2x = unitario2x.toFixed(3);
+
+
+                //Asignacion
+               // alert('kilos' + kilosx + 'subtotal' + kgalgoritmofacx + 'Total 1 :' + totalnewx + 'Total 2 : ' + totalnew2x);
+
+*/
+                $("#kga").val(kilosax);
+
+                //$("#kgescondido").val(kilosx);                
+
+                $("#subtotala").val(subtotalax);
+
+                $("#kgb").val(kilosbx);
+
+                //$("#kgescondido").val(kilosx);                
+
+                $("#subtotalb").val(subtotalbx);
+
+                $("#precioxset").val(preciosetalgoritmox);
+
+                $("#utilidad").val(totalx);
+
+
+/*
+                $("#subtotalescondido").val(kgalgoritmofacx);
+
+                $("#subtotall").val(kgalgoritmofac2x);
+
+                $("#subtotalescondidol").val(kgalgoritmofac2x);
+
+
+                $("#utilidadescondido").val(totalnewx);
+
+                $("#utilidadl").val(totalnew2x);
+
+                $("#utilidadescondidol").val(totalnew2x);
+
+                $("#tipocalibreescondido").val(calibrex);
+
+*/
+            }
+
+
+
+            function material_val()
+              {
+                var valor_option = document.getElementById('materialalmacen');
+               valormaterial = valor_option.options[valor_option.selectedIndex].value;
+                $("#valormaterial").val(valormaterial);
+
+
+              }
+
+             function calibre_val()
+              {
+                var valor_option = document.getElementById('calibrealmacen');
+               valorcalibre = valor_option.options[valor_option.selectedIndex].value;
+                $("#valorcalibre").val(valorcalibre);
+
+              }  
+
+              function bobina_val()
+              {
+                var valor_option = document.getElementById('bobinaalmacen');
+               valorbobina = valor_option.options[valor_option.selectedIndex].value;
+                $("#valorbobina").val(valorbobina);
+
+              } 
+
+              function mostrarclientes_pads(str)
+            {
+            if (str=="")
+              {
+              document.getElementById("insertarcliente").innerHTML="";
+              return;
+              } 
+            if (window.XMLHttpRequest)
+              {// code for IE7+, Firefox, Chrome, Opera, Safari
+              xmlhttp=new XMLHttpRequest();
+              }
+            else
+              {// code for IE6, IE5
+              xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+              }
+            xmlhttp.onreadystatechange=function()
+              {
+              if (xmlhttp.readyState==4 && xmlhttp.status==200)
+                {
+                document.getElementById("insertarcliente").innerHTML=xmlhttp.responseText;
+                }
+              }
+            xmlhttp.open("GET","obtenercliente_pads.php?q="+str,true);
+            xmlhttp.send();            
+            }
+
+
+            function mostrarfolio()
+            {
+
+
+            if (window.XMLHttpRequest)
+              {// code for IE7+, Firefox, Chrome, Opera, Safari
+              xmlhttp=new XMLHttpRequest();
+              }
+            else
+              {// code for IE6, IE5
+              xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+              }
+            xmlhttp.onreadystatechange=function()
+              {
+              if (xmlhttp.readyState==4 && xmlhttp.status==200)
+                {
+                document.getElementById("insertarfolio").innerHTML=xmlhttp.responseText;
+                }
+              }
+
+            xmlhttp.open("GET","obtenerfolio_pads.php",true);
+            xmlhttp.send();            
+            } 
+            mostrarfolio();
+
+
+            function mostrararticulos(str)
+            {
+                eliminargramos();
+
+            if (str=="")
+              {
+              document.getElementById("insertarmaterial").innerHTML="";
+              return;
+              } 
+            if (window.XMLHttpRequest)
+              {// code for IE7+, Firefox, Chrome, Opera, Safari
+              xmlhttp=new XMLHttpRequest();
+              }
+            else
+              {// code for IE6, IE5
+              xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+              }
+            xmlhttp.onreadystatechange=function()
+              {
+              if (xmlhttp.readyState==4 && xmlhttp.status==200)
+                {
+                document.getElementById("insertarmaterial").innerHTML=xmlhttp.responseText;
+                }
+              }
+
+
+
+            xmlhttp.open("GET","obteneralmacen_pads.php?q="+str,true);
+            xmlhttp.send();            
+            }
+
+
+            function mostrarcalibre(str2)
+            {
+                eliminargramos();
+
+            if (str2=='')
+              {
+              document.getElementById('insertarcalibre').innerHTML='';
+              return;
+              } 
+            if (window.XMLHttpRequest)
+              {// code for IE7+, Firefox, Chrome, Opera, Safari
+              xmlhttp=new XMLHttpRequest();
+              }
+            else
+              {// code for IE6, IE5
+              xmlhttp=new ActiveXObject('Microsoft.XMLHTTP');
+              }
+            xmlhttp.onreadystatechange=function()
+              {
+              if (xmlhttp.readyState==4 && xmlhttp.status==200)
+                {
+                document.getElementById('insertarcalibre').innerHTML=xmlhttp.responseText;
+                }
+              }
+            xmlhttp.open('GET','agrega_calibre_pads.php?w='+str2+"&valormaterial="+valormaterial,true);
+            xmlhttp.send();            
+            }
+
+             function mostrarbobina(str3)
+            {
+
+            if (str3=='')
+              {
+              document.getElementById('insertarbobina').innerHTML='';
+              return;
+              } 
+            if (window.XMLHttpRequest)
+              {// code for IE7+, Firefox, Chrome, Opera, Safari
+              xmlhttp=new XMLHttpRequest();
+              }
+            else
+              {// code for IE6, IE5
+              xmlhttp=new ActiveXObject('Microsoft.XMLHTTP');
+              }
+            xmlhttp.onreadystatechange=function()
+              {
+              if (xmlhttp.readyState==4 && xmlhttp.status==200)
+                {
+                document.getElementById('insertarbobina').innerHTML=xmlhttp.responseText;
+                }
+              }
+
+
+
+            xmlhttp.open("GET","mostrar_articulo_pads.php?&m="+str3+"&valormaterial="+valormaterial+"&valorcalibre="+valorcalibre+"&valorbobina="+valorbobina,true);
+            xmlhttp.send();            
+            }            
+
+
+        </script>
                 </body>
             </html>

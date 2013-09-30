@@ -10,7 +10,7 @@ $verificar="SI";
      $result=mysql_query($query,$link) or die(mysql_error()); 
 
 
-$sesionlog = $_SESSION["login"];
+$sesionlog = $_SESSION["nombre"].' '.$_SESSION["apaterno"];
                                                                                                      
 
                            //echo "<form name='importararticulos' action='../procesos/agrega_calibre.php' method='POST'>"; 
