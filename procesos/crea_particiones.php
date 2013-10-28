@@ -25,10 +25,17 @@ if(isset($_POST['btnenviar']))
 
 			$encargado = $_POST['encargado'];
 
+			$sucursal = $_POST['sucursal'];
+
 			$creado = $_POST['creado'];
 
+			$emailusuario = $_POST['emailusuario'];
 
+			$observaciones = $_POST['observaciones'];
 
+			$enviarusuario = $_POST['enviarusuario'];
+
+			$totalapagar = $_POST['totalapagar'];
 
 
 
@@ -39,14 +46,15 @@ if(isset($_POST['btnenviar']))
 
 
 
-					$query = sprintf("INSERT INTO cotizaciones (no_parte, fecha, empresa, tipo, creado)
+					$query = sprintf("INSERT INTO cotizaciones (no_parte, fecha, empresa, sucursal, encargado, tipo, observaciones, creado, total)
 
-					VALUES ('%s', '%s', '%s', '%s', '%s')", $noparte, $fecha, $cliente, $tipo, $creado );
+					VALUES ('%s','%s','%s','%s','%s', '%s', '%s', '%s', '%s')", $noparte, $fecha, $cliente, $sucursal, $encargado, $tipo, $observaciones, $creado, $totalapagar );
 
 					$result=mysql_query($query,$link) or die(mysql_error()); 
 
 					if(mysql_affected_rows()){
 
+						
 						
 						
 						$nosets =0;
@@ -59,8 +67,11 @@ if(isset($_POST['btnenviar']))
 						$material =7;
 						$calibre =8;
 						$bobina =9;
+						$desperdicioa = 12;	
+						$desperdiciob = 13;
 						$unitario =10;
 						$total =11;
+						$extra = 14;
 
 
 
@@ -88,9 +99,9 @@ if(isset($_POST['btnenviar']))
 			*/
 							$c++;
 
-								$query = sprintf("INSERT INTO articulos_particiones ( no_parte,no_sets, segmentos_a, largo_a, alto_a,segmentos_b, largo_b, alto_b, material, calibre, bobina, precio_unitario, total, tipo)
+								$query = sprintf("INSERT INTO articulos_particiones ( no_parte,no_sets, segmentos_a, largo_a, alto_a,segmentos_b, largo_b, alto_b, material, calibre, bobina, desperdicio_a, desperdicio_b, precio_unitario, total, tipo, extra)
 
-								VALUES ('%s','%s', '%s', '%s', '%s', '%s','%s','%s','%s','%s','%s','%s','%s','%s')", $noparte, $x[$nosets], $x[$segmentosa], $x[$largoa], $x[$altoa],$x[$segmentosb], $x[$largob], $x[$altob], $x[$material], $x[$calibre], $x[$bobina],  $x[$unitario], $x[$total], $tipo );
+								VALUES ('%s','%s','%s','%s','%s', '%s', '%s', '%s', '%s','%s','%s','%s','%s','%s','%s','%s','%s')", $noparte, $x[$nosets], $x[$segmentosa], $x[$largoa], $x[$altoa],$x[$segmentosb], $x[$largob], $x[$altob], $x[$material], $x[$calibre], $x[$bobina], $x[$desperdicioa], $x[$desperdiciob], $x[$unitario], $x[$total], $tipo, $x[$extra] );
 
 								$result=mysql_query($query,$link) or die(mysql_error()); 
 
@@ -102,18 +113,21 @@ if(isset($_POST['btnenviar']))
 								}
 							
 						
-						$nosets +=12;
-						$segmentosa +=12;
-						$largoa +=12;
-						$altoa +=12;
-						$segmentosb +=12;
-						$largob +=12;
-						$altob +=12;
-						$material +=12;
-						$calibre +=12;
-						$bobina +=12;
-						$unitario +=12;
-						$total +=12;
+						$nosets +=15;
+						$segmentosa +=15;
+						$largoa +=15;
+						$altoa +=15;
+						$segmentosb +=15;
+						$largob +=15;
+						$altob +=15;
+						$material +=15;
+						$calibre +=15;
+						$bobina +=15;
+						$desperdicioa +=15;
+						$desperdiciob +=15;
+						$unitario +=15;
+						$total +=15;
+						$extra +=15;
 
 						} 
 
@@ -137,18 +151,22 @@ if(isset($_POST['btnenviar']))
 			///////////////////////////////////////////////////////////////////////////////////////////
 			///////////////////////////////////////////////////////////////////////////////////////////
 
-					$nosets =0;
-					$segmentosa =1;
-					$largoa =2;
-					$altoa =3;
-					$segmentosb =4;
-					$largob =5;
-					$altob =6;
-					$material =7;
-					$calibre =8;
-					$bobina =9;
-					$unitario =10;
-					$total =11;		
+					
+						$nosets =0;
+						$segmentosa =1;
+						$largoa =2;
+						$altoa =3;
+						$segmentosb =4;
+						$largob =5;
+						$altob =6;
+						$material =7;
+						$calibre =8;
+						$bobina =9;
+						$desperdicioa = 12;	
+						$desperdiciob = 13;
+						$unitario =10;
+						$total =11;
+						$extra = 14;	
 
 
 			require_once("dompdf/dompdf_config.inc.php");
@@ -172,8 +190,8 @@ if(isset($_POST['btnenviar']))
 				<tr>
 					<td>
 						<img src="logo.jpg" width=305  heigth=99 />	
-						<p class="negrita">10950 Pelicano Dr. Glug B1</p>
-						<p class="negrita">El Paso TX 79935</p>
+						<p class="negrita">11800 Rojas Dr. Suite C23</p>
+						<p class="negrita">El Paso TX 79936</p>
 						<p class="negrita">Ph. 915 543 1459</p>
 						<p>www.cardboardandboxes.com</p>
 					</td>
@@ -185,6 +203,7 @@ if(isset($_POST['btnenviar']))
 				<tr>
 					<td>
 						<p class="negrita">Company:<span class="campo">'; $html.=$cliente;  $html.='</span> </p>
+						<p class="negrita">Sucursal:<span class="campo">'; $html.=$sucursal;  $html.='</span></p>
 						<p class="negrita">Contact:<span class="campo">'; $html.=$encargado;  $html.='</span></p>
 					</td>
 					
@@ -202,16 +221,16 @@ if(isset($_POST['btnenviar']))
 				<tr>
 					
 					<th># of Sets</th>
-					<th>Segments A</th>
+					<th>Pieces A</th>
 					<th>Width A</th>
 					<th>Height A</th>
-					<th>Segments B</th>
+					<th>Pieces B</th>
 					<th>Width B</th>
 					<th>Height B</th>
 					<th>Material</th>
 					<th>Caliber</th>
 					<th>Unit Price</th>
-					<th>Total Pads</th>		
+					<th>Total Sets</th>		
 				</tr>';  foreach ($datos as $datosxs) {	$html.=' 
 
 							
@@ -232,24 +251,29 @@ if(isset($_POST['btnenviar']))
 				';
 							$sumatotal = $sumatotal + $x[$total];
 
-						$nosets +=12;
-						$segmentosa +=12;
-						$largoa +=12;
-						$altoa +=12;
-						$segmentosb +=12;
-						$largob +=12;
-						$altob +=12;
-						$material +=12;
-						$calibre +=12;
-						$bobina +=12;
-						$unitario +=12;
-						$total +=12;	
+						$nosets +=15;
+						$segmentosa +=15;
+						$largoa +=15;
+						$altoa +=15;
+						$segmentosb +=15;
+						$largob +=15;
+						$altob +=15;
+						$material +=15;
+						$calibre +=15;
+						$bobina +=15;
+						$desperdicioa +=15;
+						$desperdiciob +=15;
+						$unitario +=15;
+						$total +=15;
+						$extra +=15;	
 			} $html.=' 
 			</table>
 
 			<br>
-			<h1 class="derecha">Total: <span class="campo"> $ '; $html.=$sumatotal; $html.=' </span></h1>
+			<h1 class="derecha">Total: <span class="campo"> $ '; $html.=$totalapagar; $html.=' </span></h1>			
 			<p class="derecha">Made by: <span class="campo"> '; $html.=$creado; $html.=' </span></p>
+			<p class="derecha">e-mail: <span class="campo"> '; $html.=$emailusuario; $html.=' </span></p>
+			<b>Observations:</b><br> <span class="campo"> '; $html.=$observaciones; $html.=' </span>
 
 			</body>
 			</html>'; // Cerramos la variable para agregarla código PHP
@@ -317,6 +341,11 @@ if(isset($_POST['btnenviar']))
 			//Set who the message is to be sent to
 
 			$mail->AddAddress($email, $cliente);
+
+			if ($enviarusuario == "si")
+			{
+				$mail->AddAddress($emailusuario, 'Folding Cardboard & Boxes Inc.');
+			}
 
 			//Set the subject line
 
@@ -418,13 +447,19 @@ else if(isset($_POST['btnprev']))
 
 			$cliente = $_POST['cliente'];
 
+			$sucursal = $_POST['sucursal'];
+
 			$desperdicio = $_POST['desperdicio'];
 
 			$encargado = $_POST['encargado'];
 
 			$creado = $_POST['creado'];
 
+			$emailusuario = $_POST['emailusuario'];
 
+			$observaciones = $_POST['observaciones'];
+
+			$totalapagar = $_POST['totalapagar'];
 
 
 
@@ -450,8 +485,11 @@ else if(isset($_POST['btnprev']))
 						$material =7;
 						$calibre =8;
 						$bobina =9;
+						$desperdicioa = 12;	
+						$desperdiciob = 13;
 						$unitario =10;
 						$total =11;
+						$extra = 14;
 
 
 
@@ -477,19 +515,22 @@ else if(isset($_POST['btnprev']))
 			///////////////////////////////////////////////////////////////////////////////////////////
 			///////////////////////////////////////////////////////////////////////////////////////////
 
-					$nosets =0;
-					$segmentosa =1;
-					$largoa =2;
-					$altoa =3;
-					$segmentosb =4;
-					$largob =5;
-					$altob =6;
-					$material =7;
-					$calibre =8;
-					$bobina =9;
-					$unitario =10;
-					$total =11;		
-
+					
+						$nosets =0;
+						$segmentosa =1;
+						$largoa =2;
+						$altoa =3;
+						$segmentosb =4;
+						$largob =5;
+						$altob =6;
+						$material =7;
+						$calibre =8;
+						$bobina =9;
+						$desperdicioa = 12;	
+						$desperdiciob = 13;
+						$unitario =10;
+						$total =11;
+						$extra = 14;
 
 			require_once("dompdf/dompdf_config.inc.php");
 
@@ -525,6 +566,7 @@ else if(isset($_POST['btnprev']))
 				<tr>
 					<td>
 						<p class="negrita">Company:<span class="campo">'; $html.=$cliente;  $html.='</span> </p>
+						<p class="negrita">Sucursal:<span class="campo">'; $html.=$sucursal;  $html.='</span></p>
 						<p class="negrita">Contact:<span class="campo">'; $html.=$encargado;  $html.='</span></p>
 					</td>
 					
@@ -542,16 +584,16 @@ else if(isset($_POST['btnprev']))
 				<tr>
 					
 					<th># of Sets</th>
-					<th>Segments A</th>
+					<th>Pieces A</th>
 					<th>Width A</th>
 					<th>Height A</th>
-					<th>Segments B</th>
+					<th>Pieces B</th>
 					<th>Width B</th>
 					<th>Height B</th>
 					<th>Material</th>
 					<th>Caliber</th>
 					<th>Unit Price</th>
-					<th>Total Pads</th>		
+					<th>Total Sets</th>		
 				</tr>';  foreach ($datos as $datosxs) {	$html.=' 
 
 							
@@ -572,24 +614,29 @@ else if(isset($_POST['btnprev']))
 				';
 							$sumatotal = $sumatotal + $x[$total];
 
-						$nosets +=12;
-						$segmentosa +=12;
-						$largoa +=12;
-						$altoa +=12;
-						$segmentosb +=12;
-						$largob +=12;
-						$altob +=12;
-						$material +=12;
-						$calibre +=12;
-						$bobina +=12;
-						$unitario +=12;
-						$total +=12;	
+						$nosets +=15;
+						$segmentosa +=15;
+						$largoa +=15;
+						$altoa +=15;
+						$segmentosb +=15;
+						$largob +=15;
+						$altob +=15;
+						$material +=15;
+						$calibre +=15;
+						$bobina +=15;
+						$desperdicioa +=15;
+						$desperdiciob +=15;
+						$unitario +=15;
+						$total +=15;
+						$extra +=15;
 			} $html.=' 
 			</table>
 
 			<br>
-			<h1 class="derecha">Total: <span class="campo"> $ '; $html.=$sumatotal; $html.=' </span></h1>
+			<h1 class="derecha">Total: <span class="campo"> $ '; $html.=$totalapagar; $html.=' </span></h1>			
 			<p class="derecha">Made by: <span class="campo"> '; $html.=$creado; $html.=' </span></p>
+			<p class="derecha">e-mail: <span class="campo"> '; $html.=$emailusuario; $html.=' </span></p>
+			<b>Observations:</b><br> <span class="campo"> '; $html.=$observaciones; $html.=' </span>
 
 			</body>
 			</html>'; // Cerramos la variable para agregarla código PHP

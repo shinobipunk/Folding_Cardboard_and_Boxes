@@ -22,7 +22,7 @@ $sesionlog = $_SESSION["login"];
 while($row=mysql_fetch_array($result,MYSQLI_NUM))
   {
                                                    
-                            
+                            if(($_SESSION["nivel"] == "AD") || ($_SESSION["nivel"] == "ES") ){
                              //echo "<form name='editaralmacen' action='../procesos/edita_almacen.php' method='POST'>";
                            
                             echo "Gramos:";
@@ -35,7 +35,16 @@ while($row=mysql_fetch_array($result,MYSQLI_NUM))
                            // echo "</form>";                             
                             echo "<br />";                            
                                                      
+                            } else {
+
+                             
+                            echo "<input id='gramosalmacen' type='hidden'name='gramosalmacen' value='". $row[3] . "' disabled />";
                             
+                            
+                            echo "<input id='preciokgalmacen' type='hidden' name='preciokgalmacen' value='". $row[5] . "' disabled />";                            
+                           // echo "</form>";                             
+                            echo "<br />";   
+                            }
 
 
 

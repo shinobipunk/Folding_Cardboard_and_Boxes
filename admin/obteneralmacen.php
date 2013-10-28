@@ -27,7 +27,7 @@ $sesionlog = $_SESSION["nombre"].' '.$_SESSION["apaterno"];
                             echo "</select>";      
                             echo "<input id='valorcalibre' type='hidden' name='valorcalibre' required/>   ";                                                         
                             echo "</form>";
-                            echo "<div id='insertarcalibre'></div>";
+                            //echo "<div id='insertarcalibre'></div>";
                            
 
 

@@ -4,10 +4,8 @@ include dirname(dirname(__FILE__))."/config.php";
 
 $link=Conectarse();
 
-$idedit = $_POST['idedit'];
-$empresaedit = $_POST['empresaedit'];
-$encargadoedit = $_POST['encargadoedit'];
-$emailedit = $_POST['emailedit'];
+$sucursal = $_POST['sucursaledith'];
+$empresaedit = $_POST['empresaedith'];
 $direccionedit= $_POST['direccionedit'];
 $cpedit=$_POST['cpedit'];
 $telefonoedit= $_POST['telefonoedit'];
@@ -15,11 +13,10 @@ $ciudadedit = $_POST['ciudadedit'];
 $paisedit = $_POST['paisedit'];	
 $modificado = $_POST['modificado'];
 
-	
-$query = sprintf("UPDATE clientes SET clientes.empresa= '%s', clientes.encargado= '%s', clientes.email= '%s', clientes.direccion = '%s', clientes.cp = '%s', clientes.telefono = '%s', clientes.ciudad = '%s', clientes.pais= '%s', clientes.modificado= '%s' WHERE clientes.id_cliente = '%s'" ,
-$empresaedit, $encargadoedit, $emailedit, $direccionedit, $cpedit, $telefonoedit, $ciudadedit, $paisedit, $modificado, $idedit);
-$result=mysql_query($query,$link) or die(mysql_error());
 
+$query = sprintf("UPDATE clientes SET  clientes.direccion = '%s', clientes.cp = '%s', clientes.telefono = '%s', clientes.ciudad = '%s', clientes.pais= '%s', clientes.modificado= '%s' WHERE clientes.empresa = '%s' AND clientes.sucursal = '%s'" ,
+  $direccionedit, $cpedit, $telefonoedit, $ciudadedit, $paisedit, $modificado, $empresaedit, $sucursal);
+$result=mysql_query($query,$link) or die(mysql_error());
 
 
 		if(mysql_affected_rows()){
@@ -27,4 +24,5 @@ $result=mysql_query($query,$link) or die(mysql_error());
 		} else {
 			header("Location: ../admin/clientes.php?error=1");			
 		}
+		
 ?>

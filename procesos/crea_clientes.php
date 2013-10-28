@@ -5,8 +5,7 @@ include dirname(dirname(__FILE__))."/config.php";
 $link=Conectarse();
 
 $empresa = $_POST['empresa'];
-$encargado = $_POST['encargado'];
-$email = $_POST['email'];
+$sucursal = $_POST['sucursal'];
 $direccion= $_POST['direccion'];
 $cp=$_POST['cp'];
 $telefono= $_POST['telefono'];
@@ -15,24 +14,26 @@ $pais = $_POST['pais'];
 $creado = $_POST['creado'];
 
 
-
-$query = sprintf("SELECT empresa FROM clientes WHERE clientes.empresa = '%s'" ,
-$empresa);
+$query = sprintf("SELECT empresa FROM clientes WHERE clientes.empresa = '%s' AND clientes.sucursal = '%s'",
+$empresa, $sucursal);
 
 $result=mysql_query($query,$link) or die(mysql_error());
 
 if(mysql_num_rows($result)){	
-	header("Location: ../admin/clientes.php?existe=1");
+	header("Location: ../admin/clientes.php?existecliente=1");
 } else {
-	mysql_free_result($result) or die(mysql_error());	
+	mysql_free_result($result) or die(mysql_error());
 
 		
 
-		$query = sprintf("INSERT INTO clientes (empresa, encargado, email, direccion, cp, telefono, ciudad, pais, creado)
+		$query= sprintf("INSERT INTO clientes (empresa, sucursal, direccion, cp, telefono, ciudad, pais, creado)
 
-VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s','%s','%s')",$empresa, $encargado,  $email, $direccion, $cp, $telefono, $ciudad, $pais, $creado);
+VALUES ( '%s','%s', '%s', '%s', '%s', '%s','%s','%s')",$empresa, $sucursal, $direccion, $cp, $telefono, $ciudad, $pais, $creado);
+
+	
 
 		$result=mysql_query($query,$link) or die(mysql_error()); 
+		
 
 		if(mysql_affected_rows()){
 			header("Location: ../admin/clientes.php?exito=1");
@@ -42,5 +43,4 @@ VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s','%s','%s')",$empresa, $encargad
 		}
 	
 }
-
 ?>

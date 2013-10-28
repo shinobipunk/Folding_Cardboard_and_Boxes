@@ -2501,6 +2501,7 @@ button.btn,input[type="submit"].btn {
 	*padding-top: 3px;
 	*padding-bottom: 3px;
 	color:black;
+	padding: 4px;
 }
 button.btn: : -moz-focus-inner,input[type="submit"].btn: : -moz-focus-inner {
 	padding: 0;
@@ -4586,6 +4587,7 @@ option:focus {
 	color: white;
 	margin: 0 auto;
 	display: block;
+	padding: 15px;
 }
 
 #tabla, #tablab{
@@ -4630,4 +4632,13 @@ option:focus {
 	margin: 30px 0 50px 0;
 	width: 100%;
 
+}
+
+#observaciones{
+	margin: 0 auto;
+	display: block;
+}
+
+.aumento{
+	width: 30px;
 }

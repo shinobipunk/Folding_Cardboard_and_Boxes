@@ -34,6 +34,63 @@ $link=Conectarse();
 
             <script>
 
+            function mejoropcion(){
+              padmenor = 0;
+             
+               menorpad = new Array();
+
+                    campoop = document.getElementsByClassName( 'campo' );
+                    tamcamo = campoop.length;
+
+                    for(var u=0;u<tamcamo;u++){
+
+                      padcamp = campoop[u].value.split('-   -');    
+                      totalmen = padcamp[9];
+                      totalmen = Number(totalmen);   
+                      menorpad[u] = totalmen;                      
+                    }
+
+                      resultado = menorpad[0];
+                      padsel = campoop[0];
+                      for(var ui=0; ui<tamcamo; ui++)
+                      {
+                        if(menorpad[ui] < resultado)
+                          {
+                            resultado = menorpad[ui];
+                            padsel = campoop[ui];
+                          }
+                      }                                      
+                  
+               fondopad = padsel.parentNode;
+               fondopad.parentNode.style.backgroundColor='#ccc';
+
+            }
+
+            function totalpads(){
+              sumatotalpads = 0;
+             
+
+
+                    agr = document.getElementsByClassName( 'seleccionados' );
+                    tamagr = agr.length;
+
+                    for(var i=0;i<tamagr;i++){
+
+                      padagr = agr[i].value.split('-   -');    
+                      totalpadagr = padagr[9];
+                      totalpadagr = Number(totalpadagr);            
+                      sumatotalpads = sumatotalpads + totalpadagr;
+                      
+                    }
+
+                    sumatotalpads = sumatotalpads.toFixed(3);
+                   
+                    document.getElementById('sumatotalpads').innerHTML = sumatotalpads;
+                    $("#totalapagar").val(sumatotalpads);
+             
+
+            }
+
             function valores(){
 
                 materialx = $('#materialalmacen').val();
@@ -124,9 +181,13 @@ $link=Conectarse();
                // alert('kilos' + kilosx + 'subtotal' + kgalgoritmofacx + 'Total 1 :' + totalnewx + 'Total 2 : ' + totalnew2x);
 
 
-                $("#kg").val(kilosx);
+                $("#kgalto").val(algoritmox);
 
-                $("#kgescondido").val(kilosx);                
+                $("#kgaltoescondido").val(algoritmox);  
+
+                 $("#kglargo").val(algoritmo2x);
+
+                $("#kglargoescondido").val(algoritmo2x);              
 
                 $("#subtotal").val(kgalgoritmofacx);
 
@@ -198,7 +259,96 @@ $link=Conectarse();
                 document.getElementById("insertarcliente").innerHTML=xmlhttp.responseText;
                 }
               }
-            xmlhttp.open("GET","obtenercliente_pads.php?q="+str,true);
+            xmlhttp.open("GET","obtenercliente_pads.php?empresa="+str,true);
+            xmlhttp.send();            
+            }
+
+             function mostrarclientenombre(str)
+            {
+              posicion=document.getElementById('cliente').options.selectedIndex; //posicion
+              encelim = document.getElementById('cliente').options[posicion].text;
+              
+            if (str=="")
+              {
+              document.getElementById("insertarclientenombre").innerHTML="";
+              return;
+              } 
+            if (window.XMLHttpRequest)
+              {// code for IE7+, Firefox, Chrome, Opera, Safari
+              xmlhttp=new XMLHttpRequest();
+              }
+            else
+              {// code for IE6, IE5
+              xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+              }
+            xmlhttp.onreadystatechange=function()
+              {
+              if (xmlhttp.readyState==4 && xmlhttp.status==200)
+                {
+                document.getElementById("insertarclientenombre").innerHTML=xmlhttp.responseText;
+                }
+              }
+            xmlhttp.open("GET","obtenerclientenombre_pads.php?sucursal="+str+"&empresa=" + encelim,true);
+            xmlhttp.send();            
+            }
+
+            function mostrarclienteemail(str)
+            {
+              posicion=document.getElementById('cliente').options.selectedIndex; //posicion
+              encelim = document.getElementById('cliente').options[posicion].text;
+
+              posicions=document.getElementById('sucursal').options.selectedIndex; //posicion
+              suc = document.getElementById('sucursal').options[posicions].text;
+              
+            if (str=="")
+              {
+              document.getElementById("insertarclienteemail").innerHTML="";
+              return;
+              } 
+            if (window.XMLHttpRequest)
+              {// code for IE7+, Firefox, Chrome, Opera, Safari
+              xmlhttp=new XMLHttpRequest();
+              }
+            else
+              {// code for IE6, IE5
+              xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+              }
+            xmlhttp.onreadystatechange=function()
+              {
+              if (xmlhttp.readyState==4 && xmlhttp.status==200)
+                {
+                document.getElementById("insertarclienteemail").innerHTML=xmlhttp.responseText;
+                }
+              }
+            xmlhttp.open("GET","obtenerclienteemail_pads.php?nombre="+str+"&empresa=" + encelim+"&sucursal=" + suc,true);
+            xmlhttp.send();            
+            }
+
+
+
+            function mostrarencargados(str)
+            {
+            if (str=="")
+              {
+              document.getElementById("insertarencargado").innerHTML="";
+              return;
+              } 
+            if (window.XMLHttpRequest)
+              {// code for IE7+, Firefox, Chrome, Opera, Safari
+              xmlhttp=new XMLHttpRequest();
+              }
+            else
+              {// code for IE6, IE5
+              xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+              }
+            xmlhttp.onreadystatechange=function()
+              {
+              if (xmlhttp.readyState==4 && xmlhttp.status==200)
+                {
+                document.getElementById("insertarencargado").innerHTML=xmlhttp.responseText;
+                }
+              }
+            xmlhttp.open("GET","mostrar_encargado.php?e="+str,true);
             xmlhttp.send();            
             }
 
@@ -332,6 +482,8 @@ $link=Conectarse();
 
                     verchecks = 0;
 
+                    
+
 
 
                     function anadiroptimos(){
@@ -386,9 +538,65 @@ $link=Conectarse();
 
                                             casilla = seleccionado[x];
 
-                                            
+                                            vaumento = parseFloat(document.getElementById('aumento'+ x +'').value);
 
-                                           $('#tablaagregados > tbody:last').append('<tr><td><input class="seleccionados"  type="checkbox" name="listado[]" value="' + casilla.value +' " checked></td><td>'+ objetoseleccionado.cantidad +'</td><td>'+ objetoseleccionado.desperdicio + '%' + '</td><td>'+ objetoseleccionado.bobina +'</td><td>'+ objetoseleccionado.material +'</td><td>'+ objetoseleccionado.calibre +'</td><td>'+ objetoseleccionado.largo +'</td><td>'+ objetoseleccionado.alto +'</td><td class="resaltado">'+ objetoseleccionado.unitario +'</td><td class="resaltado">'+ objetoseleccionado.total +'</td><td>'); 
+                                           <?php
+
+                                          if( ($_SESSION["nivel"] == "AD") || ($_SESSION["nivel"] == "UN")){
+
+                                             ?> 
+
+                                            if (vaumento >= 0){
+                                              unitarioaumentado = parseFloat(objetoseleccionado.unitario) + vaumento;  
+                                            }else{
+                                               unitarioaumentado = parseFloat(objetoseleccionado.unitario) + 0;  
+                                            }
+
+                                             <?php 
+                                                    }
+                                              
+                                                 
+                                              if ($_SESSION["nivel"] == "ES"){
+                                                ?>
+                                             
+
+                                           
+                                              unitarioaumentado = parseFloat(objetoseleccionado.unitario) + vaumento;  
+                                           
+
+                                             <?php 
+                                                    }
+                                              ?>  
+
+                                            
+                                            totalaumentado = parseFloat(objetoseleccionado.numeropads) * unitarioaumentado;
+                                            
+                                            if ( (totalaumentado >= 2500) && (totalaumentado <= 4999)  )
+                                            {
+                                              totalaumentado = totalaumentado - (totalaumentado * .05)
+                                            } 
+                                            else if ( (totalaumentado >= 5000) && (totalaumentado <= 9999)  )
+                                            {
+                                              totalaumentado = totalaumentado - (totalaumentado * .1)
+                                            }else if ( totalaumentado >= 10000 )
+                                            {
+                                              totalaumentado = totalaumentado - (totalaumentado * .15)
+                                            }
+
+
+
+                                            unitarioaumentado = unitarioaumentado.toFixed(3);
+                                            totalaumentado = totalaumentado.toFixed(3);
+
+                                            
+                                            datosenviar = casilla.value + "-   -" +  vaumento;
+                                            agregardatos = datosenviar.split("-   -");
+                                            agregardatos[8] = unitarioaumentado;
+                                            agregardatos[9] = totalaumentado;
+                                            datosenviar = agregardatos.join("-   -");
+
+
+                                           $('#tablaagregados > tbody:last').append('<tr><td><input id="listado" class="seleccionados"  type="checkbox" name="listado[]" value="' + datosenviar +' " checked></td><td>'+ objetoseleccionado.cantidad +'</td><td>'+ objetoseleccionado.desperdicio + '%' + '</td><td>'+ objetoseleccionado.bobina +'</td><td>'+ objetoseleccionado.material +'</td><td>'+ objetoseleccionado.calibre +'</td><td>'+ objetoseleccionado.largo +'</td><td>'+ objetoseleccionado.alto +'</td><td class="resaltado">'+ unitarioaumentado +'</td><td class="resaltado">'+ totalaumentado +'</td>'); 
                                             //datos = casilla.value.split("-   -");
                                           // alert(datos);
 
@@ -613,7 +821,7 @@ $link=Conectarse();
 
                                                 //for (var i = 0; i < nobobina; i++) {
 
-                                                    
+                                                    caum = 0;
 
                                                     $("#"+ idSelect).find('option').each(function()
 
@@ -1152,13 +1360,14 @@ $link=Conectarse();
 
                                                             arreglopads[indicecheck] = objetoa;
 
-                                                            indicecheck= indicecheck + 1;
+                                                           
 
-                                                            $('#tabla > tbody:last').append('<tr><td><input class="campo" type="checkbox" name="listado[]" value="'+ objetoa.numeropads + '-   -' + objetoa.cantidad + '-   -' + objetoa.desperdicio + '-   -' + objetoa.largo + '-   -' + objetoa.alto + '-   -' + objetoa.material + '-   -' + objetoa.calibre + '-   -'  + objetoa.bobina + '-   -'  +  objetoa.unitario + '-   -' + objetoa.total +'"></td><td>'+ objetoa.cantidad +'</td><td>'+ objetoa.desperdicio + '%' + '</td><td>'+ objetoa.bobina +'</td><td>'+ objetoa.material +'</td><td>'+ objetoa.calibre +'</td><td>'+ objetoa.largo +'</td><td>'+ objetoa.alto +'</td><td class="resaltado">'+ objetoa.unitario +'</td><td class="resaltado">'+ objetoa.total +'</td><td>');                                                                                                                      
+                                                            $('#tabla > tbody:last').append('<tr><td><input class="campo" type="checkbox" name="listado[]" value="'+ objetoa.numeropads + '-   -' + objetoa.cantidad + '-   -' + objetoa.desperdicio + '-   -' + objetoa.largo + '-   -' + objetoa.alto + '-   -' + objetoa.material + '-   -' + objetoa.calibre + '-   -'  + objetoa.bobina + '-   -'  +  objetoa.unitario + '-   -' + objetoa.total +'"></td><td>'+ objetoa.cantidad +'</td><td>'+ objetoa.desperdicio + '%' + '</td><td>'+ objetoa.bobina +'</td><td>'+ objetoa.material +'</td><td>'+ objetoa.calibre +'</td><td>'+ objetoa.largo +'</td><td>'+ objetoa.alto +'</td><td class="resaltado">'+ objetoa.unitario +'</td><td><input id="aumento'+ caum +'" class="aumento" type="text" name="aumento" value="0" ></td><td class="resaltado">'+ objetoa.total +'</td>');                                                                                                                      
 
                                                           //  alert("a");
 
-
+                                                           indicecheck= indicecheck + 1;
+                                                           caum = caum + 1;
 
                                                            }
 
@@ -1170,14 +1379,14 @@ $link=Conectarse();
 
                                                             arreglopads[indicecheck] = objetol;
 
-                                                            indicecheck= indicecheck + 1;
+                                                            
 
-                                                            $('#tabla > tbody:last').append('<tr><td><input class="campo"  type="checkbox" name="listado[]" value="'+ objetol.numeropads + '-   -' + objetol.cantidad + '-   -' + objetol.desperdicio + '-   -' + objetol.largo + '-   -' + objetol.alto + '-   -' + objetol.material + '-   -' + objetol.calibre + '-   -'  + objetol.bobina + '-   -'  + objetol.unitario + '-   -' + objetol.total  +'"></td><td>'+ objetol.cantidad +'</td><td>'+ objetol.desperdicio + '%' + '</td><td>'+ objetol.bobina +'</td><td>'+ objetol.material +'</td><td>'+ objetol.calibre +'</td><td>'+ objetol.largo +'</td><td>'+ objetol.alto +'</td><td class="resaltado">'+ objetol.unitario +'</td><td class="resaltado">'+ objetol.total +'</td><td>');                                                                                                                      
+                                                            $('#tabla > tbody:last').append('<tr><td><input class="campo"  type="checkbox" name="listado[]" value="'+ objetol.numeropads + '-   -' + objetol.cantidad + '-   -' + objetol.desperdicio + '-   -' + objetol.largo + '-   -' + objetol.alto + '-   -' + objetol.material + '-   -' + objetol.calibre + '-   -'  + objetol.bobina + '-   -'  + objetol.unitario + '-   -' + objetol.total  +'"></td><td>'+ objetol.cantidad +'</td><td>'+ objetol.desperdicio + '%' + '</td><td>'+ objetol.bobina +'</td><td>'+ objetol.material +'</td><td>'+ objetol.calibre +'</td><td>'+ objetol.largo +'</td><td>'+ objetol.alto +'</td><td class="resaltado">'+ objetol.unitario +'</td><td><input id="aumento'+ caum +'" class="aumento" type="text" name="aumento" value="0" ></td><td class="resaltado">'+ objetol.total +'</td>');                                                                                                                      
 
                                                            // alert("l");
 
-
-
+                                                            indicecheck= indicecheck + 1;
+                                                            caum = caum + 1;
                                                            }
 
 
@@ -1190,10 +1399,10 @@ $link=Conectarse();
 
                                                                     arreglopads[indicecheck] = objetol;
 
-                                                                    $('#tabla > tbody:last').append('<tr><td><input class="campo"  type="checkbox" name="listado[]" value="'+ objetol.numeropads + '-   -' + objetol.cantidad + '-   -' + objetol.desperdicio + '-   -' + objetol.largo + '-   -' + objetol.alto + '-   -' + objetol.material + '-   -' + objetol.calibre + '-   -'  + objetol.bobina + '-   -'  + objetol.unitario + '-   -' + objetol.total  +'"></td><td>'+ objetol.cantidad +'</td><td>'+ objetol.desperdicio + '%' + '</td><td>'+ objetol.bobina +'</td><td>'+ objetol.material +'</td><td>'+ objetol.calibre +'</td><td>'+ objetol.largo +'</td><td>'+ objetol.alto +'</td><td class="resaltado">'+ objetol.unitario +'</td><td class="resaltado">'+ objetol.total +'</td><td>');                                                                                                                      
+                                                                    $('#tabla > tbody:last').append('<tr><td><input class="campo"  type="checkbox" name="listado[]" value="'+ objetol.numeropads + '-   -' + objetol.cantidad + '-   -' + objetol.desperdicio + '-   -' + objetol.largo + '-   -' + objetol.alto + '-   -' + objetol.material + '-   -' + objetol.calibre + '-   -'  + objetol.bobina + '-   -'  + objetol.unitario + '-   -' + objetol.total  +'"></td><td>'+ objetol.cantidad +'</td><td>'+ objetol.desperdicio + '%' + '</td><td>'+ objetol.bobina +'</td><td>'+ objetol.material +'</td><td>'+ objetol.calibre +'</td><td>'+ objetol.largo +'</td><td>'+ objetol.alto +'</td><td class="resaltado">'+ objetol.unitario +'</td><td><input id="aumento'+ caum +'" class="aumento" type="text" name="aumento" value="0" ></td><td class="resaltado">'+ objetol.total +'</td>');                                                                                                                      
 
                                                                     indicecheck= indicecheck + 1;
-
+                                                                    caum = caum + 1;
                                                                   //  alert("=l");
 
                                                                 }
@@ -1204,10 +1413,10 @@ $link=Conectarse();
 
                                                                     arreglopads[indicecheck] = objetoa;
 
-                                                                    $('#tabla > tbody:last').append('<tr><td><input class="campo"  type="checkbox" name="listado[]" value="'+ objetoa.numeropads + '-   -' + objetoa.cantidad + '-   -' + objetoa.desperdicio + '-   -' + objetoa.largo + '-   -' + objetoa.alto + '-   -' + objetoa.material + '-   -' + objetoa.calibre + '-   -'  + objetoa.bobina + '-   -'  + objetoa.unitario + '-   -' + objetoa.total +'"></td><td>'+ objetoa.cantidad +'</td><td>'+ objetoa.desperdicio + '%' + '</td><td>'+ objetoa.bobina +'</td><td>'+ objetoa.material +'</td><td>'+ objetoa.calibre +'</td><td>'+ objetoa.largo +'</td><td>'+ objetoa.alto +'</td><td class="resaltado">'+ objetoa.unitario +'</td><td class="resaltado">'+ objetoa.total +'</td><td>');                                                                                                                      
+                                                                    $('#tabla > tbody:last').append('<tr><td><input class="campo"  type="checkbox" name="listado[]" value="'+ objetoa.numeropads + '-   -' + objetoa.cantidad + '-   -' + objetoa.desperdicio + '-   -' + objetoa.largo + '-   -' + objetoa.alto + '-   -' + objetoa.material + '-   -' + objetoa.calibre + '-   -'  + objetoa.bobina + '-   -'  + objetoa.unitario + '-   -' + objetoa.total +'"></td><td>'+ objetoa.cantidad +'</td><td>'+ objetoa.desperdicio + '%' + '</td><td>'+ objetoa.bobina +'</td><td>'+ objetoa.material +'</td><td>'+ objetoa.calibre +'</td><td>'+ objetoa.largo +'</td><td>'+ objetoa.alto +'</td><td class="resaltado">'+ objetoa.unitario +'</td><td><input id="aumento'+ caum +'" class="aumento" type="text" name="aumento" value="0" ></td><td class="resaltado">'+ objetoa.total +'</td>');                                                                                                                      
 
                                                                     indicecheck= indicecheck + 1;
-
+                                                                    caum = caum + 1;
                                                                    // alert("=a");
 
                                                                 }
@@ -1218,16 +1427,16 @@ $link=Conectarse();
 
                                                                     arreglopads[indicecheck] = objetol;
 
-                                                                    $('#tabla > tbody:last').append('<tr><td><input class="campo"  type="checkbox" name="listado[]" value="'+ objetol.numeropads + '-   -' + objetol.cantidad + '-   -' + objetol.desperdicio + '-   -' + objetol.largo + '-   -' + objetol.alto + '-   -' + objetol.material + '-   -' + objetol.calibre + '-   -'  + objetol.bobina + '-   -'  + objetol.unitario + '-   -' + objetol.total  +'"></td><td>'+ objetol.cantidad +'</td><td>'+ objetol.desperdicio + '%' + '</td><td>'+ objetol.bobina +'</td><td>'+ objetol.material +'</td><td>'+ objetol.calibre +'</td><td>'+ objetol.largo +'</td><td>'+ objetol.alto +'</td><td class="resaltado">'+ objetol.unitario +'</td><td class="resaltado">'+ objetol.total +'</td><td>');                                                                                                                      
+                                                                    $('#tabla > tbody:last').append('<tr><td><input class="campo"  type="checkbox" name="listado[]" value="'+ objetol.numeropads + '-   -' + objetol.cantidad + '-   -' + objetol.desperdicio + '-   -' + objetol.largo + '-   -' + objetol.alto + '-   -' + objetol.material + '-   -' + objetol.calibre + '-   -'  + objetol.bobina + '-   -'  + objetol.unitario + '-   -' + objetol.total  +'"></td><td>'+ objetol.cantidad +'</td><td>'+ objetol.desperdicio + '%' + '</td><td>'+ objetol.bobina +'</td><td>'+ objetol.material +'</td><td>'+ objetol.calibre +'</td><td>'+ objetol.largo +'</td><td>'+ objetol.alto +'</td><td class="resaltado">'+ objetol.unitario +'</td><td><input id="aumento'+ caum +'" class="aumento" type="text" name="aumento" value="0" ></td><td class="resaltado">'+ objetol.total +'</td>');                                                                                                                      
 
                                                                     indicecheck= indicecheck + 1;
-
+                                                                    caum = caum + 1;
                                                                   //  alert("==");
 
                                                                 }
 
                                                             
-
+                                                                 
 
 
                                                            }
@@ -1314,20 +1523,11 @@ $link=Conectarse();
 
                                     <li><a href="particiones.php">Particiones</a></li>
 
-                                    <li><a href="clientes.php">Clientes</a></li>
+                                    
 
-                                    <?php
+                                      
 
-                    if( $_SESSION["nivel"] == "AD" ){
-
-                         ?>             
-
-                           <?php 
-                              if (isset($_GET["existe"]) AND $_GET["existe"] == 1) { 
-                                          echo "<h2 class=\"alert alert-error\">El Numero de Folio ya existe en la Base de Datos</h2>";
-                                        } 
-
-                            ?>                                                   
+                                                                         
 
                                     <li class="dropdown">
 
@@ -1335,9 +1535,16 @@ $link=Conectarse();
 
                                         <ul class="dropdown-menu">
 
+                                          <li><a href="clientes.php">Clientes</a></li>
+
+                                          <li><a href="../cotizaciones/archivos.php">Cotizaciones</a></li>
                                            
 
-        		                            <li><a href="../cotizaciones/archivos.php">Cotizaciones</a></li>
+        		                            <?php
+
+                    if( ($_SESSION["nivel"] == "AD") || ($_SESSION["nivel"] == "ES") ){
+
+                         ?>           
 
         		                            <li><a href="almacen.php">Almacen</a></li>		                            
 
@@ -1346,15 +1553,16 @@ $link=Conectarse();
                                             <li class="nav-header">Seguridad</li>
 
                                             <li><a href="usuarios.php">Usuarios</a></li>
+                                                 <?php
+
+                    }
+
+                         ?> 
 
                                         </ul>
 
                                     </li>
-                        <?php
-
-                    }
-
-                         ?>                    
+                                      
 
                                 </ul>                      
 
@@ -1441,7 +1649,9 @@ $link=Conectarse();
 
                         <label>Fecha</label>            
 
-                                <input type="hidden" name="creado" size="30" maxlength="100" value="<?php echo $_SESSION["nombre"].' '.$_SESSION["apaterno"]; ?>" required />
+                                 <input type="hidden" name="emailusuario"  value="<?php echo $_SESSION["email"];  ?>" required />    
+                                <input type="hidden" name="creado"  value="<?php echo $_SESSION["nombre"].' '.$_SESSION["apaterno"]; ?>" required />
+                              
                                 <input id="fecha" type="text" name="fecha" disabled /> 
 
                                 <input id="fechaescondido" type="hidden" name="fechaescondido" />
@@ -1478,8 +1688,8 @@ $link=Conectarse();
                                 <label>Cliente</label>  <br/>   
                                 <label for="empresaeditar">Empresa</label><br>
                             <select id="cliente" name="cliente" onchange="mostrarclientes_pads(this.value)"><option  value=""  required> --Escoje una Empresa-- </option>
-                                <?php 
-                                    $query = sprintf("SELECT empresa FROM clientes where 1 ORDER BY empresa ASC ");
+                                 <?php 
+                                    $query = sprintf("SELECT empresa FROM empresas where 1 GROUP BY empresa ASC ");
                                     $result=mysql_query($query,$link) or die(mysql_error()); 
                                     while($row=mysql_fetch_array($result,MYSQLI_NUM)){
                                     echo "<OPTION VALUE='".$row[0]."'>".$row[0]."</OPTION>";
@@ -1487,7 +1697,9 @@ $link=Conectarse();
                                 ?>
                             </select> 
 
-                              <div id="insertarcliente"></div>       
+                              <div id="insertarcliente"></div>   
+                              <div id="insertarclientenombre"></div>    
+                              <div id="insertarclienteemail"></div>  
 
                                 <input id="clienteagregar" type="hidden" name="clienteagregar"  /> <br/>                                                                                                                                      
 
@@ -1572,11 +1784,17 @@ $link=Conectarse();
                               }?>
 
 
-                              <label>Kilos</label><br/> 
+                              <label>Kilos Alto</label><br/> 
 
-                             <input id="kg" type="text" name="kg" disabled /><br/>
+                             <input id="kgalto" type="text" name="kgalto" disabled /><br/>
 
-                             <input id="kgescondido" type="hidden" name="kgescondido" />
+                             <input id="kgaltoescondido" type="hidden" name="kgaltoescondido" />
+
+                             <label>Kilos Largo</label><br/> 
+
+                             <input id="kglargo" type="text" name="kglargo" disabled /><br/>
+
+                             <input id="kglargoescondido" type="hidden" name="kglargoescondido" />
 
                                 
                              <?php
@@ -1700,7 +1918,11 @@ $link=Conectarse();
 
                                 <th>$ Unitario</th>
 
-                                <th>Total</th>                                                                
+                                <th>Aumentar</th>
+
+                                <th>Total</th>   
+
+                                                                  
 
                             </tr>
 
@@ -1749,7 +1971,7 @@ $link=Conectarse();
 
                                 <th>Alto</th>
 
-                                <th>$ Unitario</th>
+                                <th>$ Unitario</th>                                                                                        
 
                                 <th>Total</th>                                                                
 
@@ -1772,19 +1994,25 @@ $link=Conectarse();
                         
 
                     </table>
+                    <br>
+                   
 
-
-
-
-
-
+                    <h1>Total: $<span id="sumatotalpads"></span></h1>
+                    <input id="totalapagar" name="totalapagar" type="hidden" /> 
+                    <br>
+                    
 
                     
                       <br>
                     <input id="btnagregar" type="button" name="btnagregar" value="Agregar Cotizacion" onclick="anadiroptimos()" />
 
                      <br>
+                     <textarea id="observaciones" name="observaciones" placeholder="Observaciones"  maxlength="1400" cols="20" rows="6"></textarea>
+                    <br>
+                     <h1><input type="checkbox" name="enviarusuario" value="si"> Reenviar a mi correo </h1>
+                     <br>
                      <input id="btnprev" type="submit" name="btnprev" value="Vista Previa"/>
+                      <br>
                     <input id="btnenviar" type="submit" name="btnenviar" value="Enviar Cotizacion"  />
 
                     
@@ -1809,6 +2037,9 @@ $link=Conectarse();
 
                                 valores();
                                 calcular();
+                                totalpads();
+                                mejoropcion();
+                                
                                 //mostrarfolio();
                         }
 

@@ -20,6 +20,9 @@ $link=Conectarse();
         <?php include '../encabezado.php'; ?>
 
         <script>
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                      //  Editar //
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
             function material_val()
               {
@@ -134,6 +137,122 @@ $link=Conectarse();
             xmlhttp.send();            
             }            
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                //  Eliminar //
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+              
+              function material_val_elim()
+              {
+                var valor_option = document.getElementById('materialalmacen');
+               valormaterial_elim = valor_option.options[valor_option.selectedIndex].value;
+                $("#valormaterial_elim").val(valormaterial_elim);
+
+              
+              }
+
+             function calibre_val_elim()
+              {
+                var valor_option = document.getElementById('calibrealmacen');
+               valorcalibre_elim = valor_option.options[valor_option.selectedIndex].value;
+                $("#valorcalibre_elim").val(valorcalibre_elim);
+              
+              }  
+
+              function bobina_val_elim()
+              {
+                var valor_option = document.getElementById('bobinaalmacen');
+               valorbobina_elim = valor_option.options[valor_option.selectedIndex].value;
+                $("#valorbobina_elim").val(valorbobina_elim);
+              
+              } 
+
+            function mostrararticulos_elim(str_elim)
+            {
+                
+            if (str_elim=="")
+              {
+              document.getElementById("insertarmaterial_elim").innerHTML="";
+              return;
+              } 
+            if (window.XMLHttpRequest)
+              {// code for IE7+, Firefox, Chrome, Opera, Safari
+              xmlhttp=new XMLHttpRequest();
+              }
+            else
+              {// code for IE6, IE5
+              xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+              }
+            xmlhttp.onreadystatechange=function()
+              {
+              if (xmlhttp.readyState==4 && xmlhttp.status==200)
+                {
+                document.getElementById("insertarmaterial_elim").innerHTML=xmlhttp.responseText;
+                }
+              }
+
+
+
+            xmlhttp.open("GET","obteneralmacen_elim.php?q="+str_elim,true);
+            xmlhttp.send();            
+            }
+
+
+            function mostrarcalibre_elim(str2_elim)
+            {
+              
+            if (str2_elim=='')
+              {
+              document.getElementById('insertarcalibre_elim').innerHTML='';
+              return;
+              } 
+            if (window.XMLHttpRequest)
+              {// code for IE7+, Firefox, Chrome, Opera, Safari
+              xmlhttp=new XMLHttpRequest();
+              }
+            else
+              {// code for IE6, IE5
+              xmlhttp=new ActiveXObject('Microsoft.XMLHTTP');
+              }
+            xmlhttp.onreadystatechange=function()
+              {
+              if (xmlhttp.readyState==4 && xmlhttp.status==200)
+                {
+                document.getElementById('insertarcalibre_elim').innerHTML=xmlhttp.responseText;
+                }
+              }
+            xmlhttp.open('GET','agrega_calibre_elim.php?w='+str2_elim+"&valormaterial="+valormaterial_elim,true);
+            xmlhttp.send();            
+            }
+
+             function mostrarbobina_elim(str3_elim)
+            {
+               
+            if (str3_elim=='')
+              {
+              document.getElementById('insertarbobina_elim').innerHTML='';
+              return;
+              } 
+            if (window.XMLHttpRequest)
+              {// code for IE7+, Firefox, Chrome, Opera, Safari
+              xmlhttp=new XMLHttpRequest();
+              }
+            else
+              {// code for IE6, IE5
+              xmlhttp=new ActiveXObject('Microsoft.XMLHTTP');
+              }
+            xmlhttp.onreadystatechange=function()
+              {
+              if (xmlhttp.readyState==4 && xmlhttp.status==200)
+                {
+                document.getElementById('insertarbobina_elim').innerHTML=xmlhttp.responseText;
+                }
+              }
+
+              alert(valormaterial_elim);
+            
+            xmlhttp.open("GET","mostrar_articulo_elim.php?&m="+str3_elim+"&valormaterial="+valormaterial_elim+"&valorcalibre="+valorcalibre_elim+"&valorbobina="+valorbobina_elim,true);
+            xmlhttp.send();            
+            }            
 
         </script>
                 
@@ -151,42 +270,29 @@ $link=Conectarse();
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </a>
-                    <a class="brand" href="usuario.php">Folding Cardboard & Boxes Inc.</a>
+                    <a class="brand" href="#">Folding Cardboard & Boxes Inc.</a>
                     <div class="nav-collapse collapse">
                         <ul class="nav">
                             <li><a href="usuario.php">Menu</a></li>
-                            <?php
-      if(($_SESSION["nivel"] == "AD") || ($_SESSION["nivel"] == "ES")  ){
-         ?>
                             <li><a href="pads.php">PADS</a></li>
                             <li><a href="particiones.php">Particiones</a></li>
-                            
                                                         
                             <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin<b class="caret"></b></a>
-                                <ul class="dropdown-menu">                                   
-                                <li><a href="clientes.php">Clientes</a></li>
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Administrador <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                   <li><a href="clientes.php">Clientes</a></li>
 		                            <li><a href="../cotizaciones/archivos.php">Cotizaciones</a></li>
-                    <?php
-      }
-         ?>            
-		                            <li class="active"><a href="almacen.php">Almacen</a></li>		   
-                    <?php
-      if(($_SESSION["nivel"] == "AD") || ($_SESSION["nivel"] == "ES")  ){
-         ?>                                     
+		                            <li class="active"><a href="almacen.php">Almacen</a></li>		                            
                                     <li class="divider"></li>
                                     <li class="nav-header">Seguridad</li>
                                     <li><a href="usuarios.php">Usuarios</a></li>
                                 </ul>
                             </li>
-                        <?php
-      }
-         ?>    
                         </ul>                      
                        
 
                         <form id="Formulario" class="navbar-form pull-right" name ="FormLogin" action="logout.php" method="POST">
-						<label id="usuariolog"> <?php echo $_SESSION["nombre"]." ".$_SESSION["apaterno"]; ?></label>                                                                                        
+						<label id="usuariolog"> <?php echo $_SESSION["nombre"]." ".$_SESSION["apaterno"]." ".$_SESSION["amaterno"]; ?></label>                                                                                        
                         <input class="btn" type="submit" value="Cerrar Sesion">
                     </form>
                         
@@ -213,7 +319,7 @@ $link=Conectarse();
 
 
 			<?php
-			if(($_SESSION["nivel"] == "AD") || ($_SESSION["nivel"] == "ES") || ($_SESSION["nivel"] == "AL") ){
+			if($_SESSION["nivel"] == "AD"){
 				 ?>
 
 						 <?php 
@@ -258,12 +364,7 @@ $link=Conectarse();
 
                         ?>
 
-                         <?php 
-                            if (isset($_GET["exitoedit"]) AND $_GET["exitoedit"] == 1) { 
-                            echo "<h2 class=\"alert alert-success\">Articulo editado con exito!</h2>";
-                        } 
-
-                ?>
+                        
 
 
 
@@ -288,13 +389,38 @@ $link=Conectarse();
 					<br />
 				<input type="radio" name="existencia" value="SI" checked>SI<br>
                 <input type="radio" name="existencia" value="NO">NO<br>
-                <input type="hidden" name="creado" size="30" maxlength="100" value="<?php echo $_SESSION["nombre"].' '.$_SESSION["apaterno"]; ?>" required />
+                <input type="hidden" name="creado" size="30" maxlength="100" value="<?php echo $_SESSION["login"]?>" required />
 					<br />
 				<input type="submit" name="creararticulo" value="Crear Articulo" />
 			</form>
         </div>
 
-       <div id="bloque">
+        <div id="bloque">
+                <h1>Baja</h1>
+                <form name="bajaarticulo" action="../procesos/elimina_almacen.php" method="POST">
+                        
+                        <label for="almaceneditar">Material</label><br>
+                            <select id="materialalmacen" name="almacenmaterialedit" onclick ='material_val_elim()' onchange="mostrararticulos_elim(this.value)"><option value=""> --Escoge el Material-- </option>
+                                <?php 
+                                    $query = sprintf("SELECT material FROM almacen where 1 GROUP BY material");
+                                    $result=mysql_query($query,$link) or die(mysql_error()); 
+                                    while($row=mysql_fetch_array($result,MYSQLI_NUM)){
+                                    echo "<OPTION VALUE='".$row[0]."'>".$row[0]."</OPTION>";
+                                        }
+                                ?>
+                            </select>   
+                             <input id="valormaterial_elim" type="hidden" name="valormaterial_elim" required/>         
+                            <br />
+                            <br />
+                                       
+                    </form>
+                     <div id="insertarmaterial_elim"></div>
+                    <br>
+               
+
+        </div>
+
+         <div id="bloque">
                 <h1>Editar</h1>
                 <form name="importararticulos" action="mostrar_articulo.php" method="GET"> 
                            
@@ -309,14 +435,9 @@ $link=Conectarse();
                                 ?>
                             </select>   
                              <input id="valormaterial" type="hidden" name="valormaterial" required/>  
-                            <div id="insertarmaterial"></div>
-                            <div id='insertarcalibre'></div>
                              </form>                                                            
-
                     
-        </div>
-        <div id="bloque">
-            <div id='insertarbobina'></div>
+                    <div id="insertarmaterial"></div>
         </div>
 
 	<?php } else {
@@ -324,107 +445,6 @@ $link=Conectarse();
 	}
 	?>         
            
-
-
-
-<div id="contenedor_cotizaciones">
-<h1> Existencia </h1>
-    <?php
-    $existencia = "SI";
-echo "<table id='tablacotizaciones'>";
-    echo "<tr>";   
-    echo "<th>ID</th>";
-    echo "<th>Material</th>";
-    echo "<th>Calibre</th>";
-    echo "<th>Bobina</th>";
-    echo "<th>Gramos</th>";
-    echo "<th>Precio Kg</th>";
-    echo "</tr>";
-
-
- 
-$dato = $_POST['dato'];
- 
-$query = sprintf("SELECT * FROM almacen WHERE existencia= '%s' GROUP BY id_almacen ASC", $existencia);
-     $result=mysql_query($query,$link) or die(mysql_error()); 
-
-
-    
-
-while($row=mysql_fetch_array($result,MYSQLI_NUM))
-  {
-
-   
-    echo "<tr>";    
-    echo "<td>".$row[0]."</td>";
-    echo "<td>".$row[2]."</td>";
-    echo "<td>".$row[1]."</td>";
-    echo "<td>".$row[4]."</td>";
-    echo "<td>".$row[3]."</td>";
-    echo "<td>".$row[5]."</td>"; 
-    echo "</tr>";
-   
-    
-  
-  }
-  
-
-
-  echo "</table>"; ?>
-
-</div>
-
-
-
-<div id="contenedor_cotizaciones">
-<h1> No Disponible </h1>
-    <?php
-    $existencia = "NO";
-echo "<table id='tablacotizaciones'>";
-    echo "<tr>";   
-    echo "<th>ID</th>";
-    echo "<th>Material</th>";
-    echo "<th>Calibre</th>";
-    echo "<th>Bobina</th>";
-    echo "<th>Gramos</th>";
-    echo "<th>Precio Kg</th>";
-    echo "</tr>";
-
-
- 
-$dato = $_POST['dato'];
- 
-$query = sprintf("SELECT * FROM almacen WHERE existencia= '%s' GROUP BY id_almacen ASC", $existencia);
-     $result=mysql_query($query,$link) or die(mysql_error()); 
-
-
-    
-
-while($row=mysql_fetch_array($result,MYSQLI_NUM))
-  {
-
-   
-    echo "<tr>";    
-    echo "<td>".$row[0]."</td>";
-    echo "<td>".$row[2]."</td>";
-    echo "<td>".$row[1]."</td>";
-    echo "<td>".$row[4]."</td>";
-    echo "<td>".$row[3]."</td>";
-    echo "<td>".$row[5]."</td>"; 
-    echo "</tr>";
-   
-    
-  
-  }
-  
-
-
-  echo "</table>"; ?>
-
-</div>
-
-
-
             <hr>
 
             <footer>

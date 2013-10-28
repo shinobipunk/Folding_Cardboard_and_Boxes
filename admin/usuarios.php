@@ -68,11 +68,12 @@ $link=Conectarse();
                             <li><a href="usuario.php">Menu</a></li>
                             <li><a href="pads.php">PADS</a></li>
                             <li><a href="particiones.php">Particiones</a></li>
-                            <li><a href="clientes.php">Clientes</a></li>
+                            
                                                         
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin<b class="caret"></b></a>
-                                <ul class="dropdown-menu">                                   
+                                <ul class="dropdown-menu">   
+                                    <li><a href="clientes.php">Clientes</a></li>                                
 		                            <li><a href="../cotizaciones/archivos.php">Cotizaciones</a></li>
 		                            <li><a href="almacen.php">Almacen</a></li>		                            
                                     <li class="divider"></li>
@@ -203,8 +204,9 @@ $link=Conectarse();
 					<br />Nivel del Usuario:
 					<br />
 				<select name="nivel">
-			        <option value="AD">Administrador</option>
-			    	<option value="UN">Usuario Normal</option>
+                    <option value="UN">Usuario Normal</option>
+                    <option value="AL">Almacen</option>
+			        <option value="AD">Administrador</option>			    	
                     <option value="ES">Usuario Especial</option>
 			    </select>
                 <input type="hidden" name="creado" size="30" maxlength="100" value="<?php echo $_SESSION["nombre"].' '.$_SESSION["apaterno"]; ?>" required />

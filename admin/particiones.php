@@ -32,12 +32,69 @@ function actualizar() {
 
     valores();
     calcular();
-
+    totalpads();
+    mejoropcion();
 }
  </script>
 
 
         <script type="text/javascript">
+        function mejoropcion(){
+              padmenor = 0;
+             
+               menorpad = new Array();
+
+                    campoop = document.getElementsByClassName( 'campo' );
+                    tamcamo = campoop.length;
+
+                    for(var u=0;u<tamcamo;u++){
+
+                      padcamp = campoop[u].value.split('-   -');    
+                      totalmen = padcamp[11];
+                      totalmen = Number(totalmen);   
+                      menorpad[u] = totalmen;                      
+                    }
+
+                      resultado = menorpad[0];
+                      padsel = campoop[0];
+                      for(var ui=0; ui<tamcamo; ui++)
+                      {
+                        if(menorpad[ui] < resultado)
+                          {
+                            resultado = menorpad[ui];
+                            padsel = campoop[ui];
+                          }
+                      }                                      
+                  
+               fondopad = padsel.parentNode;
+               fondopad.parentNode.style.backgroundColor='#ccc';
+
+            }
+
+        function totalpads(){
+              sumatotalpads = 0;
+             
+
+
+                    agr = document.getElementsByClassName( 'seleccionados' )
+                    tamagr = agr.length;
+
+                    for(var i=0;i<tamagr;i++){
+
+                      padagr = agr[i].value.split('-   -')    
+                      totalpadagr = padagr[11];
+                      totalpadagr = Number(totalpadagr);            
+                      sumatotalpads = sumatotalpads + totalpadagr;
+                      
+                    }
+
+                    sumatotalpads = sumatotalpads.toFixed(3);
+                   
+                    document.getElementById('sumatotalpads').innerHTML = sumatotalpads;
+                    $("#totalapagar").val(sumatotalpads);
+             
+
+            }
 
 
                   arregloparticiones = new Array();
@@ -108,9 +165,60 @@ function actualizar() {
 
                                             casilla = seleccionado[x];
 
-                                            
+                                            vaumento = parseFloat(document.getElementById('aumento'+ x +'').value);
 
-                                           $('#tablaagregados > tbody:last').append('<tr><td><input class="seleccionados"  type="checkbox" name="listado[]" value="' + casilla.value +' " checked></td><td>'+ objetoseleccionado.bobina +'</td><td>'+ objetoseleccionado.material +'</td><td>'+ objetoseleccionado.calibre +'</td><td>'+ optimoobjeto.segmentosa +'</td><td>'+ optimoobjeto.largoa +'</td><td>'+ optimoobjeto.altoa +'</td><td>'+ optimoobjeto.segmentosb +'</td><td>'+ optimoobjeto.largob +'</td><td>'+ optimoobjeto.altob +'</td><td class="resaltado">'+ objetoseleccionado.unitario +'</td><td class="resaltado">'+ objetoseleccionado.total +'</td><td>'); 
+                                             <?php
+
+                                          if( ($_SESSION["nivel"] == "AD") || ($_SESSION["nivel"] == "UN")){
+
+                                             ?> 
+
+                                            if (vaumento >= 0){
+                                              unitarioaumentado = parseFloat(objetoseleccionado.unitario) + vaumento;  
+                                            }else{
+                                               unitarioaumentado = parseFloat(objetoseleccionado.unitario) + 0;  
+                                            }
+
+                                             <?php 
+                                                    }
+                                              
+                                                 
+                                              if ($_SESSION["nivel"] == "ES"){
+                                                ?>
+                                             
+
+                                           
+                                              unitarioaumentado = parseFloat(objetoseleccionado.unitario) + vaumento;  
+                                           
+
+                                             <?php 
+                                                    }
+                                              ?>
+
+                                            totalaumentado = parseFloat(objetoseleccionado.numerosets) * unitarioaumentado;
+                                            
+                                            if ( (totalaumentado >= 2500) && (totalaumentado <= 4999)  )
+                                            {
+                                              totalaumentado = totalaumentado - (totalaumentado * .05)
+                                            } 
+                                            else if ( (totalaumentado >= 5000) && (totalaumentado <= 9999)  )
+                                            {
+                                              totalaumentado = totalaumentado - (totalaumentado * .1)
+                                            }else if ( totalaumentado >= 10000 )
+                                            {
+                                              totalaumentado = totalaumentado - (totalaumentado * .15)
+                                            }
+
+                                            unitarioaumentado = unitarioaumentado.toFixed(3);
+                                            totalaumentado = totalaumentado.toFixed(3);
+
+                                            datosenviar = casilla.value + "-   -" +  vaumento;
+                                            agregardatos = datosenviar.split("-   -");
+                                            agregardatos[10] = unitarioaumentado;
+                                            agregardatos[11] = totalaumentado;
+                                            datosenviar = agregardatos.join("-   -");
+
+                                           $('#tablaagregados > tbody:last').append('<tr><td><input class="seleccionados"  type="checkbox" name="listado[]" value="' + datosenviar +' " checked></td><td>'+ objetoseleccionado.bobina +'</td><td>'+ objetoseleccionado.material +'</td><td>'+ objetoseleccionado.calibre +'</td><td>'+ optimoobjeto.segmentosa +'</td><td>'+ optimoobjeto.largoa +'</td><td>'+ optimoobjeto.altoa +'</td><td>'+ optimoobjeto.segmentosb +'</td><td>'+ optimoobjeto.largob +'</td><td>'+ optimoobjeto.altob +'</td><td class="resaltado">'+ unitarioaumentado +'</td><td class="resaltado">'+ totalaumentado +'</td><td>'+ objetoseleccionado.desperdicioa +'%</td><td>'+ objetoseleccionado.desperdiciob +'%</td>'); 
                                             //datos = casilla.value.split("-   -");
                                           // alert(datos);
 
@@ -209,7 +317,7 @@ function actualizar() {
 
 
 
-                              function optimo(bobina,material,calibre,segmentosa, largoa, altoa,segmentosb, largob, altob, numerosets, unitario, total)
+                              function optimo(bobina,material,calibre,segmentosa, largoa, altoa, desperdicioa,segmentosb, largob, altob, desperdiciob, numerosets, unitario, total)
 
                               {                               
 
@@ -228,11 +336,15 @@ function actualizar() {
 
                                 this.altoa = altoa;
 
+                                this.desperdicioa = desperdicioa;                                
+
                                 this.segmentosb = segmentosb;
 
                                 this.largob = largob;
 
                                 this.altob = altob;
+
+                                this.desperdiciob = desperdiciob;                                
 
                                 this.numerosets = numerosets;
 
@@ -263,7 +375,7 @@ function actualizar() {
                                 }else{
 
 
-
+                                        caum = 0;
                                       $("#bobinaalmacen").find('option').each(function()
 
                                       { 
@@ -281,8 +393,19 @@ function actualizar() {
                                         particion = 1;
 
 
-                                        areapada = altoax * largoax;
-                                        areapadb = altobx * largobx;
+                                        /////////////////////////////////////////////////
+                /// desperdicio/////////////
+
+                                        largopartesa = vbobina /largoax;
+                                        largopartesa = parseInt(largopartesa);
+                                        largopartesb = vbobina /largobx;
+                                        largopartesb = parseInt(largopartesb);
+
+                                        largodoblea = largoax * largopartesa;
+                                        largodobleb = largobx * largopartesb;
+
+                                        areapada = altoax * largodoblea;
+                                        areapadb = altobx * largodobleb;
 
                                         areadesperdicioa = vbobina * altoax;
                                         areadesperdiciob = vbobina * altobx;
@@ -319,7 +442,12 @@ function actualizar() {
 
                                         areadesperdicio = areadesperdicio.toFixed(3);
 
-                                        desperdicio = desperdicio.toFixed(3);
+                                        desperdicio = desperdicio.toFixed(3); 
+
+////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+
+                                        
 
 
 
@@ -339,14 +467,17 @@ function actualizar() {
 
 
 
-
+                                            piezasa= vbobina / largoax;
+                                            piezasb= vbobina / largobx;
+                                            piezasa = Math.floor(piezasa);
+                                            piezasb = Math.floor(piezasb);
 
 
                                             nosetsx = parseFloat(nosetsx);
-                                            kilosax = parseFloat(vbobina) * parseFloat(altoax) * parseFloat(gramosx) *  parseFloat(nosegmentosax);
-                                            kilosbx = parseFloat(vbobina) * parseFloat(altobx) * parseFloat(gramosx) *  parseFloat(nosegmentosbx);
+                                            kilosax = parseFloat(vbobina) * parseFloat(altoax) * parseFloat(gramosx) *  ((nosetsx * parseFloat(nosegmentosax))/piezasa);
+                                            kilosbx = parseFloat(vbobina) * parseFloat(altobx) * parseFloat(gramosx) *  ((nosetsx * parseFloat(nosegmentosbx))/piezasb);
 
-
+                                            totalkilos = kilosax + kilosbx;    
 
 
                                             subtotalax = kilosax * preciokgx;
@@ -354,13 +485,15 @@ function actualizar() {
 
                                             ranurado = 0.0026;
 
-                                            precioranuradox = ((parseFloat(nosegmentosax) + parseFloat(nosegmentosbx)) * ranurado)/nosetsx;
+                                            precioranuradox = (parseFloat(nosegmentosax) + parseFloat(nosegmentosbx)) * ranurado;
                                             subtotalax = parseFloat(subtotalax);
                                             subtotalbx = parseFloat(subtotalbx);
 
                                             sumasubtotal = subtotalax + subtotalbx;
                                             preciosetalgoritmox = ( (parseFloat(sumasubtotal) / nosetsx ) + parseFloat(precioranuradox) ) * factorx;
                                             preciosetalgoritmox = preciosetalgoritmox.toFixed(3);
+
+
 
 
 
@@ -384,11 +517,15 @@ function actualizar() {
 
                                             optimoobjeto.altoa = altoax;
 
+                                            optimoobjeto.desperdicioa = porcdespreda;
+
                                             optimoobjeto.segmentosb = nosegmentosbx;
 
                                             optimoobjeto.largob = largobx;
 
                                             optimoobjeto.altob = altobx;
+
+                                            optimoobjeto.desperdiciob = porcdespredb;
 
                                             optimoobjeto.numerosets = nosetsx;
 
@@ -413,8 +550,9 @@ function actualizar() {
 
                                                 indicecheck= indicecheck + 1;
 
-                                                $('#tabla > tbody:last').append('<tr><td><input class="campo" type="checkbox" name="listado[]" value="'+ optimoobjeto.numerosets + '-   -' + optimoobjeto.segmentosa + '-   -'+ optimoobjeto.largoa + '-   -' + optimoobjeto.altoa + '-   -'+ optimoobjeto.segmentosb + '-   -'+ optimoobjeto.largob + '-   -' + optimoobjeto.altob + '-   -' + optimoobjeto.material + '-   -' + optimoobjeto.calibre + '-   -'  + optimoobjeto.bobina + '-   -'  +  optimoobjeto.unitario + '-   -' + optimoobjeto.total +'"></td><td>'+ optimoobjeto.bobina +'</td><td>'+ optimoobjeto.material +'</td><td>'+ optimoobjeto.calibre +'</td><td>'+ optimoobjeto.segmentosa +'</td><td>'+ optimoobjeto.largoa +'</td><td>'+ optimoobjeto.altoa +'</td><td>'+ optimoobjeto.segmentosb +'</td><td>'+ optimoobjeto.largob +'</td><td>'+ optimoobjeto.altob +'</td><td class="resaltado">'+ optimoobjeto.unitario +'</td><td class="resaltado">'+ optimoobjeto.total +'</td><td>');                                                                                                                      
-
+                                                
+                                                $('#tabla > tbody:last').append('<tr><td><input class="campo" type="checkbox" name="listado[]" value="'+ optimoobjeto.numerosets + '-   -' + optimoobjeto.segmentosa + '-   -'+ optimoobjeto.largoa + '-   -' + optimoobjeto.altoa + '-   -'+ optimoobjeto.segmentosb + '-   -'+ optimoobjeto.largob + '-   -' + optimoobjeto.altob + '-   -' + optimoobjeto.material + '-   -' + optimoobjeto.calibre + '-   -'  + optimoobjeto.bobina + '-   -'  +  optimoobjeto.unitario + '-   -' + optimoobjeto.total +'-   -' + optimoobjeto.desperdicioa +'-   -' + optimoobjeto.desperdiciob +'"></td><td>'+ optimoobjeto.bobina +'</td><td>'+ optimoobjeto.material +'</td><td>'+ optimoobjeto.calibre +'</td><td>'+ optimoobjeto.segmentosa +'</td><td>'+ optimoobjeto.largoa +'</td><td>'+ optimoobjeto.altoa +'</td><td>'+ optimoobjeto.segmentosb +'</td><td>'+ optimoobjeto.largob +'</td><td>'+ optimoobjeto.altob +'</td><td class="resaltado">'+ optimoobjeto.unitario +'</td><td class="resaltado">'+ optimoobjeto.total +'</td><td>' +optimoobjeto.desperdicioa +'%</td><td>' +optimoobjeto.desperdiciob +'%</td><td><input id="aumento'+ caum +'" class="aumento" type="text" name="aumento" value="0" ></td>');                                                                                                                      
+                                                    caum =caum + 1;
                                                           }
 
 
@@ -459,30 +597,27 @@ function actualizar() {
                                         <li class="active"><a href="particiones.php">Particiones</a></li>
                                                                     
                                         
-                                    <li><a href="clientes.php">Clientes</a></li>
+                                    
 
-                                    <?php
-
-                    if( ($_SESSION["nivel"] == "AD") || ($_SESSION["nivel"] == "ES")){
-
-                         ?>             
-
-                           <?php 
-                              if (isset($_GET["existe"]) AND $_GET["existe"] == 1) { 
-                                          echo "<h2 class=\"alert alert-error\">El Numero de Folio ya existe en la Base de Datos</h2>";
-                                        } 
-
-                            ?>                                                   
+                                    
+                                                                              
 
                                     <li class="dropdown">
 
                                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin<b class="caret"></b></a>
 
                                         <ul class="dropdown-menu">
+                            
 
-                                           
+                                           <li><a href="clientes.php">Clientes</a></li>
 
                                             <li><a href="../cotizaciones/archivos.php">Cotizaciones</a></li>
+
+                                            <?php
+
+                    if( ($_SESSION["nivel"] == "AD") || ($_SESSION["nivel"] == "ES")){
+
+                         ?> 
 
                                             <li><a href="almacen.php">Almacen</a></li>                                  
 
@@ -491,15 +626,16 @@ function actualizar() {
                                             <li class="nav-header">Seguridad</li>
 
                                             <li><a href="usuarios.php">Usuarios</a></li>
+                                            <?php
+
+                    }
+
+                         ?> 
 
                                         </ul>
 
                                     </li>
-                        <?php
-
-                    }
-
-                         ?>         
+                                
                                     </ul>                      
                                    
 
@@ -543,7 +679,8 @@ function actualizar() {
             			<form name="user_form" action="../procesos/crea_particiones.php" method="POST" >
 
                             <label>Fecha</label>   
-                                    <input type="hidden" name="creado" size="30" maxlength="100" value="<?php echo $_SESSION["nombre"].' '.$_SESSION["apaterno"];  ?>" required />         
+                                    <input type="hidden" name="creado" value="<?php echo $_SESSION["nombre"].' '.$_SESSION["apaterno"];  ?>" required />         
+                                    <input type="hidden" name="emailusuario"  value="<?php echo $_SESSION["email"];  ?>" required />         
                                     <input id="fecha" type="text" name="fecha" disabled /> 
                                     <input id="fechaescondido" type="hidden" name="fechaescondido" />
                                     
@@ -559,11 +696,13 @@ function actualizar() {
                                     
                                                                             
                                     <label># de parte</label><br/>             
-                                    <input id="noparte" type="text" name="noparte"  required /> <br/>                                                                
+                                    <input id="noparte" type="text" name="noparte"  required /> <br/>   
+
+                                                                                                 
                                                           
                                     <h2>Parte A</h2>
 
-                                <label># de Segmentos</label> <br/>              
+                                <label># de Piezas</label> <br/>              
                                     <input id="nosegmentosa" type="text" name="nosegmentosa" autocomplete="off"  required /><br/>
 
                                 <label>Largo</label> <br/>
@@ -572,15 +711,26 @@ function actualizar() {
                                 <label>Alto</label> <br/>
                                     <input id="altoa" type="text" name="altoa" autocomplete="off"  required /><br/>
 
+                            
                                     <label>Kilos A</label><br/> 
                                  <input id="kga" type="text" name="kga" disabled /><br/>
+                                                             
                                  <input id="kgescondidoa" type="hidden" name="kgescondidoa" />
 
                                       
                                      
+                                <?php
 
+                                    if( ($_SESSION["nivel"] == "AD") || ($_SESSION["nivel"] == "ES")){
+
+                                ?>                 
                                     <label>Sub-Total A</label> <br/>
                                     <input id="subtotala" type="text" name="subtotala" disabled /> <br/>
+                                <?php
+
+                                    }
+
+                                ?>                                     
 
                                     <input id="subtotalescondidoa" type="hidden" name="subtotalescondidoa"  /> 
 
@@ -604,22 +754,13 @@ function actualizar() {
                             <div class="items_pad1">
 
                                         
-                                   <label for="empresaeditar">Empresa</label><br>
-                            <select id="cliente" name="cliente" onchange="mostrarclientes_pads(this.value)"><option  value=""  required> --Escoje una Empresa-- </option>
-                                <?php 
-                                    $query = sprintf("SELECT empresa FROM clientes where 1 ORDER BY empresa ASC ");
-                                    $result=mysql_query($query,$link) or die(mysql_error()); 
-                                    while($row=mysql_fetch_array($result,MYSQLI_NUM)){
-                                    echo "<OPTION VALUE='".$row[0]."'>".$row[0]."</OPTION>";
-                                        }
-                                ?>
-                            </select> 
-
+                                     <label># de Sets</label> <br/>              
+                                    <input id="nosets" type="text" name="nosets" autocomplete="off" required /><br/>
                               
 
                                <h2>Parte B</h2>
 
-                                <label># de Segmentos</label> <br/>              
+                                <label># de Piezas</label> <br/>              
                                     <input id="nosegmentosb" type="text" name="nosegmentosb" autocomplete="off"  required /><br/>
 
                                 <label>Largo</label> <br/>
@@ -628,11 +769,17 @@ function actualizar() {
                                 <label>Alto</label> <br/>
                                     <input id="altob" type="text" name="altob" autocomplete="off"  required /><br/>
 
+                                     
+                                         
                                      <label>Kilos B</label><br/> 
                                  <input id="kgb" type="text" name="kgb" disabled /><br/>
                                  <input id="kgescondidob" type="hidden" name="kgescondidob" />
 
+                                    <?php
 
+                                        if( ($_SESSION["nivel"] == "AD") || ($_SESSION["nivel"] == "ES")){
+
+                                    ?> 
 
 
                                      <label>Sub-Total B</label> <br/>
@@ -645,7 +792,11 @@ function actualizar() {
 
                                  <input id="precioxsetescondido" type="hidden" name="precioxsetescondido" />
 
-                                 
+                                 <?php
+
+                                    }
+
+                                ?>  
 
                                   
                 				
@@ -653,10 +804,23 @@ function actualizar() {
 
                             <div class="items_pad2">
 
-                                <div id="insertarcliente"></div> 
+                                 <label for="empresaeditar">Empresa</label><br>
+                                     <select id="cliente" name="cliente" onchange="mostrarclientes_pads(this.value)"><option  value=""  required> --Escoje una Empresa-- </option>
+                                    <?php 
+                                        $query = sprintf("SELECT empresa FROM empresas where 1 GROUP BY empresa ASC ");
+                                        $result=mysql_query($query,$link) or die(mysql_error()); 
+                                        while($row=mysql_fetch_array($result,MYSQLI_NUM)){
+                                        echo "<OPTION VALUE='".$row[0]."'>".$row[0]."</OPTION>";
+                                        }
+                                     ?>
+                                    </select> 
 
-                                  <label># de Sets</label> <br/>              
-                                    <input id="nosets" type="text" name="nosets" autocomplete="off" required /><br/>   
+                              <div id="insertarcliente"></div>
+                                <div id="insertarclientenombre"></div>    
+                              <div id="insertarclienteemail"></div>   
+                              <br>
+
+                                     
 
                                 
                                <label for="almaceneditar">Material</label><br>
@@ -677,15 +841,28 @@ function actualizar() {
                             <div id='insertarbobina'></div>
 
                                 <input id="bobinaescondido" type="hidden"  name="bobinaescondido" />
+
+                                <label>Total KG</label> <br/>
+                                <input id="totalkg" type="text" name="totalkg" disabled /><br/>
+                                <input id="totalkgescondido" type="hidden" name="totalkgescondido" />   
                                                             
-                                    
+                            
+                                <?php
+
+                                    if( ($_SESSION["nivel"] == "AD") || ($_SESSION["nivel"] == "ES")){
+
+                                ?>                                      
                                 <label>Total</label> <br/>
                                  <input id="utilidad" type="text" name="utilidad" disabled /><br/>
+                                <?php
+
+                                    }
+
+                                ?>   
 
                                  <input id="utilidadescondido" type="hidden" name="utilidadescondido" />
 
-                                 
-                					
+                                	
                                  
 
 
@@ -710,14 +887,17 @@ function actualizar() {
                                     <th>Bobina</th>
                                     <th>Material</th>
                                     <th>Calibre</th>
-                                    <th>Segmentos A</th>
+                                    <th>Piezas A</th>
                                     <th>Largo A</th>
                                     <th>Alto A</th>
-                                    <th>Segmentos B</th>
+                                    <th>Piezas B</th>
                                     <th>Largo B</th>
                                     <th>Alto B</th>
                                     <th>$ Unitario</th>
                                     <th>Total</th>
+                                    <th>Desp a</th>
+                                    <th>Desp b</th>
+                                    <th>Aumentar</th>
                                     
                                    
                                     
@@ -746,15 +926,16 @@ function actualizar() {
                                     <th>Bobina</th>
                                     <th>Material</th>
                                     <th>Calibre</th>
-                                    <th>Segmentos A</th>
+                                    <th>Piezas A</th>
                                     <th>Largo A</th>
                                     <th>Alto A</th>
-                                    <th>Segmentos B</th>
+                                    <th>Piezas B</th>
                                     <th>Largo B</th>
                                     <th>Alto B</th>                                    
                                     <th>$ Unitario</th>
                                     <th>Total</th>
-                                    
+                                    <th>Desp a</th>
+                                    <th>Desp b</th>
                                 
                                     
                                 </tr>
@@ -767,16 +948,30 @@ function actualizar() {
                             </tbody>
                             
                         </table>
+                    
+                    <br>
 
- <br>
+                    <h1>Total: $<span id="sumatotalpads"></span></h1>
+                    <input id="totalapagar" name="totalapagar" type="hidden" /> 
+                    <br>
+
                     <input id="btnagregar" type="button" name="btnagregar" value="Agregar Cotizacion" onclick="anadiroptimos()" />
 
-                     <br>
+                    <br>
 
+                    <textarea id="observaciones" name="observaciones" placeholder="Observaciones"  maxlength="1400" cols="20" rows="6"></textarea>
+                    <br>
+
+
+                    <h1><input type="checkbox" name="enviarusuario" value="si"> Reenviar a mi correo</h1>
+                    <br>
                     <input id="btnprev" type="submit" name="btnprev" value="Vista Previa"/>
-                    <input id="btnenviar" type="submit" name="btnenviar" value="Enviar Cotizacion"  />
+                    <br>
 
-                       
+                    <input id="btnenviar" type="submit" name="btnenviar" value="Enviar Cotizacion"  />
+                   
+
+                 
                        
 
                    </form>    
@@ -928,13 +1123,16 @@ function actualizar() {
 
 
                  */
-
+                piezasa= bobinax / largoax;
+                piezasb= bobinax / largobx;
+                piezasa = Math.floor(piezasa);
+                piezasb = Math.floor(piezasb);
 
                 nosetsx = parseFloat(nosetsx);
-                kilosax = parseFloat(bobinax) * parseFloat(altoax) * parseFloat(gramosx) *  parseFloat(nosegmentosax);
-                kilosbx = parseFloat(bobinax) * parseFloat(altobx) * parseFloat(gramosx) *  parseFloat(nosegmentosbx);
+                kilosax = parseFloat(vbobina) * parseFloat(altoax) * parseFloat(gramosx) *  ((nosetsx * parseFloat(nosegmentosax))/piezasa);
+                kilosbx = parseFloat(vbobina) * parseFloat(altobx) * parseFloat(gramosx) *  ((nosetsx * parseFloat(nosegmentosbx))/piezasb);
 
-
+                totalkilos = kilosax + kilosbx;
 
 
                 subtotalax = kilosax * preciokgx;
@@ -942,7 +1140,7 @@ function actualizar() {
 
                 ranurado = 0.0026;
 
-                precioranuradox = precioranuradox = ((parseFloat(nosegmentosax) + parseFloat(nosegmentosbx)) * ranurado)/nosetsx;
+                 precioranuradox = (parseFloat(nosegmentosax) + parseFloat(nosegmentosbx)) * ranurado;
                 subtotalax = parseFloat(subtotalax);
                 subtotalbx = parseFloat(subtotalbx);
 
@@ -955,9 +1153,59 @@ function actualizar() {
                 totalx = preciosetalgoritmox * nosetsx;
                 totalx=totalx.toFixed(3);
 
+                /////////////////////////////////////////////////
+                /// desperdicio/////////////
+
+                                        largopartesa = vbobina /largoax;
+                                        largopartesa = parseInt(largopartesa);
+                                        largopartesb = vbobina /largobx;
+                                        largopartesb = parseInt(largopartesb);
+
+                                        largodoblea = largoax * largopartesa;
+                                        largodobleb = largobx * largopartesb;
+
+                                        areapada = altoax * largodoblea;
+                                        areapadb = altobx * largodobleb;
+
+                                        areadesperdicioa = vbobina * altoax;
+                                        areadesperdiciob = vbobina * altobx;
+
+                                        areadesperdicio = areadesperdicioa + areadesperdiciob;
 
 
 
+                                        desperdicioa = areadesperdicioa - areapada;
+
+                                        desperdiciob = areadesperdiciob - areapadb;
+
+                                        desperdicio = desperdicioa + desperdiciob;
+
+
+
+
+                                        porcdespa = (desperdicioa * 100) / areadesperdicioa;
+
+                                        porcdespreda = porcdespa.toFixed(3);
+
+                                        porcdespb = (desperdiciob * 100) / areadesperdiciob;
+
+                                        porcdespredb = porcdespb.toFixed(3);
+
+
+                                        difaltoa = vbobina-altoax;
+                                        difaltob = vbobina-altobx;
+
+                                        diflargoa = vbobina-largoax;
+                                        diflargob = vbobina-largobx;
+
+
+
+                                        areadesperdicio = areadesperdicio.toFixed(3);
+
+                                        desperdicio = desperdicio.toFixed(3); 
+
+////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
 
 
  /*  
@@ -1008,6 +1256,8 @@ function actualizar() {
 
                 $("#utilidad").val(totalx);
 
+                $("#totalkg").val(totalkilos);
+
 
 /*
                 $("#subtotalescondido").val(kgalgoritmofacx);
@@ -1052,6 +1302,7 @@ function actualizar() {
                 var valor_option = document.getElementById('bobinaalmacen');
                valorbobina = valor_option.options[valor_option.selectedIndex].value;
                 $("#valorbobina").val(valorbobina);
+                vbobina = valorbobina;
 
               } 
 
@@ -1077,7 +1328,94 @@ function actualizar() {
                 document.getElementById("insertarcliente").innerHTML=xmlhttp.responseText;
                 }
               }
-            xmlhttp.open("GET","obtenercliente_pads.php?q="+str,true);
+            xmlhttp.open("GET","obtenercliente_pads.php?empresa="+str,true);
+            xmlhttp.send();            
+            }
+
+             function mostrarclientenombre(str)
+            {
+              posicion=document.getElementById('cliente').options.selectedIndex; //posicion
+              encelim = document.getElementById('cliente').options[posicion].text;
+              
+            if (str=="")
+              {
+              document.getElementById("insertarclientenombre").innerHTML="";
+              return;
+              } 
+            if (window.XMLHttpRequest)
+              {// code for IE7+, Firefox, Chrome, Opera, Safari
+              xmlhttp=new XMLHttpRequest();
+              }
+            else
+              {// code for IE6, IE5
+              xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+              }
+            xmlhttp.onreadystatechange=function()
+              {
+              if (xmlhttp.readyState==4 && xmlhttp.status==200)
+                {
+                document.getElementById("insertarclientenombre").innerHTML=xmlhttp.responseText;
+                }
+              }
+            xmlhttp.open("GET","obtenerclientenombre_pads.php?sucursal="+str+"&empresa=" + encelim,true);
+            xmlhttp.send();            
+            }
+
+            function mostrarclienteemail(str)
+            {
+              posicion=document.getElementById('cliente').options.selectedIndex; //posicion
+              encelim = document.getElementById('cliente').options[posicion].text;
+
+              posicions=document.getElementById('sucursal').options.selectedIndex; //posicion
+              suc = document.getElementById('sucursal').options[posicions].text;
+              
+            if (str=="")
+              {
+              document.getElementById("insertarclienteemail").innerHTML="";
+              return;
+              } 
+            if (window.XMLHttpRequest)
+              {// code for IE7+, Firefox, Chrome, Opera, Safari
+              xmlhttp=new XMLHttpRequest();
+              }
+            else
+              {// code for IE6, IE5
+              xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+              }
+            xmlhttp.onreadystatechange=function()
+              {
+              if (xmlhttp.readyState==4 && xmlhttp.status==200)
+                {
+                document.getElementById("insertarclienteemail").innerHTML=xmlhttp.responseText;
+                }
+              }
+            xmlhttp.open("GET","obtenerclienteemail_pads.php?nombre="+str+"&empresa=" + encelim+"&sucursal=" + suc,true);
+            xmlhttp.send();            
+            }
+
+            function mostrarencargados(str)
+            {
+            if (str=="")
+              {
+              document.getElementById("insertarencargado").innerHTML="";
+              return;
+              } 
+            if (window.XMLHttpRequest)
+              {// code for IE7+, Firefox, Chrome, Opera, Safari
+              xmlhttp=new XMLHttpRequest();
+              }
+            else
+              {// code for IE6, IE5
+              xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+              }
+            xmlhttp.onreadystatechange=function()
+              {
+              if (xmlhttp.readyState==4 && xmlhttp.status==200)
+                {
+                document.getElementById("insertarencargado").innerHTML=xmlhttp.responseText;
+                }
+              }
+            xmlhttp.open("GET","mostrar_encargado.php?e="+str,true);
             xmlhttp.send();            
             }
 

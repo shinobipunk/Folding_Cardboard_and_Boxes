@@ -408,16 +408,27 @@ $link=Conectarse();
                             <li><a href="../admin/usuario.php">Menu</a></li>
                             <li><a href="../admin/pads.php">PADS</a></li>
                             <li><a href="../admin/particiones.php">Particiones</a></li>
-                            <li><a href="../admin/clientes.php">Clientes</a></li>
+                            
                                                         
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin<b class="caret"></b></a>
-                                <ul class="dropdown-menu">                                   
+                                <ul class="dropdown-menu">   
+                                    <li><a href="../admin/clientes.php">Clientes</a></li>                                
                                     <li class="active"><a href="archivos.php">Cotizaciones</a></li>
+                                    <?php
+
+                    if(($_SESSION["nivel"] == "AD") || ($_SESSION["nivel"] == "ES") ){
+
+                         ?>  
                                     <li><a href="../admin/almacen.php">Almacen</a></li>                                    
                                     <li class="divider"></li>
                                     <li class="nav-header">Seguridad</li>
                                     <li><a href="../admin/usuarios.php">Usuarios</a></li>
+                                    <?php
+
+                    }
+
+                         ?> 
                                 </ul>
                             </li>
                         </ul>                      
@@ -446,7 +457,7 @@ $link=Conectarse();
 
 
             <?php
-            if(($_SESSION["nivel"] == "AD") || ($_SESSION["nivel"] == "ES") ){
+            if(($_SESSION["nivel"] == "AD") || ($_SESSION["nivel"] == "ES") || ($_SESSION["nivel"] == "UN") ){
                  ?>
 
                          <?php 
@@ -492,10 +503,13 @@ echo "<table id='tablacotizaciones'>";
     echo "<th>Folio</th>";
     echo "<th>No. de parte</th>";
     echo "<th>Empresa</th>";
+    echo "<th>Sucursal</th>";
+    echo "<th>Encargado</th>";
     echo "<th>Fecha</th>";
-    echo "<th>Tipo</th>";
+    echo "<th>Tipo</th>";    
     echo "<th>Creado</th>";
-     echo "<th>Archivo</th>";
+    echo "<th>Total</th>";
+    echo "<th>Archivo</th>";
     echo "</tr>";
 
 if(isset($_POST['opcion']) == 'noparte')
@@ -517,9 +531,12 @@ while($row=mysql_fetch_array($result,MYSQLI_NUM))
     echo "<td>".$row[0]."</td>";
     echo "<td>".$row[1]."</td>";
     echo "<td>".$row[3]."</td>";
-    echo "<td>".$row[2]."</td>";
     echo "<td>".$row[4]."</td>";
     echo "<td>".$row[5]."</td>";
+    echo "<td>".$row[2]."</td>";
+    echo "<td>".$row[6]."</td>";
+    echo "<td>".$row[8]."</td>";
+    echo "<td>".$row[9]."</td>";    
     echo "<td><a href=".$row[0]."_".$row[1]."_".$row[3]."_.pdf target='_blank'><img src='http://www.000webhost.com/images/index/pdf.gif' alt='53_Nanolabs.pdf'></a></td>";
     echo "</tr>";
    
@@ -549,9 +566,12 @@ while($row=mysql_fetch_array($result,MYSQLI_NUM))
     echo "<td>".$row[0]."</td>";
     echo "<td>".$row[1]."</td>";
     echo "<td>".$row[3]."</td>";
-    echo "<td>".$row[2]."</td>";
     echo "<td>".$row[4]."</td>";
     echo "<td>".$row[5]."</td>";
+    echo "<td>".$row[2]."</td>";
+    echo "<td>".$row[6]."</td>";
+    echo "<td>".$row[8]."</td>";
+    echo "<td>".$row[9]."</td>";
     echo "<td><a href=".$row[0]."_".$row[1]."_".$row[3]."_.pdf target='_blank'><img src='http://www.000webhost.com/images/index/pdf.gif' alt='53_Nanolabs.pdf'></a></td>";
     echo "</tr>";
    
@@ -581,9 +601,12 @@ while($row=mysql_fetch_array($result,MYSQLI_NUM))
     echo "<td>".$row[0]."</td>";
     echo "<td>".$row[1]."</td>";
     echo "<td>".$row[3]."</td>";
-    echo "<td>".$row[2]."</td>";
     echo "<td>".$row[4]."</td>";
     echo "<td>".$row[5]."</td>";
+    echo "<td>".$row[2]."</td>";
+    echo "<td>".$row[6]."</td>";
+    echo "<td>".$row[8]."</td>";
+    echo "<td>".$row[9]."</td>";
     echo "<td><a href=".$row[0]."_".$row[1]."_".$row[3]."_.pdf target='_blank'><img src='http://www.000webhost.com/images/index/pdf.gif' alt='53_Nanolabs.pdf'></a></td>";
     echo "</tr>";
    
@@ -611,9 +634,12 @@ while($row=mysql_fetch_array($result,MYSQLI_NUM))
     echo "<td>".$row[0]."</td>";
     echo "<td>".$row[1]."</td>";
     echo "<td>".$row[3]."</td>";
-    echo "<td>".$row[2]."</td>";
     echo "<td>".$row[4]."</td>";
     echo "<td>".$row[5]."</td>";
+    echo "<td>".$row[2]."</td>";
+    echo "<td>".$row[6]."</td>";
+    echo "<td>".$row[8]."</td>";
+    echo "<td>".$row[9]."</td>";
     echo "<td><a href=".$row[0]."_".$row[1]."_".$row[3]."_.pdf target='_blank'><img src='http://www.000webhost.com/images/index/pdf.gif' alt='53_Nanolabs.pdf'></a></td>";
     echo "</tr>";
    
@@ -627,7 +653,7 @@ while($row=mysql_fetch_array($result,MYSQLI_NUM))
  
 $dato = $_POST['dato'];
  
- $query = sprintf("SELECT * FROM cotizaciones  GROUP BY fecha DESC", $dato);
+ $query = sprintf("SELECT * FROM cotizaciones  GROUP BY folio DESC", $dato);
      $result=mysql_query($query,$link) or die(mysql_error()); 
 
     
@@ -640,9 +666,12 @@ while($row=mysql_fetch_array($result,MYSQLI_NUM))
     echo "<td>".$row[0]."</td>";
     echo "<td>".$row[1]."</td>";
     echo "<td>".$row[3]."</td>";
-    echo "<td>".$row[2]."</td>";
     echo "<td>".$row[4]."</td>";
     echo "<td>".$row[5]."</td>";
+    echo "<td>".$row[2]."</td>";
+    echo "<td>".$row[6]."</td>";
+    echo "<td>".$row[8]."</td>";
+    echo "<td>".$row[9]."</td>";
     echo "<td><a href=".$row[0]."_".$row[1]."_".$row[3]."_.pdf target='_blank'><img src='http://www.000webhost.com/images/index/pdf.gif' alt='53_Nanolabs.pdf'></a></td>";
     echo "</tr>";
    

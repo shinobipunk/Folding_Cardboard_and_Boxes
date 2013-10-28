@@ -12,7 +12,7 @@ $link=Conectarse();
 $sesionlog = $_SESSION["nombre"].' '.$_SESSION["apaterno"];
 
 echo '<label>Sucursal:</label> <br>';
-echo ' <select id="sucursal" name="sucursal" onchange="mostrarclientenombre(this.value)"><option  value=""  required> --Escoje una Sucursal-- </option>';
+echo ' <select id="sucursal" name="sucursal" onchange="mostrarencargadonombre_baja(this.value)"><option  value=""  required> --Escoje una Sucursal-- </option>';
 
 while($row=mysql_fetch_array($result,MYSQLI_NUM))
   {
@@ -22,3 +22,4 @@ while($row=mysql_fetch_array($result,MYSQLI_NUM))
 echo '</select>';
                             
 ?>
+

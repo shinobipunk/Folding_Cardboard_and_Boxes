@@ -27,19 +27,31 @@ $fecha = $_POST['fechaescondido'];
 
 $cliente = $_POST['cliente'];
 
+$sucursal = $_POST['sucursal'];
+
 $desperdicio = $_POST['desperdicio'];
 
 $encargado = $_POST['encargado'];
 
 $creado = $_POST['creado'];
 
+$observaciones = $_POST['observaciones'];
+
+$emailusuario = $_POST['emailusuario'];
+
+$totalapagar = $_POST['totalapagar'];
+
+
+
+$enviarusuario = $_POST['enviarusuario'];
+
 $iteracioness = count($lista);
 
 
 
-		$query = sprintf("INSERT INTO cotizaciones (no_parte, fecha, empresa, tipo, creado)
+		$query = sprintf("INSERT INTO cotizaciones (no_parte, fecha, empresa, sucursal, encargado, tipo, observaciones, creado, total)
 
-		VALUES ('%s', '%s', '%s', '%s', '%s')", $noparte, $fecha, $cliente, $tipo, $creado );
+		VALUES ('%s','%s','%s','%s','%s', '%s', '%s', '%s', '%s')", $noparte, $fecha, $cliente, $sucursal, $encargado, $tipo, $observaciones, $creado, $totalapagar );
 
 		$result=mysql_query($query,$link) or die(mysql_error()); 
 
@@ -54,6 +66,7 @@ $iteracioness = count($lista);
 			$xdesperdicio = 2;
 			$xunitario = 8;
 			$xtotal = 9;
+			$xextra = 10;
 
 
 
@@ -80,9 +93,9 @@ $iteracioness = count($lista);
 */
 				
 
-					$query = sprintf("INSERT INTO articulos ( no_parte, no_pads, largo, alto, material, calibre, bobina, desperdicio, precio_unitario, total, tipo)
+					$query = sprintf("INSERT INTO articulos ( no_parte, no_pads, largo, alto, material, calibre, bobina, desperdicio, precio_unitario, total, tipo, extra)
 
-					VALUES ('%s','%s', '%s', '%s', '%s', '%s','%s','%s','%s','%s','%s')", $noparte, $x[$xpads], $x[$xlargo], $x[$xalto], $x[$xmaterial], $x[$xcalibre], $x[$xbobina], $x[$xdesperdicio], $x[$xunitario], $x[$xtotal], $tipo );
+					VALUES ('%s','%s','%s', '%s', '%s', '%s', '%s','%s','%s','%s','%s','%s')", $noparte, $x[$xpads], $x[$xlargo], $x[$xalto], $x[$xmaterial], $x[$xcalibre], $x[$xbobina], $x[$xdesperdicio], $x[$xunitario], $x[$xtotal], $tipo, $x[$xextra] );
 
 					$result=mysql_query($query,$link) or die(mysql_error()); 
 
@@ -93,15 +106,16 @@ $iteracioness = count($lista);
 						
 					}
 				
-				$xpads +=  10;
-				$xlargo  += 10;
-				$xalto += 10;
-				$xmaterial += 10;
-				$xcalibre += 10;
-				$xbobina += 10;
-				$xdesperdicio += 10;
-				$xunitario += 10;
-				$xtotal += 10;
+				$xpads +=  11;
+				$xlargo  += 11;
+				$xalto += 11;
+				$xmaterial += 11;
+				$xcalibre += 11;
+				$xbobina += 11;
+				$xdesperdicio += 11;
+				$xunitario += 11;
+				$xtotal += 11;
+				$xextra += 11;
 
 			} 
 
@@ -133,7 +147,8 @@ while($row=mysql_fetch_array($result,MYSQLI_NUM))
 	$xbobina = 7;
 	$xdesperdicio = 2;
 	$xunitario = 8;
-	$xtotal = 9;		
+	$xtotal = 9;
+	$xextra = 10;		
 
 
 require_once("dompdf/dompdf_config.inc.php");
@@ -157,8 +172,8 @@ $html = '<html xmlns="http://www.w3.org/1999/xhtml">
 	<tr>
 		<td>
 			<img src="logo.jpg" width=305  heigth=99 />	
-			<p class="negrita">10950 Pelicano Dr. Glug B1</p>
-			<p class="negrita">El Paso TX 79935</p>
+			<p class="negrita">11800 Rojas Dr. Suite C23</p>
+			<p class="negrita">El Paso TX 79936</p>
 			<p class="negrita">Ph. 915 543 1459</p>
 			<p>www.cardboardandboxes.com</p>
 		</td>
@@ -170,6 +185,7 @@ $html = '<html xmlns="http://www.w3.org/1999/xhtml">
 	<tr>
 		<td>
 			<p class="negrita">Company:<span class="campo">'; $html.=$cliente;  $html.='</span> </p>
+			<p class="negrita">Sucursal:<span class="campo">'; $html.=$sucursal;  $html.='</span></p>
 			<p class="negrita">Contact:<span class="campo">'; $html.=$encargado;  $html.='</span></p>
 		</td>
 		
@@ -209,21 +225,24 @@ $html = '<html xmlns="http://www.w3.org/1999/xhtml">
 	';
 				$sumatotal = $sumatotal + $x[$xtotal];
 
-				$xpads +=  10;
-				$xlargo  += 10;
-				$xalto += 10;
-				$xmaterial += 10;
-				$xcalibre += 10;
-				$xbobina += 10;
-				$xdesperdicio += 10;
-				$xunitario += 10;
-				$xtotal += 10;	
+				$xpads +=  11;
+				$xlargo  += 11;
+				$xalto += 11;
+				$xmaterial += 11;
+				$xcalibre += 11;
+				$xbobina += 11;
+				$xdesperdicio += 11;
+				$xunitario += 11;
+				$xtotal += 11;	
+				$xextra +=11;
 } $html.=' 
 </table>
 
 <br>
-<h1 class="derecha">Total: <span class="campo"> $ '; $html.=$sumatotal; $html.=' </span></h1>
+<h1 class="derecha">Total: <span class="campo"> $ '; $html.=$totalapagar; $html.=' </span></h1>
 <p class="derecha">Made by: <span class="campo"> '; $html.=$creado; $html.=' </span></p>
+<p class="derecha">e-mail: <span class="campo"> '; $html.=$emailusuario; $html.=' </span></p>
+<b>Observations:</b><br> <span class="campo"> '; $html.=$observaciones; $html.=' </span>
 
 </body>
 </html>'; // Cerramos la variable para agregarla código PHP
@@ -278,16 +297,19 @@ $mail = new PHPMailer();
 
 //Set who the message is to be sent from
 
-$mail->SetFrom($email, 'Folding Cardboard & Boxes Inc.');
+$mail->SetFrom($emailusuario, 'Folding Cardboard & Boxes Inc.');
 
 //Set an alternative reply-to address
 
-$mail->AddReplyTo('replyto@example.com','First Last');
+$mail->AddReplyTo($emailusuario,'Folding Cardboard & Boxes Inc.');
 
 //Set who the message is to be sent to
 
 $mail->AddAddress($email, $cliente);
-
+if ($enviarusuario == "si")
+{
+	$mail->AddAddress($emailusuario, 'Folding Cardboard & Boxes Inc.');
+}
 //Set the subject line
 
 $mail->Subject = 'Cotizacion'. '_'. $noparte.'_' . $nofolio . '_' . $fecha;
@@ -350,13 +372,24 @@ $fecha = $_POST['fechaescondido'];
 
 $cliente = $_POST['cliente'];
 
+$sucursal = $_POST['sucursal'];
+
 $desperdicio = $_POST['desperdicio'];
 
 $encargado = $_POST['encargado'];
 
 $creado = $_POST['creado'];
 
-$iteracioness = count($lista);					
+$observaciones = $_POST['observaciones'];
+
+$emailusuario = $_POST['emailusuario'];
+
+$totalapagar = $_POST['totalapagar'];
+
+
+$iteracioness = count($lista);	
+
+
 
 
 			///////////////////////////////////////////////////////////////////////////////////////////
@@ -373,7 +406,8 @@ $iteracioness = count($lista);
 				$xbobina = 7;
 				$xdesperdicio = 2;
 				$xunitario = 8;
-				$xtotal = 9;		
+				$xtotal = 9;	
+				$xextra = 10;	
 			$datos = explode("><",$lista);
 
 
@@ -421,6 +455,7 @@ $iteracioness = count($lista);
 				<tr>
 					<td>
 						<p class="negrita">Company:<span class="campo">'; $html.=$cliente;  $html.='</span> </p>
+						<p class="negrita">Sucursal:<span class="campo">'; $html.=$sucursal;  $html.='</span></p>
 						<p class="negrita">Contact:<span class="campo">'; $html.=$encargado;  $html.='</span></p>
 					</td>
 					
@@ -458,22 +493,25 @@ $iteracioness = count($lista);
 				';
 							$sumatotal = $sumatotal + $x[$xtotal];
 
-							$xpads +=  10;
-							$xlargo  += 10;
-							$xalto += 10;
-							$xmaterial += 10;
-							$xcalibre += 10;
-							$xbobina += 10;
-							$xdesperdicio += 10;
-							$xunitario += 10;
-							$xtotal += 10;	
+							$xpads +=  11;
+							$xlargo  += 11;
+							$xalto += 11;
+							$xmaterial += 11;
+							$xcalibre += 11;
+							$xbobina += 11;
+							$xdesperdicio += 11;
+							$xunitario += 11;
+							$xtotal += 11;	
+							$xextra += 11;
 			} 
 							$html.=' 
 			</table>
 
 			<br>
-			<h1 class="derecha">Total: <span class="campo"> $ '; $html.=$sumatotal; $html.=' </span></h1>
+			<h1 class="derecha">Total: <span class="campo"> $ '; $html.=$totalapagar; $html.=' </span></h1>
 			<p class="derecha">Made by: <span class="campo"> '; $html.=$creado; $html.=' </span></p>
+			<p class="derecha">e-mail: <span class="campo"> '; $html.=$emailusuario; $html.=' </span></p>
+			<b>Observations:</b><br> <span class="campo"> '; $html.=$observaciones; $html.=' </span>
 
 			</body>
 			</html>'; // Cerramos la variable para agregarla código PHP
